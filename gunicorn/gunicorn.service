@@ -8,7 +8,7 @@ Group=ubuntu
 WorkingDirectory=/srv/cafejari
 ExecStart=/home/ubuntu/.local/bin/gunicorn \
         --workers 3 \
-        --bind unix:/tmp/gunicorn.sock \
+        --bind /tmp/gunicorn.sock \
         cafejari.wsgi:application
 
 [Install]
