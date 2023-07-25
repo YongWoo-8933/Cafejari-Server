@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./static/:/static
+      - ./media/:/media
+      - ./nginx:/etc/nginx/conf.d
+    command: tail -f /dev/null
+    depends_on:
+      - web-server
+
+  web-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: web-server
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      DB_NAME: ${DB_NAME}
+      DB_LOCAL_USER: ${DB_LOCAL_USER}
+      DB_USER: ${DB_USER}
+      DB_PORT: ${DB_PORT}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      GIFTISHOW_AUTH_CODE: ${GIFTISHOW_AUTH_CODE}
+      GIFTISHOW_AUTH_TOKEN: ${GIFTISHOW_AUTH_TOKEN}
+      GIFTISHOW_USER_ID: ${GIFTISHOW_USER_ID}
+      SEOUL_CITY_DATA_API_KEY: ${SEOUL_CITY_DATA_API_KEY}
+      KAKAO_REST_API_KEY: ${KAKAO_REST_API_KEY}
+      KAKAO_REDIRECT_URL: ${KAKAO_REDIRECT_URL}
+      GOOGLE_APPLICATION_CREDENTIALS: ${GOOGLE_APPLICATION_CREDENTIALS}
+      NAVER_SERVICE_ID: ${NAVER_SERVICE_ID}
+      NAVER_API_ID: ${NAVER_API_ID}
+      NAVER_API_SECRET: ${NAVER_API_SECRET}
+      NAVER_SMS_CALLING_NUMBER: ${NAVER_SMS_CALLING_NUMBER}
+      ADMIN_PHONE_NUMBER_1: ${ADMIN_PHONE_NUMBER_1}
+      AWS_S3_REGION_NAME: ${AWS_S3_REGION_NAME}
+      AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME}
+    command: >
+      sh -c "
+          python3 manage.py collectstatic &&
+          python3 manage.py makemigrations && 
+          python3 manage.py migrate &&
+          python3 manage.py crontab add &&
+          tail -f /dev/null"
+#          gunicorn cafejari.wsgi -b 0.0.0.0:8000:application"
+    ports:
+      - "22:22"
+    expose:
+      - "8000"
+    depends_on:
+      - db
+    volumes:
+      - ./static/:/cafejari/static
+      - ./media/:/cafejari/media
+
+  db:
+    image: postgres
+    container_name: postgresql
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+    ports:
+      - "5432:5432"
