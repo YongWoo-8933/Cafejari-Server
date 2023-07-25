@@ -6,9 +6,9 @@ After=network.target
 User=ubuntu
 Group=ubuntu
 WorkingDirectory=/srv/cafejari
-ExecStart=/home/ubuntu/.local/bin/gunicorn \
+ExecStart=gunicorn \
         --workers 3 \
-        --bind 0.0.0.0:8000 \
+        --bind unix:/home/ubuntu/run/gunicorn.sock \
         cafejari.wsgi:application
 
 [Install]
