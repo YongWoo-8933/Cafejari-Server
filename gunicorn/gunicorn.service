@@ -4,12 +4,14 @@ After=network.target
 
 [Service]
 User=ubuntu
-Group=ubuntu
+Group=www-data
 WorkingDirectory=/srv/cafejari
-ExecStart=/srv/cafejari/venv/bin/gunicorn \
+ExecStart=/home/ubuntu/.local/bin/gunicorn \
+        --access-logfile - \
         --workers 3 \
         --bind unix:/run/gunicorn.sock \
         cafejari.wsgi:application
+EnvironmentFile=/srv/cafejari/.env
 
 [Install]
 WantedBy=multi-user.target
