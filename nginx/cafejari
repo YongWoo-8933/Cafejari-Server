@@ -1,12 +1,12 @@
 
 server {
     listen 80;
-    server_name cafejari.co.kr;
+    server_name *.cafejari.co.kr *.amazonaws.com;
     client_max_body_size 256M;
     charset utf-8mb4;
 
     location / {
-        proxy_pass http://cafejari.co.kr;
+        proxy_pass unix:/run/gunicorn.sock;
 
         # Do not change this
         proxy_set_header Host $host;
@@ -15,10 +15,6 @@ server {
     }
 
     location /static/ {
-        alias /static/;
-    }
-
-    location /media/ {
-        alias /media/;
+        alias /srv/cafejari/static/;
     }
 }
