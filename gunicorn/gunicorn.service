@@ -6,7 +6,7 @@ After=network.target
 User=ubuntu
 Group=ubuntu
 WorkingDirectory=/srv/cafejari
-ExecStart=gunicorn \
+ExecStart=/home/ubuntu/.local/bin/gunicorn \
         --workers 3 \
         --bind unix:/run/gunicorn.sock \
         cafejari.wsgi:application
