@@ -8,6 +8,9 @@ def district_csv_upload_path(instance, filename): return f"data/district/{filena
 def brand_csv_upload_path(instance, filename): return f"data/brand/{filename}"
 
 
+def congestion_area_csv_upload_path(instance, filename): return f"data/congestion_area/{filename}"
+
+
 class DistrictDataUpdate(models.Model):
     last_update = models.DateTimeField(auto_now_add=True)
     city = models.CharField(max_length=15)
@@ -47,5 +50,16 @@ class CongestionDataUpdate(models.Model):
     class Meta:
         db_table = 'data_congestion_data_update'
         db_table_comment = '지역 실시간 혼잡도 업데이트하는 admin전용 모델'
+        app_label = 'data'
+        ordering = ['-last_update']
+
+
+class CongestionAreaDataUpdate(models.Model):
+    last_update = models.DateTimeField(auto_now_add=True)
+    congestion_area_csv_file = models.FileField(upload_to=congestion_area_csv_upload_path)
+
+    class Meta:
+        db_table = 'data_congestion_area_data_update'
+        db_table_comment = '혼잡도 제공 해주는 지역 정보 업데이트하는 admin전용 모델'
         app_label = 'data'
         ordering = ['-last_update']

@@ -54,14 +54,14 @@ AUTHORIZATION_MANUAL_PARAMETER = openapi.Parameter(
 
 
 # s3 이미지 업로드 관련
-class S3ImageManager:
+class S3Manager:
 
     @classmethod
-    def upload_image(cls, file, path):
+    def upload_file(cls, file, path):
         boto3.client('s3').upload_fileobj(file, AWS_STORAGE_BUCKET_NAME, str(path))
 
     @classmethod
-    def delete_image(cls, path):
+    def delete_file(cls, path):
         boto3.client('s3').delete_object(Bucket=AWS_STORAGE_BUCKET_NAME, Key=str(path))
 
 
@@ -69,12 +69,12 @@ class S3ImageManager:
 class ImageModelAdmin(admin.ModelAdmin):
 
     def delete_model(self, request, obj):
-        S3ImageManager.delete_image(path=obj.image)
+        S3Manager.delete_file(path=obj.image)
         obj.delete()
 
     def delete_queryset(self, request, queryset):
         for obj in queryset:
-            S3ImageManager.delete_image(path=obj.image)
+            S3Manager.delete_file(path=obj.image)
             obj.delete()
 
 
