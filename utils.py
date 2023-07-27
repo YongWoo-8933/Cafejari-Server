@@ -70,15 +70,16 @@ class S3ImageManager:
 
 # 이미지 파일을 가지고 있는 모델의 admin
 class ImageModelAdmin(admin.ModelAdmin):
-    s3_manager = S3ImageManager()
 
     def delete_model(self, request, obj):
-        self.s3_manager.delete_image(path=obj.image)
+        s3_manager = S3ImageManager()
+        s3_manager.delete_image(path=obj.image)
         obj.delete()
 
     def delete_queryset(self, request, queryset):
+        s3_manager = S3ImageManager()
         for obj in queryset:
-            self.s3_manager.delete_image(path=obj.image)
+            s3_manager.delete_image(path=obj.image)
             obj.delete()
 
 
