@@ -20,4 +20,4 @@ urlpatterns = [
 ]
 
 if DEBUG:
-    urlpatterns += path("login/", LoginView.as_view(), name="account_login")
+    urlpatterns += [path("login/", LoginView.as_view(), name="account_login")]
