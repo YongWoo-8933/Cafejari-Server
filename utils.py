@@ -65,8 +65,7 @@ class S3ImageManager:
         self._client.upload_fileobj(file, AWS_STORAGE_BUCKET_NAME, path)
 
     def delete_image(self, path):
-        pass
-        # self._client.delete_object(Bucket=AWS_STORAGE_BUCKET_NAME, Key=path)
+        self._client.delete_object(Bucket=AWS_STORAGE_BUCKET_NAME, Key=path)
 
 
 # 이미지 파일을 가지고 있는 모델의 admin
@@ -74,12 +73,12 @@ class ImageModelAdmin(admin.ModelAdmin):
     s3_manager = S3ImageManager()
 
     def delete_model(self, request, obj):
-        # self.s3_manager.delete_image(path=obj.image)
+        self.s3_manager.delete_image(path=obj.image)
         obj.delete()
 
     def delete_queryset(self, request, queryset):
         for obj in queryset:
-            # self.s3_manager.delete_image(path=obj.image)
+            self.s3_manager.delete_image(path=obj.image)
             obj.delete()
 
 
