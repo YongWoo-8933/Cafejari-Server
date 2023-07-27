@@ -65,7 +65,8 @@ class S3ImageManager:
         self._client.upload_fileobj(file, AWS_STORAGE_BUCKET_NAME, path)
 
     def delete_image(self, path):
-        self._client.delete_object(Bucket=AWS_STORAGE_BUCKET_NAME, Key=path)
+        pass
+        # self._client.delete_object(Bucket=AWS_STORAGE_BUCKET_NAME, Key=path)
 
 
 # 이미지 파일을 가지고 있는 모델의 admin
