@@ -1,4 +1,4 @@
-from allauth.account.views import LoginView
+from dj_rest_auth.views import LoginView
 from django.urls import path, include
 
 from rest_framework import routers
@@ -20,4 +20,4 @@ urlpatterns = [
 ]
 
 if DEBUG:
-    urlpatterns += [path("login/", LoginView.as_view(), name="account_login")]
+    urlpatterns += [path("login/", LoginView.as_view())]
