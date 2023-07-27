@@ -1,8 +1,9 @@
-
+from dj_rest_auth.views import LoginView
 from django.urls import path, include
 
 from rest_framework import routers
 
+from cafejari.settings import DEBUG
 from user import views
 from user.views import UserViewSet, ProfileViewSet, CustomTokenRefreshView
 
@@ -17,3 +18,6 @@ urlpatterns = [
     path('kakao/login/finish/', views.KakaoLogin.as_view(), name='kakao_login_todjango'),
     path('token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh')
 ]
+
+if DEBUG:
+    urlpatterns += path('login/', include(LoginView.as_view()))
