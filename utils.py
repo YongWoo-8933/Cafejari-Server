@@ -1,5 +1,6 @@
 
 import boto3
+import botocore
 from django.contrib import admin
 from django.utils.html import format_html
 from drf_yasg import openapi
@@ -57,11 +58,11 @@ class S3ImageManager:
 
     @classmethod
     def upload_image(cls, file, path):
-        boto3.client('s3').upload_fileobj(file, AWS_STORAGE_BUCKET_NAME, path)
+        boto3.client('s3').upload_fileobj(file, AWS_STORAGE_BUCKET_NAME, str(path))
 
     @classmethod
     def delete_image(cls, path):
-        boto3.client('s3').delete_object(Bucket=AWS_STORAGE_BUCKET_NAME, Key=path)
+        boto3.client('s3').delete_object(Bucket=AWS_STORAGE_BUCKET_NAME, Key=str(path))
 
 
 # 이미지 파일을 가지고 있는 모델의 admin
