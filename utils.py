@@ -54,32 +54,26 @@ AUTHORIZATION_MANUAL_PARAMETER = openapi.Parameter(
 
 # s3 이미지 업로드 관련
 class S3ImageManager:
-    _client = None
 
-    def __new__(cls):
-        if cls._client is None:
-            cls._client = boto3.client('s3')
-        return cls._client
+    @classmethod
+    def upload_image(cls, file, path):
+        boto3.client('s3').upload_fileobj(file, AWS_STORAGE_BUCKET_NAME, path)
 
-    def upload_image(self, file, path):
-        self._client.upload_fileobj(file, AWS_STORAGE_BUCKET_NAME, path)
-
-    def delete_image(self, path):
-        self._client.delete_object(Bucket=AWS_STORAGE_BUCKET_NAME, Key=path)
+    @classmethod
+    def delete_image(cls, path):
+        boto3.client('s3').delete_object(Bucket=AWS_STORAGE_BUCKET_NAME, Key=path)
 
 
 # 이미지 파일을 가지고 있는 모델의 admin
 class ImageModelAdmin(admin.ModelAdmin):
 
     def delete_model(self, request, obj):
-        s3_manager = S3ImageManager()
-        s3_manager.delete_image(path=obj.image)
+        S3ImageManager.delete_image(path=obj.image)
         obj.delete()
 
     def delete_queryset(self, request, queryset):
-        s3_manager = S3ImageManager()
         for obj in queryset:
-            s3_manager.delete_image(path=obj.image)
+            S3ImageManager.delete_image(path=obj.image)
             obj.delete()
 
 
