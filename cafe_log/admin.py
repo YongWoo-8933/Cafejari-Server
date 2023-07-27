@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 from cafe_log.models import CafeLog, CafeLogReport, Snapshot, CafeLogLike
-from utils import ImageModelAdmin
+from utils import ImageModelAdmin, replace_image_domain
 
 
 @admin.register(CafeLog)
@@ -17,7 +17,7 @@ class CafeLogAdmin(admin.ModelAdmin):
     preserve_filters = True
 
     def image_tag(self, log):
-        return format_html('<img src="{}" width="85" height="85" />', log.snapshot.image.url) if log.snapshot else None
+        return format_html('<img src="{}" width="85" height="85" />', replace_image_domain(log.snapshot.image.url)) if log.snapshot else None
 
     def cafe_name(self, log):
         return log.cafe.name if log.cafe else None
@@ -47,7 +47,7 @@ class CafeLogReportAdmin(admin.ModelAdmin):
     preserve_filters = True
 
     def image_tag(self, report):
-        return format_html('<img src="{}" width="85" height="85" />', report.cafe_log.snapshot.image.url) if report.cafe_log.snapshot else None
+        return format_html('<img src="{}" width="85" height="85" />', replace_image_domain(report.cafe_log.snapshot.image.url)) if report.cafe_log.snapshot else None
 
     def reporter(self, report):
         return report.user.profile.nickname if report.user.profile else None
@@ -67,7 +67,7 @@ class CafeLogReportAdmin(admin.ModelAdmin):
     preserve_filters = True
 
     def image_tag(self, like):
-        return format_html('<img src="{}" width="85" height="85" />', like.cafe_log.snapshot.image.url) if like.cafe_log.snapshot else None
+        return format_html('<img src="{}" width="85" height="85" />', replace_image_domain(like.cafe_log.snapshot.image.url)) if like.cafe_log.snapshot else None
 
     def user_nickname(self, like):
         return like.user.profile.nickname if like.user.profile else None
@@ -88,7 +88,7 @@ class SnapshotAdmin(ImageModelAdmin):
     preserve_filters = True
 
     def image_tag(self, snapshot):
-        return format_html('<img src="{}" width="85" height="85" />', snapshot.image.url) if snapshot.image else None
+        return format_html('<img src="{}" width="85" height="85" />', replace_image_domain(snapshot.image.url)) if snapshot.image else None
 
     image_tag.short_description = "이미지"
 

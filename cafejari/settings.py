@@ -7,6 +7,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # 시크릿 키
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
+# url
+BASE_URL = "cafejari.co.kr"
+BASE_IMAGE_URL = "cafejariimage.co.kr"
+
 # 디버그 모드 설정
 DEBUG = True
 
@@ -43,6 +47,9 @@ INSTALLED_APPS = [
 
     # swagger
     'drf_yasg',
+
+    # s3 연동
+    'storages',
 
     # 카페자리
     'cafe',
@@ -230,8 +237,9 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # media 파일
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+if LOCAL:
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # auto field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

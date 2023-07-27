@@ -5,14 +5,17 @@ from user.models import User, Profile, Grade, ProfileImage
 
 
 # 기본 serializer ----------------------------------------------------------------------------
-class GradeSerializer(serializers.ModelSerializer):
+from utils import ImageModelSerializer
+
+
+class GradeSerializer(ImageModelSerializer):
 
     class Meta:
         model = Grade
         fields = "__all__"
 
 
-class ProfileImageSerializer(serializers.ModelSerializer):
+class ProfileImageSerializer(ImageModelSerializer):
 
     class Meta:
         model = ProfileImage

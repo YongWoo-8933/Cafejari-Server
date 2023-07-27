@@ -5,6 +5,9 @@ from shop.models import Item, Coupon, UserCoupon, Gifticon
 
 
 # 기본 serializer ------------------------------------------------------------------------
+from utils import ImageModelSerializer
+
+
 class ItemSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -12,14 +15,14 @@ class ItemSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class GifticonSerializer(serializers.ModelSerializer):
+class GifticonSerializer(ImageModelSerializer):
 
     class Meta:
         model = Gifticon
         fields = "__all__"
 
 
-class CouponSerializer(serializers.ModelSerializer):
+class CouponSerializer(ImageModelSerializer):
 
     class Meta:
         model = Coupon

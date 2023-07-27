@@ -1,12 +1,13 @@
 
 import boto3
 from django.contrib import admin
+from django.utils.html import format_html
 from drf_yasg import openapi
 from rest_framework import mixins, status, serializers
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from cafejari.settings import AWS_STORAGE_BUCKET_NAME
+from cafejari.settings import AWS_STORAGE_BUCKET_NAME, AWS_S3_DOMAIN, BASE_IMAGE_URL, LOCAL
 from error import ServiceError
 
 # 유저가 자신의 모델만 받아오고, 삭제할 수 있는 viewset
@@ -79,3 +80,17 @@ class ImageModelAdmin(admin.ModelAdmin):
         for obj in queryset:
             self.s3_manager.delete_image(path=obj.image)
             obj.delete()
+
+
+# 이미지 파일을 가지고 있는 모델의 serializer
+class ImageModelSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_image(obj):
+        return replace_image_domain(url=obj.image.url)
+
+
+# s3 도메인을 image 도메인으로 교체
+def replace_image_domain(url):
+    return str(url).replace(AWS_S3_DOMAIN, BASE_IMAGE_URL) if not LOCAL else url

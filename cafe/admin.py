@@ -3,7 +3,7 @@ from django.utils.html import format_html
 
 from cafe.models import Cafe, Brand, District, OpeningHour, CafeFloor, CafeImage, OccupancyRatePrediction, \
     OccupancyRateUpdateLog, CongestionArea, CafeVIP, CafeTypeTag, DailyActivityStack
-from utils import ImageModelAdmin
+from utils import ImageModelAdmin, replace_image_domain
 
 
 @admin.register(District)
@@ -36,7 +36,7 @@ class BrandAdmin(ImageModelAdmin):
     preserve_filters = True
 
     def image_tag(self, brand):
-        return format_html('<img src="{}" width="85" height="85" />', brand.image.url) if brand.image else None
+        return format_html('<img src="{}" width="85" height="85" />', replace_image_domain(brand.image.url)) if brand.image else None
 
     image_tag.short_description = "이미지"
 
@@ -116,7 +116,7 @@ class CafeImageAdmin(ImageModelAdmin):
     preserve_filters = True
 
     def image_tag(self, cafe_image):
-        return format_html('<img src="{}" width="85" height="85" />', cafe_image.image.url) if cafe_image.image else None
+        return format_html('<img src="{}" width="85" height="85" />', replace_image_domain(cafe_image.image.url)) if cafe_image.image else None
 
     def cafe_name(self, cafe_image): return cafe_image.cafe.name
 

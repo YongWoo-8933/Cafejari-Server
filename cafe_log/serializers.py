@@ -7,7 +7,10 @@ from user.serializers import PartialUserSerializer
 
 
 # 기본 serializer ------------------------------------------------------------
-class SnapShotSerializer(serializers.ModelSerializer):
+from utils import ImageModelSerializer
+
+
+class SnapShotSerializer(ImageModelSerializer):
 
     class Meta:
         model = Snapshot

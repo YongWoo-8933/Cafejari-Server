@@ -7,6 +7,9 @@ from user.serializers import PartialUserSerializer
 
 
 # 기본 serializer ------------------------------------------------------------
+from utils import ImageModelSerializer
+
+
 class DistrictSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -21,7 +24,7 @@ class CongestionAreaSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class BrandSerializer(serializers.ModelSerializer):
+class BrandSerializer(ImageModelSerializer):
 
     class Meta:
         model = Brand
@@ -42,7 +45,7 @@ class CafeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class CafeImageSerializer(serializers.ModelSerializer):
+class CafeImageSerializer(ImageModelSerializer):
 
     class Meta:
         model = CafeImage
