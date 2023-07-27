@@ -11,8 +11,8 @@ from rest_framework.viewsets import GenericViewSet
 
 from cafe.models import Cafe
 from cafe_log.models import CafeLog, CafeLogLike, CafeLogReport, Snapshot, CafeLogTheme
-from cafe_log.serializers import CafeLogResponseSerializer, SnapShotSerializer, CafeLogLikeSerializer, \
-    CafeLogReportSerializer, CafeLogSerializer
+from cafe_log.serializers import CafeLogResponseSerializer, CafeLogLikeSerializer, \
+    CafeLogReportSerializer, CafeLogSerializer, SnapShotSerializer
 from cafe_log.swagger_serializers import SwaggerCafeLogListResponseSerializer, SwaggerCafeLogRequestSerializer, \
     SwaggerCafeLogReportRequestSerializer
 from error import ServiceError

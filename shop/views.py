@@ -17,9 +17,10 @@ from notification.naver_sms import send_sms_to_admin
 from shop.giftishow_biz import GiftishowBiz
 from shop.models import Item, Gifticon, Coupon, UserCoupon
 from cafe.serializers import BrandSerializer
-from shop.serializers import ItemSerializer, GifticonSerializer, CouponSerializer, UserCouponResponseSerializer
+from shop.serializers import ItemSerializer, GifticonSerializer, CouponSerializer, UserCouponResponseSerializer, \
+    GifticonResponseSerializer, CouponResponseSerializer
 from shop.swagger_serializers import SwaggerGifticonRequestSerializer
-from user.serializers import ProfileResponseSerializer
+from user.serializers import ProfileResponseSerializer, ProfileSerializer
 from utils import UserListDestroyViewSet, AUTHORIZATION_MANUAL_PARAMETER
 
 
@@ -67,14 +68,14 @@ class GifticonViewSet(
     UserListDestroyViewSet
 ):
     queryset = Gifticon.objects.all()
-    serializer_class = GifticonSerializer
+    serializer_class = GifticonResponseSerializer
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
         operation_id='기프티콘 리스트',
         operation_description='유저가 구매한 기프티콘 리스트(사용 완료 포함)',
         request_body=no_body,
-        responses={200: GifticonSerializer(many=True)},
+        responses={200: GifticonResponseSerializer(many=True)},
         manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
     )
     def list(self, request, *args, **kwargs):
@@ -119,7 +120,7 @@ class GifticonViewSet(
         time.sleep(0.4)
         with open(temp_file_name, 'rb') as f:
             image = ContentFile(f.read(), name=temp_file_name)
-        serializer = self.get_serializer(data={
+        serializer = GifticonSerializer(data={
             "image": image,
             "expiration_period": datetime.datetime.now() + datetime.timedelta(days=30),
             "is_used": False,
@@ -132,9 +133,9 @@ class GifticonViewSet(
         os.remove(temp_file_name)
 
         # 포인트 정산
-        profile_serializer = ProfileResponseSerializer(request.user.profile,
-                                                       data={"point": request.user.profile.point - item_object.price},
-                                                       partial=True)
+        profile_serializer = ProfileSerializer(request.user.profile,
+                                               data={"point": request.user.profile.point - item_object.price},
+                                               partial=True)
         profile_serializer.is_valid(raise_exception=True)
         profile_serializer.save()
 
@@ -165,7 +166,7 @@ class GifticonViewSet(
         operation_id='기프티콘 사용처리',
         operation_description='기프티콘 사용 완료 처리',
         request_body=no_body,
-        responses={201: GifticonSerializer()},
+        responses={201: GifticonResponseSerializer()},
         manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
     )
     @action(methods=['put'], detail=True, )
@@ -184,7 +185,7 @@ class CouponViewSet(
     GenericViewSet
 ):
     queryset = Coupon.objects.all()
-    serializer_class = CouponSerializer
+    serializer_class = CouponResponseSerializer
     permission_classes = [AllowAny]
 
     @swagger_auto_schema(

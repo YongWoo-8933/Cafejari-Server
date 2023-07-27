@@ -4,12 +4,9 @@ from cafe.models import District, Brand, CongestionArea, Cafe, OccupancyRatePred
     OpeningHour, OccupancyRateUpdateLog, CafeFloor, CafeTypeTag, DailyActivityStack
 from cafejari.settings import RECENT_HOUR
 from user.serializers import PartialUserSerializer
-
-
-# 기본 serializer ------------------------------------------------------------
 from utils import ImageModelSerializer
 
-
+# 기본 serializer ------------------------------------------------------------
 class DistrictSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -24,7 +21,7 @@ class CongestionAreaSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class BrandSerializer(ImageModelSerializer):
+class BrandSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Brand
@@ -45,7 +42,7 @@ class CafeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class CafeImageSerializer(ImageModelSerializer):
+class CafeImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CafeImage
@@ -96,6 +93,22 @@ class DailyActivityStackSerializer(serializers.ModelSerializer):
 
 
 # 응용 serializer ------------------------------------------------------------
+# brand image 응답용 serializer
+class BrandResponseSerializer(ImageModelSerializer):
+
+    class Meta:
+        model = Brand
+        fields = "__all__"
+
+
+# cafe image 응답용 serializer
+class CafeImageResponseSerializer(ImageModelSerializer):
+
+    class Meta:
+        model = CafeImage
+        fields = "__all__"
+
+
 # 맵 cafe 정보에 같이 실리는 vip 정보
 class CafeVIPRepresentationSerializer(CafeVIPSerializer):
     user = PartialUserSerializer(read_only=True)
@@ -103,6 +116,7 @@ class CafeVIPRepresentationSerializer(CafeVIPSerializer):
     def to_representation(self, instance):
         self.fields['user'] = PartialUserSerializer(read_only=True)
         return super(CafeVIPRepresentationSerializer, self).to_representation(instance)
+
 
 # 맵 cafe 정보 속 cafe_floor안에 recent_log에 포함되는 업데이트 로그
 class OccupancyRateUpdateLogCafeFloorRepresentationSerializer(OccupancyRateUpdateLogSerializer):
@@ -166,11 +180,11 @@ class OccupancyRateUpdateLogResponseSerializer(OccupancyRateUpdateLogSerializer)
 class CafeResponseSerializer(CafeSerializer):
     cafe_floor = CafeFloorCafeRepresentationSerializer(many=True, read_only=True)
     cafe_vip = CafeVIPRepresentationSerializer(many=True, read_only=True)
-    cafe_image = CafeImageSerializer(many=True, read_only=True)
+    cafe_image = CafeImageResponseSerializer(many=True, read_only=True)
     opening_hour = OpeningHourSerializer(read_only=True)
-    brand = BrandSerializer(read_only=True)
+    brand = BrandResponseSerializer(read_only=True)
 
     def to_representation(self, instance):
-        self.fields['brand'] = BrandSerializer(read_only=True)
+        self.fields['brand'] = BrandResponseSerializer(read_only=True)
         return super(CafeResponseSerializer, self).to_representation(instance)
 

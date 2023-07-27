@@ -15,14 +15,14 @@ class ItemSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class GifticonSerializer(ImageModelSerializer):
+class GifticonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Gifticon
         fields = "__all__"
 
 
-class CouponSerializer(ImageModelSerializer):
+class CouponSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Coupon
@@ -38,9 +38,26 @@ class UserCouponSerializer(serializers.ModelSerializer):
 
 
 # 기본 serializer ------------------------------------------------------------------------
+# 기프티콘 이미지 응답용 serializer
+class GifticonResponseSerializer(ImageModelSerializer):
+
+    class Meta:
+        model = Gifticon
+        fields = "__all__"
+
+
+# 쿠폰 이미지 응답용 serializer
+class CouponResponseSerializer(ImageModelSerializer):
+
+    class Meta:
+        model = Coupon
+        fields = "__all__"
+
+
+# 유저 쿠폰 응답용 serializer
 class UserCouponResponseSerializer(UserCouponSerializer):
-    coupon = CouponSerializer(read_only=True)
+    coupon = CouponResponseSerializer(read_only=True)
 
     def to_representation(self, instance):
-        self.fields['coupon'] = CouponSerializer(read_only=True)
+        self.fields['coupon'] = CouponResponseSerializer(read_only=True)
         return super(UserCouponResponseSerializer, self).to_representation(instance)

@@ -8,14 +8,14 @@ from user.models import User, Profile, Grade, ProfileImage
 from utils import ImageModelSerializer
 
 
-class GradeSerializer(ImageModelSerializer):
+class GradeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Grade
         fields = "__all__"
 
 
-class ProfileImageSerializer(ImageModelSerializer):
+class ProfileImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProfileImage
@@ -38,13 +38,29 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 # 응용 serializer ----------------------------------------------------------------------------
+# grade image 저장용 serializer
+class GradeResponseSerializer(ImageModelSerializer):
+
+    class Meta:
+        model = Grade
+        fields = "__all__"
+
+
+# profile_image image 저장용 serializer
+class ProfileImageResponseSerializer(ImageModelSerializer):
+
+    class Meta:
+        model = ProfileImage
+        fields = "__all__"
+
+
 class PartialProfileSerializer(serializers.ModelSerializer):
-    grade = GradeSerializer(read_only=True)
-    profile_image = ProfileImageSerializer(read_only=True)
+    grade = GradeResponseSerializer(read_only=True)
+    profile_image = ProfileImageResponseSerializer(read_only=True)
 
     def to_representation(self, instance):
-        self.fields['grade'] = GradeSerializer(read_only=True)
-        self.fields['profile_image'] = ProfileImageSerializer(read_only=True)
+        self.fields['grade'] = GradeResponseSerializer(read_only=True)
+        self.fields['profile_image'] = ProfileImageResponseSerializer(read_only=True)
         return super(PartialProfileSerializer, self).to_representation(instance)
 
     class Meta:
@@ -61,12 +77,12 @@ class PartialUserSerializer(serializers.ModelSerializer):
 
 
 class ProfileResponseSerializer(ProfileSerializer):
-    grade = GradeSerializer(read_only=True)
-    profile_image = ProfileImageSerializer(read_only=True)
+    grade = GradeResponseSerializer(read_only=True)
+    profile_image = ProfileImageResponseSerializer(read_only=True)
 
     def to_representation(self, instance):
-        self.fields['grade'] = GradeSerializer(read_only=True)
-        self.fields['profile_image'] = ProfileImageSerializer(read_only=True)
+        self.fields['grade'] = GradeResponseSerializer(read_only=True)
+        self.fields['profile_image'] = ProfileImageResponseSerializer(read_only=True)
         return super(ProfileResponseSerializer, self).to_representation(instance)
 
 

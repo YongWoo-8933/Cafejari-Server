@@ -26,11 +26,29 @@ from user.swagger_serializers import SwaggerMakeNewProfileRequestSerializer, \
     SwaggerProfileUpdateRequestSerializer, SwaggerKakaoCallbackResponseSerializer, \
     SwaggerKakaoLoginFinishResponseSerializer, SwaggerTokenRequestSerializer, \
     SwaggerValidateNicknameResponseSerializer, SwaggerKakaoLoginRequestSerializer, SwaggerRefreshTokenResponseSerializer
-from user.serializers import ProfileResponseSerializer, UserResponseSerializer, ProfileSerializer, ProfileImageSerializer
+from user.serializers import ProfileResponseSerializer, UserResponseSerializer, ProfileSerializer, \
+    ProfileImageSerializer, GradeResponseSerializer
 from drf_yasg.utils import swagger_auto_schema, no_body
 
 from utils import AUTHORIZATION_MANUAL_PARAMETER
 from rest_framework_simplejwt.tokens import RefreshToken
+
+
+class GradeViewSet(
+    mixins.ListModelMixin,
+    GenericViewSet
+):
+    queryset = Grade.objects.all()
+    serializer_class = GradeResponseSerializer
+    permission_classes = [AllowAny]
+
+    @swagger_auto_schema(
+        operation_id='grade 종류 받아오기',
+        operation_description='존배하는 모든 grade 종류 반환',
+        responses={200: GradeResponseSerializer(many=True)}
+    )
+    def list(self, request, *args, **kwargs):
+        return super(GradeViewSet, self).list(request, *args, **kwargs)
 
 
 class UserViewSet(GenericViewSet):
