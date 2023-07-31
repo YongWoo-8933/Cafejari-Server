@@ -64,7 +64,7 @@ class S3Manager:
 
     @classmethod
     def download_file(cls, path, filename):
-        boto3.client('s3').download_file(Bucket=AWS_STORAGE_BUCKET_NAME, Key=path, Filename='media/' + filename)
+        boto3.client('s3').download_file(Bucket=AWS_STORAGE_BUCKET_NAME, Key=path, Filename=filename)
 
 
 # 이미지 파일을 가지고 있는 모델의 admin

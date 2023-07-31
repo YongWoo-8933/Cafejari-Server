@@ -15,7 +15,7 @@ BASE_IMAGE_URL = "cafejariimage.co.kr"
 DEBUG = True
 
 # 로컬환경 / 서버환경 설정
-LOCAL = True
+LOCAL = False
 
 # 허용 호스트
 ALLOWED_HOSTS = ["*"]
