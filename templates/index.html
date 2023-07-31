@@ -55,80 +55,135 @@
 {#        </div>#}
 {#    </div>#}
 {#</div>#}
-    <div class="section overflow-hidden">
-        <div data-w-id="a12326fe-9964-de5d-902a-7d3869687150" class="hero-section-holder">
-            <div class="hero-section-container">
-                <div class="hero-section-text-content">
-                    <div class="animate-on-load-01">
-                        <div class="hero-section-header-container">
-                            <h1 class="heading-2">카페 갈 때,<br>카페자리</h1>
+<div class="section overflow-hidden">
+    <div data-w-id="a12326fe-9964-de5d-902a-7d3869687150" class="hero-section-holder">
+        <div class="hero-section-container">
+            <div class="hero-section-text-content">
+                <div class="animate-on-load-01">
+                    <div class="hero-section-header-container">
+                        <h1 class="heading-2">카페 갈 때,<br>카페자리</h1>
+                    </div>
+                </div>
+                <div class="animate-on-load-02">
+                    <div class="hero-paragraph-holder">
+                        <p>더 이상 힘들게 카페를 찾아 돌아다니지 마세요. 카페자리를 통해 원하는 카페를 골라가세요!</p>
+                    </div>
+                </div>
+                <div class="animate-on-load-03">
+                    <div class="hero-section-button-holder">
+                        <a href="#About" class="button w-button">시작하기</a>
+                    </div>
+                </div>
+            </div>
+            <div class="left-side-iphones">
+                <div class="hero-phone-holder first">
+                    <div class="iphone-container _01">
+                        <div class="iphone-holder">
+                            <img src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
+                                 loading="lazy"
+                                 sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
+                                 srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
+                                 alt="" class="iphone-image">
+                            <div class="iphone-screen-container">
+                                <img src="{% static 'main/image/Phone-Screenshot-07_1Phone-Screenshot-07.webp' %}"
+                                     loading="lazy" alt=""
+                                     sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
+                                     srcset="{% static 'main/image/Phone-Screenshot-07_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-07_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-07_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-07_1Phone-Screenshot-07.webp' %} 1126w"
+                                     class="iphone-screen-image">
+                            </div>
+                            <div class="iphone-shadow-container">
+                                <img src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
+                                     loading="lazy"
+                                     sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
+                                     srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
+                                     alt="" class="harsh-shadow">
+                            </div>
                         </div>
                     </div>
-                    <div class="animate-on-load-02">
-                        <div class="hero-paragraph-holder">
-                            <p>더 이상 힘들게 카페를 찾아 돌아다니지 마세요. 카페자리를 통해 원하는 카페를 골라가세요!</p>
-                        </div>
-                    </div>
-                    <div class="animate-on-load-03">
-                        <div class="hero-section-button-holder">
-                            <a href="#About" class="button w-button">시작하기</a>
+                    <div class="iphone-container _01">
+                        <div class="iphone-holder">
+                            <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                            <img src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
+                                 loading="lazy"
+                                 sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
+                                 srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
+                                 alt="" class="iphone-image">
+                            <div class="iphone-screen-container">
+                                <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                <img src="{% static 'main/image/Phone-Screenshot-02_1Phone-Screenshot-02.webp' %}"
+                                     loading="lazy" alt=""
+                                     sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
+                                     srcset="{% static 'main/image/Phone-Screenshot-02_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-02_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-02_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-02_1Phone-Screenshot-02.webp' %} 1125w"
+                                     class="iphone-screen-image">
+                            </div>
+                            <div class="iphone-shadow-container">
+                                <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                <img src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
+                                     loading="lazy"
+                                     sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
+                                     srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
+                                     alt="" class="harsh-shadow">
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="left-side-iphones">
-                    <div class="hero-phone-holder first">
-                        <div class="iphone-container _01">
-                            <div class="iphone-holder">
-                                <img src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
-                                     loading="lazy"
-                                     sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
-                                     srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
-                                     alt="" class="iphone-image">
-                                <div class="iphone-screen-container">
-                                    <img src="{% static 'main/image/Phone-Screenshot-07_1Phone-Screenshot-07.webp' %}"
-                                         loading="lazy" alt=""
-                                         sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
-                                         srcset="{% static 'main/image/Phone-Screenshot-07_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-07_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-07_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-07_1Phone-Screenshot-07.webp' %} 1126w"
-                                         class="iphone-screen-image">
-                                </div>
-                                <div class="iphone-shadow-container">
-                                    <img src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
-                                         loading="lazy"
-                                         sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
-                                         srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
-                                         alt="" class="harsh-shadow">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="iphone-container _01">
-                            <div class="iphone-holder">
+                <div class="hero-phone-holder second">
+                    <div class="iphone-container _02">
+                        <div class="iphone-holder">
+                            <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                            <img src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
+                                 loading="eager"
+                                 sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
+                                 srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
+                                 alt="" class="iphone-image">
+                            <div class="iphone-screen-container">
                                 <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                <img src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
-                                     loading="lazy"
-                                     sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
-                                     srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
-                                     alt="" class="iphone-image">
-                                <div class="iphone-screen-container">
-                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                    <img src="{% static 'main/image/Phone-Screenshot-02_1Phone-Screenshot-02.webp' %}"
-                                         loading="lazy" alt=""
-                                         sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
-                                         srcset="{% static 'main/image/Phone-Screenshot-02_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-02_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-02_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-02_1Phone-Screenshot-02.webp' %} 1125w"
-                                         class="iphone-screen-image">
-                                </div>
-                                <div class="iphone-shadow-container">
-                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                    <img src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
-                                         loading="lazy"
-                                         sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
-                                         srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
-                                         alt="" class="harsh-shadow">
-                                </div>
+                                <img src="{% static 'main/image/Phone-Screenshot-03_1Phone-Screenshot-03.webp' %}"
+                                     loading="eager" alt=""
+                                     sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
+                                     srcset="{% static 'main/image/Phone-Screenshot-03_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-03_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-03_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-03_1Phone-Screenshot-03.webp' %} 1125w"
+                                     class="iphone-screen-image">
+                            </div>
+                            <div class="iphone-shadow-container">
+                                <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                <img src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
+                                     loading="eager"
+                                     sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
+                                     srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
+                                     alt="" class="harsh-shadow">
                             </div>
                         </div>
                     </div>
-                    <div class="hero-phone-holder second">
-                        <div class="iphone-container _02">
+                    <div class="iphone-container _02">
+                        <div class="iphone-holder">
+                            <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                            <img src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
+                                 loading="lazy"
+                                 sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
+                                 srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
+                                 alt="" class="iphone-image">
+                            <div class="iphone-screen-container">
+                                <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                <img src="{% static 'main/image/Phone-Screenshot-05_1Phone-Screenshot-05.webp' %}"
+                                     loading="lazy" alt=""
+                                     sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
+                                     srcset="{% static 'main/image/Phone-Screenshot-05_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-05_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-05_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-05_1Phone-Screenshot-05.webp' %} 1126w"
+                                     class="iphone-screen-image">
+                            </div>
+                            <div class="iphone-shadow-container">
+                                <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                <img src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
+                                     loading="lazy"
+                                     sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
+                                     srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
+                                     alt="" class="harsh-shadow">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-side-iphones">
+                    <div class="hero-phone-holder third">
+                        <div class="iphone-container _03">
                             <div class="iphone-holder">
                                 <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
                                 <img src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
@@ -138,23 +193,23 @@
                                      alt="" class="iphone-image">
                                 <div class="iphone-screen-container">
                                     <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                    <img src="{% static 'main/image/Phone-Screenshot-03_1Phone-Screenshot-03.webp' %}"
-                                         loading="eager" alt=""
-                                         sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
-                                         srcset="{% static 'main/image/Phone-Screenshot-03_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-03_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-03_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-03_1Phone-Screenshot-03.webp' %} 1125w"
-                                         class="iphone-screen-image">
+                                    <img src="{% static 'main/image/check_login_background.png' %}" loading="lazy"
+                                         width="180"
+                                         sizes="(max-width: 479px) 28vw, (max-width: 767px) 89.6875px, (max-width: 991px) 14vw, (max-width: 1439px) 15vw, 180px"
+                                         srcset="{% static 'main/image/check_login_background-p-500.png' %} 500w, {% static 'main/image/check_login_background.png' %} 648w"
+                                         alt="" class="test_image">
                                 </div>
                                 <div class="iphone-shadow-container">
                                     <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
                                     <img src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
-                                         loading="eager"
+                                         loading="lazy"
                                          sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
                                          srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
                                          alt="" class="harsh-shadow">
                                 </div>
                             </div>
                         </div>
-                        <div class="iphone-container _02">
+                        <div class="iphone-container _03">
                             <div class="iphone-holder">
                                 <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
                                 <img src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
@@ -164,10 +219,10 @@
                                      alt="" class="iphone-image">
                                 <div class="iphone-screen-container">
                                     <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                    <img src="{% static 'main/image/Phone-Screenshot-05_1Phone-Screenshot-05.webp' %}"
+                                    <img src="{% static 'main/image/Phone-Screenshot-08_1Phone-Screenshot-08.webp' %}"
                                          loading="lazy" alt=""
                                          sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
-                                         srcset="{% static 'main/image/Phone-Screenshot-05_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-05_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-05_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-05_1Phone-Screenshot-05.webp' %} 1126w"
+                                         srcset="{% static 'main/image/Phone-Screenshot-08_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-08_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-08_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-08_1Phone-Screenshot-08.webp' %} 1129w"
                                          class="iphone-screen-image">
                                 </div>
                                 <div class="iphone-shadow-container">
@@ -181,1005 +236,57 @@
                             </div>
                         </div>
                     </div>
-                    <div class="right-side-iphones">
-                        <div class="hero-phone-holder third">
-                            <div class="iphone-container _03">
-                                <div class="iphone-holder">
-                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                    <img src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
-                                         loading="eager"
-                                         sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
-                                         srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
-                                         alt="" class="iphone-image">
-                                    <div class="iphone-screen-container">
-                                        <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                        <img src="{% static 'main/image/check_login_background.png' %}" loading="lazy"
-                                             width="180"
-                                             sizes="(max-width: 479px) 28vw, (max-width: 767px) 89.6875px, (max-width: 991px) 14vw, (max-width: 1439px) 15vw, 180px"
-                                             srcset="{% static 'main/image/check_login_background-p-500.png' %} 500w, {% static 'main/image/check_login_background.png' %} 648w"
-                                             alt="" class="test_image">
-                                    </div>
-                                    <div class="iphone-shadow-container">
-                                        <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                        <img src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
-                                             loading="lazy"
-                                             sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
-                                             srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
-                                             alt="" class="harsh-shadow">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="iphone-container _03">
-                                <div class="iphone-holder">
-                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                    <img src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
-                                         loading="lazy"
-                                         sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
-                                         srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
-                                         alt="" class="iphone-image">
-                                    <div class="iphone-screen-container">
-                                        <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                        <img src="{% static 'main/image/Phone-Screenshot-08_1Phone-Screenshot-08.webp' %}"
-                                             loading="lazy" alt=""
-                                             sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
-                                             srcset="{% static 'main/image/Phone-Screenshot-08_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-08_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-08_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-08_1Phone-Screenshot-08.webp' %} 1129w"
-                                             class="iphone-screen-image">
-                                    </div>
-                                    <div class="iphone-shadow-container">
-                                        <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                        <img src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
-                                             loading="lazy"
-                                             sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
-                                             srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
-                                             alt="" class="harsh-shadow">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="hero-phone-holder forth">
-                            <div class="iphone-container _04">
-                                <div class="iphone-holder">
-                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                    <img src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
-                                         loading="lazy"
-                                         sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
-                                         srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
-                                         alt="" class="iphone-image">
-                                    <div class="iphone-screen-container">
-                                        <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                        <img src="{% static 'main/image/Phone-Screenshot-06_1Phone-Screenshot-06.webp' %}"
-                                             loading="lazy" alt=""
-                                             sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
-                                             srcset="{% static 'main/image/Phone-Screenshot-06_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-06_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-06_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-06_1Phone-Screenshot-06.webp' %} 1126w"
-                                             class="iphone-screen-image">
-                                    </div>
-                                    <div class="iphone-shadow-container">
-                                        <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                        <img src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
-                                             loading="lazy"
-                                             sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
-                                             srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
-                                             alt="" class="harsh-shadow">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="iphone-container _04">
-                                <div class="iphone-holder">
-                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                    <img src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
-                                         loading="lazy"
-                                         sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
-                                         srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
-                                         alt="" class="iphone-image">
-                                    <div class="iphone-screen-container">
-                                        <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                        <img src="{% static 'main/image/Phone-Screenshot-01_1Phone-Screenshot-01.webp' %}"
-                                             loading="lazy" alt=""
-                                             sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
-                                             srcset="{% static 'main/image/Phone-Screenshot-01_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-01_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-01_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-01_1Phone-Screenshot-01.webp' %} 1125w"
-                                             class="iphone-screen-image">
-                                    </div>
-                                    <div class="iphone-shadow-container">
-                                        <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                        <img src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
-                                             loading="lazy"
-                                             sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
-                                             srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
-                                             alt="" class="harsh-shadow">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="tabs-container">
-                    <div class="center-text">
-                        <div class="fade-in-move-on-scroll">
-                            <h2>카페별 실시간 혼잡도를 제공해드립니다</h2>
-                        </div>
-                        <div class="w-layout-grid grid-8-col">
-                            <div id="w-node-_77789d64-d6ad-83b5-5af1-ea5afa8d0f96-0e21a08b" class="fade-in-move-on-scroll">
-                                <p class="grey-paragraph">앱을 통해 카페의 혼잡도를 미리 확인하고, 포인트까지 얻을 수 있어요</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="stacked-tabs-holder">
-                        <div class="stacked-tabs-container">
-                            <div data-w-id="f4234da7-3abc-a4df-1041-1618fe91dfe2" style="border-color:rgb(75,148,255)"
-                                 class="tab-link _01">
-                                <div class="tab-wrapper">
-                                    <div class="tab-circle">
-                                        <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                        <img style="filter:grayscale(0%)" alt="" src="{% static 'main/image/File-Icon.svg' %}"
-                                             loading="lazy" class="tab-icon _01">
-                                    </div>
-                                    <div style="opacity:1" class="tab-content-holder _01">
-                                        <div class="tab-title">Manage your portfolio</div>
-                                        <div class="tab-paragraph">Buy and sell popular digital currencies, keep track of them
-                                            in the one place.
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href="#Tabs" class="mobile-link w-inline-block"></a>
-                            </div>
-                            <div id="Tabs" data-w-id="9ec6002b-038e-551a-5173-5b14d2ddc58b"
-                                 style="border-color:rgba(75,148,255,0)" class="tab-link _02">
-                                <div class="tab-wrapper">
-                                    <div class="tab-circle">
-                                        <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                        <img style="filter:grayscale(100%)" alt=""
-                                             src="{% static 'main/image/Dollar-Icon.svg' %}" loading="lazy"
-                                             class="tab-icon _02">
-                                    </div>
-                                    <div style="opacity:0.5" class="tab-content-holder _02">
-                                        <div class="tab-title">Recurring buys</div>
-                                        <div class="tab-paragraph">Invest on used and donate on the ones that need it more.
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href="#Tabs" class="mobile-link w-inline-block"></a>
-                            </div>
-                            <div data-w-id="a04c9a00-ff3d-83db-cfab-1a4ff3c47f14" style="border-color:rgba(75,148,255,0)"
-                                 class="tab-link _03">
-                                <div class="tab-wrapper">
-                                    <div class="tab-circle">
-                                        <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                        <img style="filter:grayscale(100%)" alt="" src="{% static 'main/image/Lock-Icon.svg' %}"
-                                             loading="lazy" class="tab-icon _03">
-                                    </div>
-                                    <div style="opacity:0.5" class="tab-content-holder _03">
-                                        <div class="tab-title">Vault protection</div>
-                                        <div class="tab-paragraph">For added security, store your funds in a vault with time
-                                            delayed withdrawals.
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href="#Tabs" class="mobile-link w-inline-block"></a>
-                            </div>
-                        </div>
-                        <div class="stacked-tabs-content-holder">
-                            <div class="stacked-tabs-pane-holder">
-                                <div style="-webkit-transform:translate3d(0px, 0px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0px, 0px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0px, 0px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0px, 0px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:1"
-                                     class="stacked-tab-holder _01">
-                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                    <img src="{% static 'main/image/Dashboard-Image-01_1Dashboard-Image-01.webp' %}"
-                                         loading="lazy" sizes="(max-width: 991px) 74vw, (max-width: 1439px) 50vw, 774px"
-                                         srcset="{% static 'main/image/Dashboard-Image-01_1-p-500.jpg' %} 500w, {% static 'main/image/Dashboard-Image-01_1-p-800.jpg' %} 800w, {% static 'main/image/Dashboard-Image-01_1-p-1080.jpg' %} 1080w, {% static 'main/image/Dashboard-Image-01_1-p-1600.jpg' %} 1600w, {% static 'main/image/Dashboard-Image-01_1Dashboard-Image-01.webp' %} 1989w"
-                                         alt="First Dashboard Image" class="stacked-tab-image">
-                                </div>
-                                <div style="-webkit-transform:translate3d(75px, 0px, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(75px, 0px, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(75px, 0px, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(75px, 0px, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0.7"
-                                     class="stacked-tab-holder _02">
-                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                    <img src="{% static 'main/image/Dashboard-Image-01_1Dashboard-Image-01.webp' %}"
-                                         loading="lazy"
-                                         sizes="(max-width: 991px) 67vw, (max-width: 1439px) 45vw, 696.6000366210938px"
-                                         srcset="{% static 'main/image/Dashboard-Image-01_1-p-500.jpg' %} 500w, {% static 'main/image/Dashboard-Image-01_1-p-800.jpg' %} 800w, {% static 'main/image/Dashboard-Image-01_1-p-1080.jpg' %} 1080w, {% static 'main/image/Dashboard-Image-01_1-p-1600.jpg' %} 1600w, {% static 'main/image/Dashboard-Image-01_1Dashboard-Image-01.webp' %} 1989w"
-                                         alt="Second Dashboard Image" class="stacked-tab-image">
-                                </div>
-                                <div style="-webkit-transform:translate3d(150px, 0px, 0) scale3d(0.8, 0.8, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(150px, 0px, 0) scale3d(0.8, 0.8, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(150px, 0px, 0) scale3d(0.8, 0.8, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(150px, 0px, 0) scale3d(0.8, 0.8, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0.45"
-                                     class="stacked-tab-holder _03">
-                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                    <img src="{% static 'main/image/Dashboard-Image-03_1Dashboard-Image-03.webp' %}"
-                                         loading="lazy"
-                                         sizes="(max-width: 991px) 59vw, (max-width: 1439px) 40vw, 619.2000122070312px"
-                                         srcset="{% static 'main/image/Dashboard-Image-03_1-p-500.jpg' %} 500w, {% static 'main/image/Dashboard-Image-03_1-p-800.jpg' %} 800w, {% static 'main/image/Dashboard-Image-03_1-p-1080.jpg' %} 1080w, {% static 'main/image/Dashboard-Image-03_1-p-1600.jpg' %} 1600w, {% static 'main/image/Dashboard-Image-03_1Dashboard-Image-03.webp' %} 1989w"
-                                         alt="Third Dashboard Image" class="stacked-tab-image">
-                                </div>
-                            </div>
-                            <div class="stacked-gradient"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="About" class="section black-section">
-            <div class="container">
-                <div class="payment-config-section">
-                    <div class="payment-config-sticky-section">
-                        <div class="payment-sticky">
-                            <div class="fade-in-move-on-scroll">
-                                <div class="payment-title">
-                                    <h2 class="white-text no-margins">카페자리 문구문구</h2>
-                                </div>
-                            </div>
-                            <div class="fade-in-move-on-scroll">
-                                <p class="payment-paragraph">이건 매우 혁신적. 경이롭지만 배타적인, 최고의 UX를 경험하다!</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="payment-config-content">
-                        <div class="payment-config-content-holder">
-                            <div class="fade-in-move-on-scroll">
-                                <div class="white-title">Collect</div>
-                            </div>
-                            <div class="fade-in-move-on-scroll">
-                                <p class="payment-paragraph">Collect cardholder data, encrypt it, and share it with any payment
-                                    processor or merchant. We&#x27;ll also help you navigate PCI Compliance and 3D Secure
-                                    Validation.</p>
-                            </div>
-                            <div class="fade-in-move-on-scroll _100-width">
-                                <div class="payment-image-holder">
-                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                    <img src="{% static 'main/image/Debit-Card-Image_1Debit-Card-Image.webp' %}" loading="lazy"
-                                         sizes="(max-width: 991px) 93vw, (max-width: 1439px) 45vw, 470px"
-                                         srcset="{% static 'main/image/Debit-Card-Image_1-p-500.jpg' %} 500w, {% static 'main/image/Debit-Card-Image_1-p-800.jpg' %} 800w, {% static 'main/image/Debit-Card-Image_1-p-1080.jpg' %} 1080w, {% static 'main/image/Debit-Card-Image_1Debit-Card-Image.webp' %} 1410w"
-                                         alt="Card Image" class="debit-card-image">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="payment-config-content-holder">
-                            <div class="fade-in-move-on-scroll">
-                                <div class="white-title">Editing</div>
-                            </div>
-                            <div class="fade-in-move-on-scroll">
-                                <p class="payment-paragraph">Store the encrypted data in your database as normal, without any
-                                    changes to your stack or data structure.<br><br>Processing the encrypted cardholder data
-                                    without handling it.</p>
-                            </div>
-                            <div class="fade-in-move-on-scroll _100-width">
-                                <div class="payment-image-holder">
-                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                    <img src="{% static 'main/image/Editing-Image.svg' %}" loading="lazy"
-                                         alt="Editing Card Image" class="debit-card-image">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="payment-config-content-holder">
-                            <div class="fade-in-move-on-scroll">
-                                <div class="white-title">Comply</div>
-                            </div>
-                            <div class="fade-in-move-on-scroll">
-                                <p class="payment-paragraph">We’ll guide you through the process of becoming PCI DSS compliant
-                                    and help you through your first PCI DSS audit.</p>
-                            </div>
-                            <div class="fade-in-move-on-scroll">
-                                <div class="payment-button-holder">
-                                    <a href="#CTA" class="button w-button">Read the docs</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="Testimonials" class="section white-section">
-            <div class="container">
-                <div class="features-section">
-                    <div class="feature-grid">
-                        <div id="w-node-_52d8ff9b-d99f-0f6e-92f8-5b64a289a5b9-0e21a08b" class="feature-image-holder">
-                            <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                            <img src="{% static 'main/image/Feature-Image_1-p-1600.png' %}" loading="lazy"
-                                 alt="Girl Looking at sale report" class="feature-image">
-                        </div>
-                        <div id="w-node-_7bad64f3-c758-257f-b60f-91adddf9b627-0e21a08b" class="feature-text-holder">
-                            <div class="feature-title-holder">
-                                <div class="fade-in-move-on-scroll">
-                                    <h2>이게바로 카페자리란다</h2>
-                                </div>
-                                <div class="fade-in-move-on-scroll">
-                                    <p class="grey-paragraph">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit
-                                        aliquet ut ultrices dignissim libero vulputate. Curabitur dui natoque sit dui.</p>
-                                </div>
-                            </div>
-                            <div class="feature-testimonial-holder">
-                                <div class="fade-in-move-on-scroll">
-                                    <div class="fetaure-stars-holder">
-                                        <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                        <img src="{% static 'main/image/Star-review.svg' %}" loading="lazy" alt=""
-                                             class="feature-stars">
-                                    </div>
-                                </div>
-                                <div class="fade-in-move-on-scroll">
-                                    <div class="feature-testimonial">
-                                        <div class="black-title">Best profit maker in market!</div>
-                                        <div class="feature-testimonial-paragraph">
-                                            <p class="grey-paragraph">Consectetur adipiscing elit. Vehicula massa in enim
-                                                luctus. Rutrum arcu, aliquam nulla tincidunt gravida. Cursus convallis dolor
-                                                semper pretium ornare.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="fade-in-move-on-scroll">
-                                    <div class="feature-person-holder">
-                                        <div class="feature-person-profile-picture-holder">
-                                            <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                            <img src="{% static 'main/image/Testimonial-Image_1Testimonial-Image.webp' %}"
-                                                 loading="lazy" sizes="(max-width: 767px) 26px, (max-width: 991px) 3vw, 26px"
-                                                 srcset="{% static 'main/image/Testimonial-Image_1-p-500.jpg' %} 500w, {% static 'main/image/Testimonial-Image_1-p-800.jpg' %} 800w, {% static 'main/image/Testimonial-Image_1Testimonial-Image.webp' %} 1044w"
-                                                 alt="Testimonial Image" class="feature-person-profile-picture">
-                                        </div>
-                                        <div class="testimonial-name">Denny Jones</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="feature-grid">
-                        <div id="w-node-f41226f4-74c9-86f8-7aea-98a695473461-0e21a08b" class="feature-list-holder">
-                            <div class="feature-title-holder">
-                                <div class="fade-in-move-on-scroll">
-                                    <h2 class="no-margins">너의 카페 삶을 윤택하게해보아</h2>
-                                </div>
-                                <div class="fade-in-move-on-scroll">
-                                    <p class="grey-paragraph">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit
-                                        aliquet ut ultrices dignissim libero vulputate. Curabitur dui natoque sit dui.</p>
-                                </div>
-                            </div>
-                            <div class="feature-list-wrapper">
-                                <ul role="list" class="w-list-unstyled">
-                                    <li>
-                                        <div class="checkmark-list-holder">
-                                            <div class="checkmark-icon-holder">
-                                                <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                                <img src="{% static 'main/image/Check-Icon.svg' %}" loading="lazy" width="14"
-                                                     alt="" class="checkmark-icon">
-                                            </div>
-                                            <div class="list-text">Elementum sagittis dignissim ut</div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="checkmark-list-holder">
-                                            <div class="checkmark-icon-holder">
-                                                <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                                <img src="{% static 'main/image/Check-Icon.svg' %}" loading="lazy" alt=""
-                                                     class="checkmark-icon">
-                                            </div>
-                                            <div class="list-text">Dignissim aliquam interdum</div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="checkmark-list-holder">
-                                            <div class="checkmark-icon-holder">
-                                                <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                                <img src="{% static 'main/image/Check-Icon.svg' %}" loading="lazy" alt=""
-                                                     class="checkmark-icon">
-                                            </div>
-                                            <div class="list-text">Tellus vestibulum, molestie.</div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="feature-button-holder">
-                                <div class="fade-in-move-on-scroll">
-                                    <a href="#Pricing" class="button w-button">About pricing</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="w-node-f41226f4-74c9-86f8-7aea-98a69547345f-0e21a08b" class="feature-image-holder">
-                            <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                            <img src="{% static 'main/image/Feature-Image-02_1-p-1600.png' %}" loading="lazy"
-                                 alt="Guy looking at security of the card" class="feature-image">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="Features" class="section">
-            <div class="container">
-                <div class="cards-section">
-                    <div class="center-text">
-                        <div class="fade-in-move-on-scroll">
-                            <h2>카페자리는 이런 장점을 가지고 있어요</h2>
-                        </div>
-                        <div class="w-layout-grid grid-8-col">
-                            <div id="w-node-d5ab1ee6-0abe-c9d5-2f0c-ccac64bdd816-0e21a08b" class="fade-in-move-on-scroll">
-                                <p class="grey-paragraph">Coin-base has a variety of features that make it the best place to
-                                    start trading</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cards-wrapper">
-                        <div class="cards-grid">
-                            <div class="featured-cards">
-                                <div id="w-node-_539f8ba4-c08d-ee85-2409-69623da78972-0e21a08b" class="card-holder">
-                                    <div class="card-container">
-                                        <div class="card-image-holder">
-                                            <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                            <img src="{% static 'main/image/Card-Image-01.png' %}" loading="lazy"
-                                                 sizes="(max-width: 479px) 92vw, (max-width: 767px) 91vw, (max-width: 991px) 45vw, (max-width: 1439px) 46vw, 628.7999877929688px"
-                                                 srcset="{% static 'main/image/Card-Image-01-p-500.png' %} 500w, {% static 'main/image/Card-Image-01-p-800.png' %} 800w, {% static 'main/image/Card-Image-01-p-1080.png' %} 1080w, {% static 'main/image/Card-Image-01-p-1600.png' %} 1600w, {% static 'main/image/Card-Image-01.png' %} 1707w"
-                                                 alt="" class="card-image">
-                                        </div>
-                                        <div class="card-text-holder">
-                                            <div class="black-title">Elements that are adaptable and can be changed by switching
-                                                presets
-                                            </div>
-                                            <div class="card-paragraph-holder">
-                                                <p class="grey-paragraph">Coin-base has a variety of features that make it the
-                                                    best place to start trading</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="w-node-aa6d2952-65c7-ef68-8a7b-02ead5e0bd42-0e21a08b" class="card-holder">
-                                    <div class="card-container">
-                                        <div class="card-image-holder">
-                                            <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                            <img src="{% static 'main/image/Card-Image-03.png' %}" loading="lazy"
-                                                 sizes="(max-width: 479px) 92vw, (max-width: 767px) 91vw, (max-width: 991px) 45vw, (max-width: 1439px) 46vw, 628.7999877929688px"
-                                                 srcset="{% static 'main/image/Card-Image-03-p-500.png' %} 500w, {% static 'main/image/Card-Image-03-p-800.png' %} 800w, {% static 'main/image/Card-Image-03-p-1080.png' %} 1080w, {% static 'main/image/Card-Image-03-p-1600.png' %} 1600w, {% static 'main/image/Card-Image-03.png' %} 1704w"
-                                                 alt="" class="card-image">
-                                        </div>
-                                        <div class="card-text-holder">
-                                            <div class="black-title">Easy payment process that keeps you focused on tasks</div>
-                                            <div class="card-paragraph-holder">
-                                                <p class="grey-paragraph">Buy and sell popular digital currencies, keep track of
-                                                    them in the one place.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="featured-cards">
-                                <div id="w-node-_45aab09d-36a5-3bc7-26df-bc1037daf4f6-0e21a08b" class="card-holder">
-                                    <div class="card-container">
-                                        <div class="card-image-holder">
-                                            <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                            <img src="{% static 'main/image/Card-Image-02.png' %}" loading="lazy"
-                                                 sizes="(max-width: 479px) 92vw, (max-width: 767px) 91vw, (max-width: 991px) 45vw, (max-width: 1439px) 46vw, 628.7999877929688px"
-                                                 srcset="{% static 'main/image/Card-Image-02-p-500.png' %} 500w, {% static 'main/image/Card-Image-02-p-800.png' %} 800w, {% static 'main/image/Card-Image-02-p-1080.png' %} 1080w, {% static 'main/image/Card-Image-02-p-1600.png' %} 1600w, {% static 'main/image/Card-Image-02.png' %} 1710w"
-                                                 alt="" class="card-image">
-                                        </div>
-                                        <div class="card-text-holder">
-                                            <div class="black-title">Forget about loading bars. The response is immediate.</div>
-                                            <div class="card-paragraph-holder">
-                                                <p class="grey-paragraph">Buy and sell popular digital currencies, keep track of
-                                                    them in the one place.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="w-node-_45aab09d-36a5-3bc7-26df-bc1037daf4ec-0e21a08b" class="card-holder">
-                                    <div class="card-container">
-                                        <div class="card-text-holder no-padding-bot">
-                                            <div class="black-title">Whatever you do, we make layouts that don't break.</div>
-                                            <div class="card-paragraph-holder">
-                                                <p class="grey-paragraph">Buy and sell popular digital currencies, keep track of
-                                                    them in the one place.</p>
-                                            </div>
-                                        </div>
-                                        <div class="card-image-holder">
-                                            <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                            <img src="{% static 'main/image/Card-Image-04.png' %}" loading="lazy"
-                                                 sizes="(max-width: 479px) 92vw, (max-width: 767px) 91vw, (max-width: 991px) 45vw, (max-width: 1439px) 46vw, 628.7999877929688px"
-                                                 srcset="{% static 'main/image/Card-Image-04-p-500.png' %} 500w, {% static 'main/image/Card-Image-04-p-800.png' %} 800w, {% static 'main/image/Card-Image-04-p-1080.png' %} 1080w, {% static 'main/image/Card-Image-04-p-1600.png' %} 1600w, {% static 'main/image/Card-Image-04.png' %} 1704w"
-                                                 alt="" class="card-image">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="Pricing" class="section pricing-section">
-            <div class="container">
-                <div class="pricing-wrapper">
-                    <div class="center-text">
-                        <div class="fade-in-move-on-scroll">
-                            <h2 class="white-text">질러!</h2>
-                        </div>
-                        <div class="w-layout-grid grid-8-col">
-                            <div id="w-node-f14b6e27-ed71-c6ed-e9f5-9843c7df92ee-0e21a08b" class="fade-in-move-on-scroll">
-                                <p class="grey-paragraph">Malta is open source and completely free to use. It is currently being
-                                    worked on.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pricing-tab-holder">
-                        <div data-w-id="b68b949a-5aa1-52a2-17ed-27a9819b18ba" class="pricing-tab">
-                            <div class="pricing-tab-content">
-                                <div class="pricing-header">
-                                    <div class="pricing-sub-title">BASIC</div>
-                                    <div class="pricing-title">Free for all</div>
-                                </div>
-                                <div class="pricing-list-holder">
-                                    <ul role="list" class="w-list-unstyled">
-                                        <li>
-                                            <div class="checkmark-list-holder">
-                                                <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                                <img src="{% static 'main/image/Checkmark-White.svg' %}" loading="lazy" alt=""
-                                                     class="checkmark-white">
-                                                <div class="list-text white-text">Open License</div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="checkmark-list-holder">
-                                                <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                                <img src="{% static 'main/image/Checkmark-White.svg' %}" loading="lazy" alt=""
-                                                     class="checkmark-white">
-                                                <div class="list-text white-text">Great Documentation</div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="checkmark-list-holder">
-                                                <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                                <img src="{% static 'main/image/Checkmark-White.svg' %}" loading="lazy" alt=""
-                                                     class="checkmark-white">
-                                                <div class="list-text white-text">Tested In Production</div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="pricing-button-holder">
-                                    <a href="#CTA" class="button white w-button">Try it out</a>
-                                </div>
-                            </div>
-                            <div class="blur-container">
-                                <div class="blur-ancor">
-                                    <div class="background-blur"></div>
-                                </div>
-                                <div class="background-blue-holder"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="signup-from-holder">
-                        <div class="signup-from-container">
-                            <div class="signup-from-text-holder">
-                                <div class="fade-in-move-on-scroll">
-                                    <div class="white-title">Sign up for email updates!</div>
-                                </div>
-                                <div class="fade-in-move-on-scroll">
-                                    <p class="no-margin-white-text">Get monthly email updates about malta improvements and
-                                        roadmap.</p>
-                                </div>
-                            </div>
-                            <div class="form-block w-form">
-                                <form id="email-form" name="email-form" data-name="Email Form" method="get" class="form"
-                                      data-wf-page-id="64c4bf43a0442cfa0e21a08b"
-                                      data-wf-element-id="81d44b46-4a97-04af-ee75-7e92f0d3cf90">
-                                    <input type="email" class="cta-text-field w-input" maxlength="256" name="email"
-                                           data-name="Email" placeholder="Email" id="email" required="">
-                                    <input type="submit" value="" data-wait="..." class="submit-button w-button">
-                                </form>
-                                <div class="success-message w-form-done">
-                                    <div>Thank you! Your submission has been received!</div>
-                                </div>
-                                <div class="w-form-fail">
-                                    <div>Oops! Something went wrong while submitting the form.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="section relative">
-            <div class="container">
-                <div class="customers-section-holder">
-                    <div class="center-text">
-                        <div class="w-layout-grid grid-8-col">
-                            <div id="w-node-_9b63d825-4fc3-9b46-2b3f-0d190a8fda8e-0e21a08b" class="fade-in-move-on-scroll">
-                                <h2>다운받아!</h2>
-                            </div>
-                        </div>
-                        <div class="w-layout-grid grid-8-col">
-                            <div id="w-node-_9b63d825-4fc3-9b46-2b3f-0d190a8fda92-0e21a08b" class="fade-in-move-on-scroll">
-                                <p class="grey-paragraph">Our apps conceal an incredible amount of complex proprietary
-                                    technology that we developed and perfected behind their apparent simplicity.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="blue-cta-holder">
-                    <div class="blue-cta-container">
-                        <div class="cta-blue-text-holder">
-                            <div class="fade-in-move-on-scroll">
-                                <h2 class="cta-title">Let’s do the work, make greatness</h2>
-                            </div>
-                            <div class="fade-in-move-on-scroll">
-                                <div class="cta-paragraph">
-                                    <p class="white-text">Collect cardholder data, encrypt it, and share it with. We&#x27;ll
-                                        also help you navigate PCI Compliance and 3D Secure Validation.</p>
-                                </div>
-                            </div>
-                            <div class="fade-in-move-on-scroll">
-                                <div class="cta-buttons-holder">
-                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                    <a href="https://www.apple.com/store" target="_blank"
-                                       class="cta-image-holder w-inline-block"><img
-                                            src="{% static 'main/image/App-Store.svg' %}" loading="lazy"
-                                            alt="Download Apple store" class="cta-image"></a>
-                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                    <a href="https://play.google.com/store/apps" target="_blank"
-                                       class="cta-image-holder w-inline-block"><img
-                                            src="{% static 'main/image/Google-Play.svg' %}" loading="lazy"
-                                            alt="Download Google Play" class="cta-image"></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="cta-blue-hand-holder">
-                            <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                            <img src="{% static 'main/image/CTA-Iphone.png' %}" loading="lazy"
-                                 sizes="(max-width: 479px) 83vw, (max-width: 991px) 46vw, (max-width: 1439px) 32vw, 484px"
-                                 srcset="{% static 'main/image/CTA-Iphone-p-500.png' %} 500w, {% static 'main/image/CTA-Iphone-p-800.png' %} 800w, {% static 'main/image/CTA-Iphone-p-1080.png' %} 1080w, {% static 'main/image/CTA-Iphone.png' %} 1158w"
-                                 alt="" class="cta-blue-hand-image">
-                            <div class="screen-inside-iphone-holder">
-                                <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                                <img src="{% static 'main/image/Phone-Screenshot-01_1Phone-Screenshot-01.webp' %}"
-                                     loading="lazy"
-                                     sizes="(max-width: 479px) 46vw, (max-width: 991px) 26vw, (max-width: 1439px) 18vw, 271.0500183105469px"
-                                     srcset="{% static 'main/image/Phone-Screenshot-01_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-01_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-01_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-01_1Phone-Screenshot-01.webp' %} 1125w"
-                                     alt="Screen of the dashboard on mobile" class="screen-inside-iphone">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    <!-- <div class="section black-section">
-        <div id="CTA" class="cta-holder">
-            <div class="container">
-                <div class="cta-logo-holder">
-                    <div class="cta-text-holder">
-                        <div class="fade-in-move-on-scroll">
-                            <div class="cta-header-holder">
-                                <h2 class="white-text">Tried-and-true external products.</h2>
-                            </div>
-                        </div>
-                        <div class="fade-in-move-on-scroll">
-                            <div class="cta-paragraph">
-                                <p class="grey-paragraph">Our apps conceal an incredible amount of complex proprietary technology that we developed and perfected behind their apparent simplicity.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cta-grid-holder">
-                        <div class="cta-logo-grid">
-                            <div id="w-node-_1faa8986-67d3-0561-534b-ecd721750ef6-0e21a08b" class="cta-logo-container"><img src="images/Logo-White-06.svg" loading="lazy" alt="Recharge Logo" class="cta-logo"></div>
-                            <div id="w-node-_821c0d87-b5cb-43f1-e1f8-6557d367a94f-0e21a08b" class="cta-logo-container"><img src="images/Logo-White-05.svg" loading="lazy" alt="Network Logo" class="cta-logo"></div>
-                            <div id="w-node-_774032d3-6ed6-1ff7-f4d5-d48e1680f28a-0e21a08b" class="cta-logo-container"><img src="images/Logo-White-01.svg" loading="lazy" alt="Greenish Logo" class="cta-logo"></div>
-                            <div id="w-node-ab57a118-64f6-6c07-a189-241e4ec70f8f-0e21a08b" class="cta-logo-container"><img src="images/Logo-White-02.svg" loading="lazy" alt="Inspire Logo" class="cta-logo"></div>
-                            <div id="w-node-_58b37029-fe62-9e32-414c-7938f9e2ec54-0e21a08b" class="cta-logo-container"><img src="images/Logo-White-03.svg" loading="lazy" alt="Cloud Icon" class="cta-logo"></div>
-                            <div id="w-node-_0d6a082e-a692-5022-d21e-d54a2c5a5fc7-0e21a08b" class="cta-logo-container"><img src="images/Logo-White-04.svg" loading="lazy" alt="Hitech Logo" class="cta-logo"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-        <div class="footer">
-            <div class="container">
-                <div class="footer-flex-container">
-                    <div id="w-node-_6a983adf-29bb-bea4-f1c9-518466de9af8-0a144c54"
-                         data-w-id="6a983adf-29bb-bea4-f1c9-518466de9af8" class="footer-brand">
-                        <a href="index.html" aria-current="page" class="footer-brand-holder w-inline-block w--current">
-                            <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
-                            <img src="{% static 'main/image/Logo-PNG_1Logo-PNG.webp' %}" loading="lazy" sizes="140px"
-                                 srcset="{% static 'main/image/Logo-PNG_1-p-500.png' %} 500w, {% static 'main/image/Logo-PNG_1-p-800.png' %} 800w, {% static 'main/image/Logo-PNG_1-p-1080.png' %} 1080w, {% static 'main/image/Logo-PNG_1Logo-PNG.webp' %} 1559w"
-                                 alt="Malta Logo" class="footer-brand-image">
-                        </a>
-                        <div class="footer-info">
-                            <div class="grey-link text-block">
-                                <a href="tel:123123123" class="grey-link">+383 44 123 - 456</a>
-                            </div>
-                            <div class="hide-mobile">|</div>
-                            <div class="grey-link">
-                                <a href="mailto:info@yourwebsite.com" class="grey-link">Info@yourwebsite.com</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="w-node-eb050d0c-cd20-6fbc-5d31-0eaf0a144c59-0a144c54" class="fade-in-move-on-scroll">
-                        <div class="footer-link-holder">
-                            <!-- 변경: href 속성에 {% static 'main/template/{filename}' %} 형식으로 바꿔줍니다. -->
-                            <a href="{% static 'main/template/change-log.html' %}" class="footer-link w-inline-block">
-                                <div class="footer-text">Change Log</div>
-                            </a>
-                            <!-- 변경: href 속성에 {% static 'main/template/{filename}' %} 형식으로 바꿔줍니다. -->
-                            <a href="{% static 'main/template/style-guide.html' %}" class="footer-link w-inline-block">
-                                <div class="footer-text">Style Guide</div>
-                            </a>
-                            <!-- 변경: href 속성에 {% static 'main/template/{filename}' %} 형식으로 바꿔줍니다. -->
-                            <a href="{% static 'main/template/licensing.html' %}" class="footer-link w-inline-block">
-                                <div class="footer-text">Licensing</div>
-                            </a>
-                            <!-- 변경: href 속성에 {% static 'main/template/{filename}' %} 형식으로 바꿔줍니다. -->
-                            <a href="{% static 'main/template/instructions.html' %}" class="footer-link w-inline-block">
-                                <div class="footer-text">Instructions</div>
-                            </a>
-                        </div>
-                    </div>
-                    <div id="w-node-_40382bd6-a79c-0890-7f58-1ed22ce7a6ff-0a144c54" class="fade-in-move-on-scroll">
-                        <div class="footer-link-holder">
-                            <!-- 변경: href 속성에 {% static 'main/template/{filename}' %} 형식으로 바꿔줍니다. -->
-                            <a href="/#About" class="footer-link w-inline-block">
-                                <div class="footer-text">About</div>
-                            </a>
-                            <!-- 변경: href 속성에 {% static 'main/template/{filename}' %} 형식으로 바꿔줍니다. -->
-                            <a href="/#Features" class="footer-link w-inline-block">
-                                <div class="footer-text">Features</div>
-                            </a>
-                            <!-- 변경: href 속성에 {% static 'main/template/{filename}' %} 형식으로 바꿔줍니다. -->
-                            <a href="/#Pricing" class="footer-link w-inline-block">
-                                <div class="footer-text">Pricing</div>
-                            </a>
-                            <!-- 변경: href 속성에 {% static 'main/template/{filename}' %} 형식으로 바꿔줍니다. -->
-                            <a href="/#Testimonials" class="footer-link w-inline-block">
-                                <div class="footer-text">Testimonials</div>
-                            </a>
-                        </div>
-                    </div>
-                    <div id="w-node-_19d66aab-9c90-b904-3ee5-6e4373744c48-0a144c54" class="fade-in-move-on-scroll">
-                        <div class="footer-link-holder">
-                            <!-- 변경: href 속성에 'main/image/{filename}' 형식으로 바꿔줍니다. -->
-                            <a href="https://www.linkedin.com/company/azwedo/" target="_blank"
-                               class="footer-link w-inline-block">
-                                <div class="footer-text">Linkedin</div>
-                            </a>
-                            <!-- 변경: href 속성에 'main/image/{filename}' 형식으로 바꿔줍니다. -->
-                            <a href="https://www.facebook.com/azwedo" target="_blank" class="footer-link w-inline-block">
-                                <div class="footer-text">Facebook</div>
-                            </a>
-                            <!-- 변경: href 속성에 'main/image/{filename}' 형식으로 바꿔줍니다. -->
-                            <a href="https://dribbble.com/azwedo" target="_blank" class="footer-link w-inline-block">
-                                <div class="footer-text">Dribbble</div>
-                            </a>
-                            <!-- 변경: href 속성에 'main/image/{filename}' 형식으로 바꿔줍니다. -->
-                            <a href="http://instagram.com" target="_blank" class="footer-link w-inline-block">
-                                <div class="footer-text">Instagram</div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="made-by-section">
-                    <div class="made-by-horizontal-block">
-                        <div class="_16px">©Malta All Rights Reserved 2022 -</div>
-                        <div class="horizontal-footer-link-holder top-bottom-margin">
-                            <div class="by left-margin">Designed By</div>
-                            <!-- 변경: href 속성에 "main/image/{filename}" 형식으로 바꿔줍니다. -->
-                            <a href="http://azwedo.com?ref=malta-template" target="_blank" class="w-inline-block">
-                                <div>Azwedo</div>
-                            </a>
-                            <div class="and"> &amp;</div>
-                            <!-- 변경: href 속성에 "main/image/{filename}" 형식으로 바꿔줍니다. -->
-                            <a href="http://wedoflow.com?ref=malta-template" target="_blank" class="w-inline-block">
-                                <div>Wedoflow</div>
-                            </a>
-                        </div>
-                        <div class="horizontal-footer-link-holder">
-                            <div class="by left-margin">Powered By</div>
-                            <!-- 변경: href 속성에 "main/image/{filename}" 형식으로 바꿔줍니다. -->
-                            <a href="http://www.webflow.com" target="_blank" class="w-inline-block">
-                                <div>Webflow</div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div data-w-id="ee0537f6-fdf9-8f3c-a0e3-6e93734ab19a"
-             style="-webkit-transform:translate3d(null, 20px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(null, 20px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(null, 20px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(null, 20px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0"
-             class="buy-template-holder">
-            <a href="https://webflow.com/templates/html/malta-app-website-template" target="_blank"
-               class="buy-template-link w-inline-block">
-                <div class="buy-this-template-button-container">
-                    <div class="buy-this-template-content">
-                        <div class="buy-this-template-text">Buy this<strong></strong></div>
-                        <div class="buy-webflow-template-content">
-                            <div class="webflow-icon"></div>
-                            <div class="buy-this-template-text">template for <span class="buy-template-price">$24 USD</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div data-w-id="a12326fe-9964-de5d-902a-7d3869687150" class="hero-section-holder">
-            <div class="hero-section-container">
-                <div class="hero-section-text-content">
-                    <div class="animate-on-load-01">
-                        <div class="hero-section-header-container">
-                            <h1 class="heading-2">카페 갈 때,<br>카페자리</h1>
-                        </div>
-                    </div>
-                    <div class="animate-on-load-02">
-                        <div class="hero-paragraph-holder">
-                            <p>더 이상 힘들게 카페를 찾아 돌아다니지 마세요. 앱 하나로 손쉽게 혼잡도를 확인하고, 포인트도 받아보세요!</p>
-                        </div>
-                    </div>
-                    <div class="animate-on-load-03">
-                        <div class="hero-section-button-holder">
-                            <a href="#About" class="button w-button">시작하기</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="left-side-iphones">
-                    <div class="hero-phone-holder first">
-                        <div class="iphone-container _01">
-                            <div class="iphone-holder"><img
-                                    src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
-                                    loading="lazy"
-                                    sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
-                                    srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
-                                    alt="" class="iphone-image">
-                                <div class="iphone-screen-container"><img
-                                        src="{% static 'main/image/Phone-Screenshot-07_1Phone-Screenshot-07.webp' %}"
-                                        loading="lazy" alt=""
-                                        sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
-                                        srcset="{% static 'main/image/Phone-Screenshot-07_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-07_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-07_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-07_1Phone-Screenshot-07.webp' %} 1126w"
-                                        class="iphone-screen-image"></div>
-                                <div class="iphone-shadow-container"><img
-                                        src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
-                                        loading="lazy"
-                                        sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
-                                        srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
-                                        alt="" class="harsh-shadow"></div>
-                            </div>
-                        </div>
-                        <div class="iphone-container _01">
-                            <div class="iphone-holder"><img
-                                    src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
-                                    loading="lazy"
-                                    sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
-                                    srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
-                                    alt="" class="iphone-image">
-                                <div class="iphone-screen-container"><img
-                                        src="{% static 'main/image/Phone-Screenshot-02_1Phone-Screenshot-02.webp' %}"
-                                        loading="lazy" alt=""
-                                        sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
-                                        srcset="{% static 'main/image/Phone-Screenshot-02_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-02_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-02_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-02_1Phone-Screenshot-02.webp' %} 1125w"
-                                        class="iphone-screen-image"></div>
-                                <div class="iphone-shadow-container"><img
-                                        src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
-                                        loading="lazy"
-                                        sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
-                                        srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
-                                        alt="" class="harsh-shadow"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="hero-phone-holder second">
-                        <div class="iphone-container _02">
-                            <div class="iphone-holder"><img
-                                    src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
-                                    loading="eager"
-                                    sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
-                                    srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
-                                    alt="" class="iphone-image">
-                                <div class="iphone-screen-container"><img
-                                        src="{% static 'main/image/Phone-Screenshot-03_1Phone-Screenshot-03.webp' %}"
-                                        loading="eager" alt=""
-                                        sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
-                                        srcset="{% static 'main/image/Phone-Screenshot-03_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-03_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-03_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-03_1Phone-Screenshot-03.webp' %} 1125w"
-                                        class="iphone-screen-image"></div>
-                                <div class="iphone-shadow-container"><img
-                                        src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
-                                        loading="eager"
-                                        sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
-                                        srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
-                                        alt="" class="harsh-shadow"></div>
-                            </div>
-                        </div>
-                        <div class="iphone-container _02">
-                            <div class="iphone-holder"><img
-                                    src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
-                                    loading="lazy"
-                                    sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
-                                    srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
-                                    alt="" class="iphone-image">
-                                <div class="iphone-screen-container"><img
-                                        src="{% static 'main/image/Phone-Screenshot-05_1Phone-Screenshot-05.webp' %}"
-                                        loading="lazy" alt=""
-                                        sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
-                                        srcset="{% static 'main/image/Phone-Screenshot-05_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-05_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-05_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-05_1Phone-Screenshot-05.webp' %} 1126w"
-                                        class="iphone-screen-image"></div>
-                                <div class="iphone-shadow-container"><img
-                                        src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
-                                        loading="lazy"
-                                        sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
-                                        srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
-                                        alt="" class="harsh-shadow"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="right-side-iphones">
-                    <div class="hero-phone-holder third">
-                        <div class="iphone-container _03">
-                            <div class="iphone-holder"><img
-                                    src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
-                                    loading="eager"
-                                    sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
-                                    srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
-                                    alt="" class="iphone-image">
-                                <div class="iphone-screen-container"><img
-                                        src="{% static 'main/image/check_login_background.png' %}" loading="lazy" width="180"
-                                        sizes="(max-width: 479px) 28vw, (max-width: 767px) 89.6875px, (max-width: 991px) 14vw, (max-width: 1439px) 15vw, 180px"
-                                        srcset="{% static 'main/image/check_login_background-p-500.png' %} 500w, {% static 'main/image/check_login_background.png' %} 648w"
-                                        alt="" class="test_image"></div>
-                                <div class="iphone-shadow-container"><img
-                                        src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
-                                        loading="lazy"
-                                        sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
-                                        srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
-                                        alt="" class="harsh-shadow"></div>
-                            </div>
-                        </div>
-                        <div class="iphone-container _03">
-                            <div class="iphone-holder"><img
-                                    src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
-                                    loading="lazy"
-                                    sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
-                                    srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
-                                    alt="" class="iphone-image">
-                                <div class="iphone-screen-container"><img
-                                        src="{% static 'main/image/Phone-Screenshot-08_1Phone-Screenshot-08.webp' %}"
-                                        loading="lazy" alt=""
-                                        sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
-                                        srcset="{% static 'main/image/Phone-Screenshot-08_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-08_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-08_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-08_1Phone-Screenshot-08.webp' %} 1129w"
-                                        class="iphone-screen-image"></div>
-                                <div class="iphone-shadow-container"><img
-                                        src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
-                                        loading="lazy"
-                                        sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
-                                        srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
-                                        alt="" class="harsh-shadow"></div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="hero-phone-holder forth">
                         <div class="iphone-container _04">
-                            <div class="iphone-holder"><img
-                                    src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
-                                    loading="lazy"
-                                    sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
-                                    srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
-                                    alt="" class="iphone-image">
-                                <div class="iphone-screen-container"><img
-                                        src="{% static 'main/image/Phone-Screenshot-04_1Phone-Screenshot-04.webp' %}"
-                                        loading="lazy" alt=""
-                                        sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
-                                        srcset="{% static 'main/image/Phone-Screenshot-04_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-04_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-04_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-04_1Phone-Screenshot-04.webp' %} 1125w"
-                                        class="iphone-screen-image"></div>
-                                <div class="iphone-shadow-container"><img
-                                        src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
-                                        loading="lazy"
-                                        sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
-                                        srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
-                                        alt="" class="harsh-shadow"></div>
+                            <div class="iphone-holder">
+                                <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                <img src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
+                                     loading="lazy"
+                                     sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
+                                     srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
+                                     alt="" class="iphone-image">
+                                <div class="iphone-screen-container">
+                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                    <img src="{% static 'main/image/Phone-Screenshot-06_1Phone-Screenshot-06.webp' %}"
+                                         loading="lazy" alt=""
+                                         sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
+                                         srcset="{% static 'main/image/Phone-Screenshot-06_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-06_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-06_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-06_1Phone-Screenshot-06.webp' %} 1126w"
+                                         class="iphone-screen-image">
+                                </div>
+                                <div class="iphone-shadow-container">
+                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                    <img src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
+                                         loading="lazy"
+                                         sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
+                                         srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
+                                         alt="" class="harsh-shadow">
+                                </div>
                             </div>
                         </div>
                         <div class="iphone-container _04">
-                            <div class="iphone-holder"><img
-                                    src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
-                                    loading="eager"
-                                    sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
-                                    srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
-                                    alt="" class="iphone-image">
-                                <div class="iphone-screen-container"><img
-                                        src="{% static 'main/image/Phone-Screenshot-06_1Phone-Screenshot-06.webp' %}"
-                                        loading="eager" alt=""
-                                        sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
-                                        srcset="{% static 'main/image/Phone-Screenshot-06_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-06_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-06_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-06_1Phone-Screenshot-06.webp' %} 1125w"
-                                        class="iphone-screen-image"></div>
-                                <div class="iphone-shadow-container"><img
-                                        src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
-                                        loading="eager"
-                                        sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
-                                        srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
-                                        alt="" class="harsh-shadow"></div>
+                            <div class="iphone-holder">
+                                <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                <img src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
+                                     loading="lazy"
+                                     sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
+                                     srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
+                                     alt="" class="iphone-image">
+                                <div class="iphone-screen-container">
+                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                    <img src="{% static 'main/image/Phone-Screenshot-01_1Phone-Screenshot-01.webp' %}"
+                                         loading="lazy" alt=""
+                                         sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
+                                         srcset="{% static 'main/image/Phone-Screenshot-01_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-01_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-01_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-01_1Phone-Screenshot-01.webp' %} 1125w"
+                                         class="iphone-screen-image">
+                                </div>
+                                <div class="iphone-shadow-container">
+                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                    <img src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
+                                         loading="lazy"
+                                         sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
+                                         srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
+                                         alt="" class="harsh-shadow">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1187,10 +294,903 @@
             </div>
         </div>
     </div>
-    <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=64c4bf42a0442cfa0e21a063"
-            type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
-            crossorigin="anonymous"></script>
-    <script src="{% static 'main/js/webflow.js' %}" type="text/javascript"></script>
+    <div class="container">
+        <div class="tabs-container">
+            <div class="center-text">
+                <div class="fade-in-move-on-scroll">
+                    <h2>카페별 실시간 혼잡도를 제공해드립니다</h2>
+                </div>
+                <div class="w-layout-grid grid-8-col">
+                    <div id="w-node-_77789d64-d6ad-83b5-5af1-ea5afa8d0f96-0e21a08b" class="fade-in-move-on-scroll">
+                        <p class="grey-paragraph">앱을 통해 카페의 혼잡도를 미리 확인하고, 포인트까지 얻을 수 있어요</p>
+                    </div>
+                </div>
+            </div>
+            <div class="stacked-tabs-holder">
+                <div class="stacked-tabs-container">
+                    <div data-w-id="f4234da7-3abc-a4df-1041-1618fe91dfe2" style="border-color:rgb(75,148,255)"
+                         class="tab-link _01">
+                        <div class="tab-wrapper">
+                            <div class="tab-circle">
+                                <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                <img style="filter:grayscale(0%)" alt="" src="{% static 'main/image/File-Icon.svg' %}"
+                                     loading="lazy" class="tab-icon _01">
+                            </div>
+                            <div style="opacity:1" class="tab-content-holder _01">
+                                <div class="tab-title">Manage your portfolio</div>
+                                <div class="tab-paragraph">Buy and sell popular digital currencies, keep track of them
+                                    in the one place.
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#Tabs" class="mobile-link w-inline-block"></a>
+                    </div>
+                    <div id="Tabs" data-w-id="9ec6002b-038e-551a-5173-5b14d2ddc58b"
+                         style="border-color:rgba(75,148,255,0)" class="tab-link _02">
+                        <div class="tab-wrapper">
+                            <div class="tab-circle">
+                                <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                <img style="filter:grayscale(100%)" alt=""
+                                     src="{% static 'main/image/Dollar-Icon.svg' %}" loading="lazy"
+                                     class="tab-icon _02">
+                            </div>
+                            <div style="opacity:0.5" class="tab-content-holder _02">
+                                <div class="tab-title">Recurring buys</div>
+                                <div class="tab-paragraph">Invest on used and donate on the ones that need it more.
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#Tabs" class="mobile-link w-inline-block"></a>
+                    </div>
+                    <div data-w-id="a04c9a00-ff3d-83db-cfab-1a4ff3c47f14" style="border-color:rgba(75,148,255,0)"
+                         class="tab-link _03">
+                        <div class="tab-wrapper">
+                            <div class="tab-circle">
+                                <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                <img style="filter:grayscale(100%)" alt="" src="{% static 'main/image/Lock-Icon.svg' %}"
+                                     loading="lazy" class="tab-icon _03">
+                            </div>
+                            <div style="opacity:0.5" class="tab-content-holder _03">
+                                <div class="tab-title">Vault protection</div>
+                                <div class="tab-paragraph">For added security, store your funds in a vault with time
+                                    delayed withdrawals.
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#Tabs" class="mobile-link w-inline-block"></a>
+                    </div>
+                </div>
+                <div class="stacked-tabs-content-holder">
+                    <div class="stacked-tabs-pane-holder">
+                        <div style="-webkit-transform:translate3d(0px, 0px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0px, 0px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0px, 0px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0px, 0px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:1"
+                             class="stacked-tab-holder _01">
+                            <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                            <img src="{% static 'main/image/Dashboard-Image-01_1Dashboard-Image-01.webp' %}"
+                                 loading="lazy" sizes="(max-width: 991px) 74vw, (max-width: 1439px) 50vw, 774px"
+                                 srcset="{% static 'main/image/Dashboard-Image-01_1-p-500.jpg' %} 500w, {% static 'main/image/Dashboard-Image-01_1-p-800.jpg' %} 800w, {% static 'main/image/Dashboard-Image-01_1-p-1080.jpg' %} 1080w, {% static 'main/image/Dashboard-Image-01_1-p-1600.jpg' %} 1600w, {% static 'main/image/Dashboard-Image-01_1Dashboard-Image-01.webp' %} 1989w"
+                                 alt="First Dashboard Image" class="stacked-tab-image">
+                        </div>
+                        <div style="-webkit-transform:translate3d(75px, 0px, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(75px, 0px, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(75px, 0px, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(75px, 0px, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0.7"
+                             class="stacked-tab-holder _02">
+                            <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                            <img src="{% static 'main/image/Dashboard-Image-01_1Dashboard-Image-01.webp' %}"
+                                 loading="lazy"
+                                 sizes="(max-width: 991px) 67vw, (max-width: 1439px) 45vw, 696.6000366210938px"
+                                 srcset="{% static 'main/image/Dashboard-Image-01_1-p-500.jpg' %} 500w, {% static 'main/image/Dashboard-Image-01_1-p-800.jpg' %} 800w, {% static 'main/image/Dashboard-Image-01_1-p-1080.jpg' %} 1080w, {% static 'main/image/Dashboard-Image-01_1-p-1600.jpg' %} 1600w, {% static 'main/image/Dashboard-Image-01_1Dashboard-Image-01.webp' %} 1989w"
+                                 alt="Second Dashboard Image" class="stacked-tab-image">
+                        </div>
+                        <div style="-webkit-transform:translate3d(150px, 0px, 0) scale3d(0.8, 0.8, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(150px, 0px, 0) scale3d(0.8, 0.8, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(150px, 0px, 0) scale3d(0.8, 0.8, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(150px, 0px, 0) scale3d(0.8, 0.8, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0.45"
+                             class="stacked-tab-holder _03">
+                            <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                            <img src="{% static 'main/image/Dashboard-Image-03_1Dashboard-Image-03.webp' %}"
+                                 loading="lazy"
+                                 sizes="(max-width: 991px) 59vw, (max-width: 1439px) 40vw, 619.2000122070312px"
+                                 srcset="{% static 'main/image/Dashboard-Image-03_1-p-500.jpg' %} 500w, {% static 'main/image/Dashboard-Image-03_1-p-800.jpg' %} 800w, {% static 'main/image/Dashboard-Image-03_1-p-1080.jpg' %} 1080w, {% static 'main/image/Dashboard-Image-03_1-p-1600.jpg' %} 1600w, {% static 'main/image/Dashboard-Image-03_1Dashboard-Image-03.webp' %} 1989w"
+                                 alt="Third Dashboard Image" class="stacked-tab-image">
+                        </div>
+                    </div>
+                    <div class="stacked-gradient"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="About" class="section black-section">
+    <div class="container">
+        <div class="payment-config-section">
+            <div class="payment-config-sticky-section">
+                <div class="payment-sticky">
+                    <div class="fade-in-move-on-scroll">
+                        <div class="payment-title">
+                            <h2 class="white-text no-margins">카페자리 문구문구</h2>
+                        </div>
+                    </div>
+                    <div class="fade-in-move-on-scroll">
+                        <p class="payment-paragraph">이건 매우 혁신적. 경이롭지만 배타적인, 최고의 UX를 경험하다!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="payment-config-content">
+                <div class="payment-config-content-holder">
+                    <div class="fade-in-move-on-scroll">
+                        <div class="white-title">Collect</div>
+                    </div>
+                    <div class="fade-in-move-on-scroll">
+                        <p class="payment-paragraph">Collect cardholder data, encrypt it, and share it with any payment
+                            processor or merchant. We&#x27;ll also help you navigate PCI Compliance and 3D Secure
+                            Validation.</p>
+                    </div>
+                    <div class="fade-in-move-on-scroll _100-width">
+                        <div class="payment-image-holder">
+                            <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                            <img src="{% static 'main/image/Debit-Card-Image_1Debit-Card-Image.webp' %}" loading="lazy"
+                                 sizes="(max-width: 991px) 93vw, (max-width: 1439px) 45vw, 470px"
+                                 srcset="{% static 'main/image/Debit-Card-Image_1-p-500.jpg' %} 500w, {% static 'main/image/Debit-Card-Image_1-p-800.jpg' %} 800w, {% static 'main/image/Debit-Card-Image_1-p-1080.jpg' %} 1080w, {% static 'main/image/Debit-Card-Image_1Debit-Card-Image.webp' %} 1410w"
+                                 alt="Card Image" class="debit-card-image">
+                        </div>
+                    </div>
+                </div>
+                <div class="payment-config-content-holder">
+                    <div class="fade-in-move-on-scroll">
+                        <div class="white-title">Editing</div>
+                    </div>
+                    <div class="fade-in-move-on-scroll">
+                        <p class="payment-paragraph">Store the encrypted data in your database as normal, without any
+                            changes to your stack or data structure.<br><br>Processing the encrypted cardholder data
+                            without handling it.</p>
+                    </div>
+                    <div class="fade-in-move-on-scroll _100-width">
+                        <div class="payment-image-holder">
+                            <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                            <img src="{% static 'main/image/Editing-Image.svg' %}" loading="lazy"
+                                 alt="Editing Card Image" class="debit-card-image">
+                        </div>
+                    </div>
+                </div>
+                <div class="payment-config-content-holder">
+                    <div class="fade-in-move-on-scroll">
+                        <div class="white-title">Comply</div>
+                    </div>
+                    <div class="fade-in-move-on-scroll">
+                        <p class="payment-paragraph">We’ll guide you through the process of becoming PCI DSS compliant
+                            and help you through your first PCI DSS audit.</p>
+                    </div>
+                    <div class="fade-in-move-on-scroll">
+                        <div class="payment-button-holder">
+                            <a href="#CTA" class="button w-button">Read the docs</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="Testimonials" class="section white-section">
+    <div class="container">
+        <div class="features-section">
+            <div class="feature-grid">
+                <div id="w-node-_52d8ff9b-d99f-0f6e-92f8-5b64a289a5b9-0e21a08b" class="feature-image-holder">
+                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                    <img src="{% static 'main/image/Feature-Image_1-p-1600.png' %}" loading="lazy"
+                         alt="Girl Looking at sale report" class="feature-image">
+                </div>
+                <div id="w-node-_7bad64f3-c758-257f-b60f-91adddf9b627-0e21a08b" class="feature-text-holder">
+                    <div class="feature-title-holder">
+                        <div class="fade-in-move-on-scroll">
+                            <h2>이게바로 카페자리란다</h2>
+                        </div>
+                        <div class="fade-in-move-on-scroll">
+                            <p class="grey-paragraph">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit
+                                aliquet ut ultrices dignissim libero vulputate. Curabitur dui natoque sit dui.</p>
+                        </div>
+                    </div>
+                    <div class="feature-testimonial-holder">
+                        <div class="fade-in-move-on-scroll">
+                            <div class="fetaure-stars-holder">
+                                <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                <img src="{% static 'main/image/Star-review.svg' %}" loading="lazy" alt=""
+                                     class="feature-stars">
+                            </div>
+                        </div>
+                        <div class="fade-in-move-on-scroll">
+                            <div class="feature-testimonial">
+                                <div class="black-title">Best profit maker in market!</div>
+                                <div class="feature-testimonial-paragraph">
+                                    <p class="grey-paragraph">Consectetur adipiscing elit. Vehicula massa in enim
+                                        luctus. Rutrum arcu, aliquam nulla tincidunt gravida. Cursus convallis dolor
+                                        semper pretium ornare.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fade-in-move-on-scroll">
+                            <div class="feature-person-holder">
+                                <div class="feature-person-profile-picture-holder">
+                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                    <img src="{% static 'main/image/Testimonial-Image_1Testimonial-Image.webp' %}"
+                                         loading="lazy" sizes="(max-width: 767px) 26px, (max-width: 991px) 3vw, 26px"
+                                         srcset="{% static 'main/image/Testimonial-Image_1-p-500.jpg' %} 500w, {% static 'main/image/Testimonial-Image_1-p-800.jpg' %} 800w, {% static 'main/image/Testimonial-Image_1Testimonial-Image.webp' %} 1044w"
+                                         alt="Testimonial Image" class="feature-person-profile-picture">
+                                </div>
+                                <div class="testimonial-name">Denny Jones</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="feature-grid">
+                <div id="w-node-f41226f4-74c9-86f8-7aea-98a695473461-0e21a08b" class="feature-list-holder">
+                    <div class="feature-title-holder">
+                        <div class="fade-in-move-on-scroll">
+                            <h2 class="no-margins">너의 카페 삶을 윤택하게해보아</h2>
+                        </div>
+                        <div class="fade-in-move-on-scroll">
+                            <p class="grey-paragraph">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit
+                                aliquet ut ultrices dignissim libero vulputate. Curabitur dui natoque sit dui.</p>
+                        </div>
+                    </div>
+                    <div class="feature-list-wrapper">
+                        <ul role="list" class="w-list-unstyled">
+                            <li>
+                                <div class="checkmark-list-holder">
+                                    <div class="checkmark-icon-holder">
+                                        <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                        <img src="{% static 'main/image/Check-Icon.svg' %}" loading="lazy" width="14"
+                                             alt="" class="checkmark-icon">
+                                    </div>
+                                    <div class="list-text">Elementum sagittis dignissim ut</div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="checkmark-list-holder">
+                                    <div class="checkmark-icon-holder">
+                                        <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                        <img src="{% static 'main/image/Check-Icon.svg' %}" loading="lazy" alt=""
+                                             class="checkmark-icon">
+                                    </div>
+                                    <div class="list-text">Dignissim aliquam interdum</div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="checkmark-list-holder">
+                                    <div class="checkmark-icon-holder">
+                                        <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                        <img src="{% static 'main/image/Check-Icon.svg' %}" loading="lazy" alt=""
+                                             class="checkmark-icon">
+                                    </div>
+                                    <div class="list-text">Tellus vestibulum, molestie.</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="feature-button-holder">
+                        <div class="fade-in-move-on-scroll">
+                            <a href="#Pricing" class="button w-button">About pricing</a>
+                        </div>
+                    </div>
+                </div>
+                <div id="w-node-f41226f4-74c9-86f8-7aea-98a69547345f-0e21a08b" class="feature-image-holder">
+                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                    <img src="{% static 'main/image/Feature-Image-02_1-p-1600.png' %}" loading="lazy"
+                         alt="Guy looking at security of the card" class="feature-image">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="Features" class="section">
+    <div class="container">
+        <div class="cards-section">
+            <div class="center-text">
+                <div class="fade-in-move-on-scroll">
+                    <h2>카페자리는 이런 장점을 가지고 있어요</h2>
+                </div>
+                <div class="w-layout-grid grid-8-col">
+                    <div id="w-node-d5ab1ee6-0abe-c9d5-2f0c-ccac64bdd816-0e21a08b" class="fade-in-move-on-scroll">
+                        <p class="grey-paragraph">Coin-base has a variety of features that make it the best place to
+                            start trading</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cards-wrapper">
+                <div class="cards-grid">
+                    <div class="featured-cards">
+                        <div id="w-node-_539f8ba4-c08d-ee85-2409-69623da78972-0e21a08b" class="card-holder">
+                            <div class="card-container">
+                                <div class="card-image-holder">
+                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                    <img src="{% static 'main/image/Card-Image-01.png' %}" loading="lazy"
+                                         sizes="(max-width: 479px) 92vw, (max-width: 767px) 91vw, (max-width: 991px) 45vw, (max-width: 1439px) 46vw, 628.7999877929688px"
+                                         srcset="{% static 'main/image/Card-Image-01-p-500.png' %} 500w, {% static 'main/image/Card-Image-01-p-800.png' %} 800w, {% static 'main/image/Card-Image-01-p-1080.png' %} 1080w, {% static 'main/image/Card-Image-01-p-1600.png' %} 1600w, {% static 'main/image/Card-Image-01.png' %} 1707w"
+                                         alt="" class="card-image">
+                                </div>
+                                <div class="card-text-holder">
+                                    <div class="black-title">Elements that are adaptable and can be changed by switching
+                                        presets
+                                    </div>
+                                    <div class="card-paragraph-holder">
+                                        <p class="grey-paragraph">Coin-base has a variety of features that make it the
+                                            best place to start trading</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="w-node-aa6d2952-65c7-ef68-8a7b-02ead5e0bd42-0e21a08b" class="card-holder">
+                            <div class="card-container">
+                                <div class="card-image-holder">
+                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                    <img src="{% static 'main/image/Card-Image-03.png' %}" loading="lazy"
+                                         sizes="(max-width: 479px) 92vw, (max-width: 767px) 91vw, (max-width: 991px) 45vw, (max-width: 1439px) 46vw, 628.7999877929688px"
+                                         srcset="{% static 'main/image/Card-Image-03-p-500.png' %} 500w, {% static 'main/image/Card-Image-03-p-800.png' %} 800w, {% static 'main/image/Card-Image-03-p-1080.png' %} 1080w, {% static 'main/image/Card-Image-03-p-1600.png' %} 1600w, {% static 'main/image/Card-Image-03.png' %} 1704w"
+                                         alt="" class="card-image">
+                                </div>
+                                <div class="card-text-holder">
+                                    <div class="black-title">Easy payment process that keeps you focused on tasks</div>
+                                    <div class="card-paragraph-holder">
+                                        <p class="grey-paragraph">Buy and sell popular digital currencies, keep track of
+                                            them in the one place.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="featured-cards">
+                        <div id="w-node-_45aab09d-36a5-3bc7-26df-bc1037daf4f6-0e21a08b" class="card-holder">
+                            <div class="card-container">
+                                <div class="card-image-holder">
+                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                    <img src="{% static 'main/image/Card-Image-02.png' %}" loading="lazy"
+                                         sizes="(max-width: 479px) 92vw, (max-width: 767px) 91vw, (max-width: 991px) 45vw, (max-width: 1439px) 46vw, 628.7999877929688px"
+                                         srcset="{% static 'main/image/Card-Image-02-p-500.png' %} 500w, {% static 'main/image/Card-Image-02-p-800.png' %} 800w, {% static 'main/image/Card-Image-02-p-1080.png' %} 1080w, {% static 'main/image/Card-Image-02-p-1600.png' %} 1600w, {% static 'main/image/Card-Image-02.png' %} 1710w"
+                                         alt="" class="card-image">
+                                </div>
+                                <div class="card-text-holder">
+                                    <div class="black-title">Forget about loading bars. The response is immediate.</div>
+                                    <div class="card-paragraph-holder">
+                                        <p class="grey-paragraph">Buy and sell popular digital currencies, keep track of
+                                            them in the one place.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="w-node-_45aab09d-36a5-3bc7-26df-bc1037daf4ec-0e21a08b" class="card-holder">
+                            <div class="card-container">
+                                <div class="card-text-holder no-padding-bot">
+                                    <div class="black-title">Whatever you do, we make layouts that don't break.</div>
+                                    <div class="card-paragraph-holder">
+                                        <p class="grey-paragraph">Buy and sell popular digital currencies, keep track of
+                                            them in the one place.</p>
+                                    </div>
+                                </div>
+                                <div class="card-image-holder">
+                                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                    <img src="{% static 'main/image/Card-Image-04.png' %}" loading="lazy"
+                                         sizes="(max-width: 479px) 92vw, (max-width: 767px) 91vw, (max-width: 991px) 45vw, (max-width: 1439px) 46vw, 628.7999877929688px"
+                                         srcset="{% static 'main/image/Card-Image-04-p-500.png' %} 500w, {% static 'main/image/Card-Image-04-p-800.png' %} 800w, {% static 'main/image/Card-Image-04-p-1080.png' %} 1080w, {% static 'main/image/Card-Image-04-p-1600.png' %} 1600w, {% static 'main/image/Card-Image-04.png' %} 1704w"
+                                         alt="" class="card-image">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="Pricing" class="section pricing-section">
+    <div class="container">
+        <div class="pricing-wrapper">
+            <div class="center-text">
+                <div class="fade-in-move-on-scroll">
+                    <h2 class="white-text">질러!</h2>
+                </div>
+                <div class="w-layout-grid grid-8-col">
+                    <div id="w-node-f14b6e27-ed71-c6ed-e9f5-9843c7df92ee-0e21a08b" class="fade-in-move-on-scroll">
+                        <p class="grey-paragraph">Malta is open source and completely free to use. It is currently being
+                            worked on.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="pricing-tab-holder">
+                <div data-w-id="b68b949a-5aa1-52a2-17ed-27a9819b18ba" class="pricing-tab">
+                    <div class="pricing-tab-content">
+                        <div class="pricing-header">
+                            <div class="pricing-sub-title">BASIC</div>
+                            <div class="pricing-title">Free for all</div>
+                        </div>
+                        <div class="pricing-list-holder">
+                            <ul role="list" class="w-list-unstyled">
+                                <li>
+                                    <div class="checkmark-list-holder">
+                                        <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                        <img src="{% static 'main/image/Checkmark-White.svg' %}" loading="lazy" alt=""
+                                             class="checkmark-white">
+                                        <div class="list-text white-text">Open License</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="checkmark-list-holder">
+                                        <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                        <img src="{% static 'main/image/Checkmark-White.svg' %}" loading="lazy" alt=""
+                                             class="checkmark-white">
+                                        <div class="list-text white-text">Great Documentation</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="checkmark-list-holder">
+                                        <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                                        <img src="{% static 'main/image/Checkmark-White.svg' %}" loading="lazy" alt=""
+                                             class="checkmark-white">
+                                        <div class="list-text white-text">Tested In Production</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="pricing-button-holder">
+                            <a href="#CTA" class="button white w-button">Try it out</a>
+                        </div>
+                    </div>
+                    <div class="blur-container">
+                        <div class="blur-ancor">
+                            <div class="background-blur"></div>
+                        </div>
+                        <div class="background-blue-holder"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="signup-from-holder">
+                <div class="signup-from-container">
+                    <div class="signup-from-text-holder">
+                        <div class="fade-in-move-on-scroll">
+                            <div class="white-title">Sign up for email updates!</div>
+                        </div>
+                        <div class="fade-in-move-on-scroll">
+                            <p class="no-margin-white-text">Get monthly email updates about malta improvements and
+                                roadmap.</p>
+                        </div>
+                    </div>
+                    <div class="form-block w-form">
+                        <form id="email-form" name="email-form" data-name="Email Form" method="get" class="form"
+                              data-wf-page-id="64c4bf43a0442cfa0e21a08b"
+                              data-wf-element-id="81d44b46-4a97-04af-ee75-7e92f0d3cf90">
+                            <input type="email" class="cta-text-field w-input" maxlength="256" name="email"
+                                   data-name="Email" placeholder="Email" id="email" required="">
+                            <input type="submit" value="" data-wait="..." class="submit-button w-button">
+                        </form>
+                        <div class="success-message w-form-done">
+                            <div>Thank you! Your submission has been received!</div>
+                        </div>
+                        <div class="w-form-fail">
+                            <div>Oops! Something went wrong while submitting the form.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section relative">
+    <div class="container">
+        <div class="customers-section-holder">
+            <div class="center-text">
+                <div class="w-layout-grid grid-8-col">
+                    <div id="w-node-_9b63d825-4fc3-9b46-2b3f-0d190a8fda8e-0e21a08b" class="fade-in-move-on-scroll">
+                        <h2>다운받아!</h2>
+                    </div>
+                </div>
+                <div class="w-layout-grid grid-8-col">
+                    <div id="w-node-_9b63d825-4fc3-9b46-2b3f-0d190a8fda92-0e21a08b" class="fade-in-move-on-scroll">
+                        <p class="grey-paragraph">Our apps conceal an incredible amount of complex proprietary
+                            technology that we developed and perfected behind their apparent simplicity.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="blue-cta-holder">
+            <div class="blue-cta-container">
+                <div class="cta-blue-text-holder">
+                    <div class="fade-in-move-on-scroll">
+                        <h2 class="cta-title">Let’s do the work, make greatness</h2>
+                    </div>
+                    <div class="fade-in-move-on-scroll">
+                        <div class="cta-paragraph">
+                            <p class="white-text">Collect cardholder data, encrypt it, and share it with. We&#x27;ll
+                                also help you navigate PCI Compliance and 3D Secure Validation.</p>
+                        </div>
+                    </div>
+                    <div class="fade-in-move-on-scroll">
+                        <div class="cta-buttons-holder">
+                            <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                            <a href="https://www.apple.com/store" target="_blank"
+                               class="cta-image-holder w-inline-block"><img
+                                    src="{% static 'main/image/App-Store.svg' %}" loading="lazy"
+                                    alt="Download Apple store" class="cta-image"></a>
+                            <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                            <a href="https://play.google.com/store/apps" target="_blank"
+                               class="cta-image-holder w-inline-block"><img
+                                    src="{% static 'main/image/Google-Play.svg' %}" loading="lazy"
+                                    alt="Download Google Play" class="cta-image"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="cta-blue-hand-holder">
+                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                    <img src="{% static 'main/image/CTA-Iphone.png' %}" loading="lazy"
+                         sizes="(max-width: 479px) 83vw, (max-width: 991px) 46vw, (max-width: 1439px) 32vw, 484px"
+                         srcset="{% static 'main/image/CTA-Iphone-p-500.png' %} 500w, {% static 'main/image/CTA-Iphone-p-800.png' %} 800w, {% static 'main/image/CTA-Iphone-p-1080.png' %} 1080w, {% static 'main/image/CTA-Iphone.png' %} 1158w"
+                         alt="" class="cta-blue-hand-image">
+                    <div class="screen-inside-iphone-holder">
+                        <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                        <img src="{% static 'main/image/Phone-Screenshot-01_1Phone-Screenshot-01.webp' %}"
+                             loading="lazy"
+                             sizes="(max-width: 479px) 46vw, (max-width: 991px) 26vw, (max-width: 1439px) 18vw, 271.0500183105469px"
+                             srcset="{% static 'main/image/Phone-Screenshot-01_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-01_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-01_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-01_1Phone-Screenshot-01.webp' %} 1125w"
+                             alt="Screen of the dashboard on mobile" class="screen-inside-iphone">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <div class="section black-section">
+    <div id="CTA" class="cta-holder">
+        <div class="container">
+            <div class="cta-logo-holder">
+                <div class="cta-text-holder">
+                    <div class="fade-in-move-on-scroll">
+                        <div class="cta-header-holder">
+                            <h2 class="white-text">Tried-and-true external products.</h2>
+                        </div>
+                    </div>
+                    <div class="fade-in-move-on-scroll">
+                        <div class="cta-paragraph">
+                            <p class="grey-paragraph">Our apps conceal an incredible amount of complex proprietary technology that we developed and perfected behind their apparent simplicity.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="cta-grid-holder">
+                    <div class="cta-logo-grid">
+                        <div id="w-node-_1faa8986-67d3-0561-534b-ecd721750ef6-0e21a08b" class="cta-logo-container"><img src="images/Logo-White-06.svg" loading="lazy" alt="Recharge Logo" class="cta-logo"></div>
+                        <div id="w-node-_821c0d87-b5cb-43f1-e1f8-6557d367a94f-0e21a08b" class="cta-logo-container"><img src="images/Logo-White-05.svg" loading="lazy" alt="Network Logo" class="cta-logo"></div>
+                        <div id="w-node-_774032d3-6ed6-1ff7-f4d5-d48e1680f28a-0e21a08b" class="cta-logo-container"><img src="images/Logo-White-01.svg" loading="lazy" alt="Greenish Logo" class="cta-logo"></div>
+                        <div id="w-node-ab57a118-64f6-6c07-a189-241e4ec70f8f-0e21a08b" class="cta-logo-container"><img src="images/Logo-White-02.svg" loading="lazy" alt="Inspire Logo" class="cta-logo"></div>
+                        <div id="w-node-_58b37029-fe62-9e32-414c-7938f9e2ec54-0e21a08b" class="cta-logo-container"><img src="images/Logo-White-03.svg" loading="lazy" alt="Cloud Icon" class="cta-logo"></div>
+                        <div id="w-node-_0d6a082e-a692-5022-d21e-d54a2c5a5fc7-0e21a08b" class="cta-logo-container"><img src="images/Logo-White-04.svg" loading="lazy" alt="Hitech Logo" class="cta-logo"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+<div class="footer">
+    <div class="container">
+        <div class="footer-flex-container">
+            <div id="w-node-_6a983adf-29bb-bea4-f1c9-518466de9af8-0a144c54"
+                 data-w-id="6a983adf-29bb-bea4-f1c9-518466de9af8" class="footer-brand">
+                <a href="index.html" aria-current="page" class="footer-brand-holder w-inline-block w--current">
+                    <!-- 변경: 이미지 경로를 {% static 'main/image/{filename}' %} 형식으로 바꿔줍니다. -->
+                    <img src="{% static 'main/image/Logo-PNG_1Logo-PNG.webp' %}" loading="lazy" sizes="140px"
+                         srcset="{% static 'main/image/Logo-PNG_1-p-500.png' %} 500w, {% static 'main/image/Logo-PNG_1-p-800.png' %} 800w, {% static 'main/image/Logo-PNG_1-p-1080.png' %} 1080w, {% static 'main/image/Logo-PNG_1Logo-PNG.webp' %} 1559w"
+                         alt="Malta Logo" class="footer-brand-image">
+                </a>
+                <div class="footer-info">
+                    <div class="grey-link text-block">
+                        <a href="tel:123123123" class="grey-link">+383 44 123 - 456</a>
+                    </div>
+                    <div class="hide-mobile">|</div>
+                    <div class="grey-link">
+                        <a href="mailto:info@yourwebsite.com" class="grey-link">Info@yourwebsite.com</a>
+                    </div>
+                </div>
+            </div>
+            <div id="w-node-eb050d0c-cd20-6fbc-5d31-0eaf0a144c59-0a144c54" class="fade-in-move-on-scroll">
+                <div class="footer-link-holder">
+                    <!-- 변경: href 속성에 {% static 'main/template/{filename}' %} 형식으로 바꿔줍니다. -->
+                    <a href="{% static 'main/template/change-log.html' %}" class="footer-link w-inline-block">
+                        <div class="footer-text">Change Log</div>
+                    </a>
+                    <!-- 변경: href 속성에 {% static 'main/template/{filename}' %} 형식으로 바꿔줍니다. -->
+                    <a href="{% static 'main/template/style-guide.html' %}" class="footer-link w-inline-block">
+                        <div class="footer-text">Style Guide</div>
+                    </a>
+                    <!-- 변경: href 속성에 {% static 'main/template/{filename}' %} 형식으로 바꿔줍니다. -->
+                    <a href="{% static 'main/template/licensing.html' %}" class="footer-link w-inline-block">
+                        <div class="footer-text">Licensing</div>
+                    </a>
+                    <!-- 변경: href 속성에 {% static 'main/template/{filename}' %} 형식으로 바꿔줍니다. -->
+                    <a href="{% static 'main/template/instructions.html' %}" class="footer-link w-inline-block">
+                        <div class="footer-text">Instructions</div>
+                    </a>
+                </div>
+            </div>
+            <div id="w-node-_40382bd6-a79c-0890-7f58-1ed22ce7a6ff-0a144c54" class="fade-in-move-on-scroll">
+                <div class="footer-link-holder">
+                    <!-- 변경: href 속성에 {% static 'main/template/{filename}' %} 형식으로 바꿔줍니다. -->
+                    <a href="/#About" class="footer-link w-inline-block">
+                        <div class="footer-text">About</div>
+                    </a>
+                    <!-- 변경: href 속성에 {% static 'main/template/{filename}' %} 형식으로 바꿔줍니다. -->
+                    <a href="/#Features" class="footer-link w-inline-block">
+                        <div class="footer-text">Features</div>
+                    </a>
+                    <!-- 변경: href 속성에 {% static 'main/template/{filename}' %} 형식으로 바꿔줍니다. -->
+                    <a href="/#Pricing" class="footer-link w-inline-block">
+                        <div class="footer-text">Pricing</div>
+                    </a>
+                    <!-- 변경: href 속성에 {% static 'main/template/{filename}' %} 형식으로 바꿔줍니다. -->
+                    <a href="/#Testimonials" class="footer-link w-inline-block">
+                        <div class="footer-text">Testimonials</div>
+                    </a>
+                </div>
+            </div>
+            <div id="w-node-_19d66aab-9c90-b904-3ee5-6e4373744c48-0a144c54" class="fade-in-move-on-scroll">
+                <div class="footer-link-holder">
+                    <!-- 변경: href 속성에 'main/image/{filename}' 형식으로 바꿔줍니다. -->
+                    <a href="https://www.linkedin.com/company/azwedo/" target="_blank"
+                       class="footer-link w-inline-block">
+                        <div class="footer-text">Linkedin</div>
+                    </a>
+                    <!-- 변경: href 속성에 'main/image/{filename}' 형식으로 바꿔줍니다. -->
+                    <a href="https://www.facebook.com/azwedo" target="_blank" class="footer-link w-inline-block">
+                        <div class="footer-text">Facebook</div>
+                    </a>
+                    <!-- 변경: href 속성에 'main/image/{filename}' 형식으로 바꿔줍니다. -->
+                    <a href="https://dribbble.com/azwedo" target="_blank" class="footer-link w-inline-block">
+                        <div class="footer-text">Dribbble</div>
+                    </a>
+                    <!-- 변경: href 속성에 'main/image/{filename}' 형식으로 바꿔줍니다. -->
+                    <a href="http://instagram.com" target="_blank" class="footer-link w-inline-block">
+                        <div class="footer-text">Instagram</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="made-by-section">
+            <div class="made-by-horizontal-block">
+                <div class="_16px">©Malta All Rights Reserved 2022 -</div>
+                <div class="horizontal-footer-link-holder top-bottom-margin">
+                    <div class="by left-margin">Designed By</div>
+                    <!-- 변경: href 속성에 "main/image/{filename}" 형식으로 바꿔줍니다. -->
+                    <a href="http://azwedo.com?ref=malta-template" target="_blank" class="w-inline-block">
+                        <div>Azwedo</div>
+                    </a>
+                    <div class="and"> &amp;</div>
+                    <!-- 변경: href 속성에 "main/image/{filename}" 형식으로 바꿔줍니다. -->
+                    <a href="http://wedoflow.com?ref=malta-template" target="_blank" class="w-inline-block">
+                        <div>Wedoflow</div>
+                    </a>
+                </div>
+                <div class="horizontal-footer-link-holder">
+                    <div class="by left-margin">Powered By</div>
+                    <!-- 변경: href 속성에 "main/image/{filename}" 형식으로 바꿔줍니다. -->
+                    <a href="http://www.webflow.com" target="_blank" class="w-inline-block">
+                        <div>Webflow</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div data-w-id="ee0537f6-fdf9-8f3c-a0e3-6e93734ab19a"
+     style="-webkit-transform:translate3d(null, 20px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(null, 20px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(null, 20px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(null, 20px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0"
+     class="buy-template-holder">
+    <a href="https://webflow.com/templates/html/malta-app-website-template" target="_blank"
+       class="buy-template-link w-inline-block">
+        <div class="buy-this-template-button-container">
+            <div class="buy-this-template-content">
+                <div class="buy-this-template-text">Buy this<strong></strong></div>
+                <div class="buy-webflow-template-content">
+                    <div class="webflow-icon"></div>
+                    <div class="buy-this-template-text">template for <span class="buy-template-price">$24 USD</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+<div data-w-id="a12326fe-9964-de5d-902a-7d3869687150" class="hero-section-holder">
+    <div class="hero-section-container">
+        <div class="hero-section-text-content">
+            <div class="animate-on-load-01">
+                <div class="hero-section-header-container">
+                    <h1 class="heading-2">카페 갈 때,<br>카페자리</h1>
+                </div>
+            </div>
+            <div class="animate-on-load-02">
+                <div class="hero-paragraph-holder">
+                    <p>더 이상 힘들게 카페를 찾아 돌아다니지 마세요. 앱 하나로 손쉽게 혼잡도를 확인하고, 포인트도 받아보세요!</p>
+                </div>
+            </div>
+            <div class="animate-on-load-03">
+                <div class="hero-section-button-holder">
+                    <a href="#About" class="button w-button">시작하기</a>
+                </div>
+            </div>
+        </div>
+        <div class="left-side-iphones">
+            <div class="hero-phone-holder first">
+                <div class="iphone-container _01">
+                    <div class="iphone-holder"><img
+                            src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
+                            loading="lazy"
+                            sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
+                            srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
+                            alt="" class="iphone-image">
+                        <div class="iphone-screen-container"><img
+                                src="{% static 'main/image/Phone-Screenshot-07_1Phone-Screenshot-07.webp' %}"
+                                loading="lazy" alt=""
+                                sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
+                                srcset="{% static 'main/image/Phone-Screenshot-07_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-07_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-07_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-07_1Phone-Screenshot-07.webp' %} 1126w"
+                                class="iphone-screen-image"></div>
+                        <div class="iphone-shadow-container"><img
+                                src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
+                                loading="lazy"
+                                sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
+                                srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
+                                alt="" class="harsh-shadow"></div>
+                    </div>
+                </div>
+                <div class="iphone-container _01">
+                    <div class="iphone-holder"><img
+                            src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
+                            loading="lazy"
+                            sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
+                            srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
+                            alt="" class="iphone-image">
+                        <div class="iphone-screen-container"><img
+                                src="{% static 'main/image/Phone-Screenshot-02_1Phone-Screenshot-02.webp' %}"
+                                loading="lazy" alt=""
+                                sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
+                                srcset="{% static 'main/image/Phone-Screenshot-02_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-02_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-02_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-02_1Phone-Screenshot-02.webp' %} 1125w"
+                                class="iphone-screen-image"></div>
+                        <div class="iphone-shadow-container"><img
+                                src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
+                                loading="lazy"
+                                sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
+                                srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
+                                alt="" class="harsh-shadow"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-phone-holder second">
+                <div class="iphone-container _02">
+                    <div class="iphone-holder"><img
+                            src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
+                            loading="eager"
+                            sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
+                            srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
+                            alt="" class="iphone-image">
+                        <div class="iphone-screen-container"><img
+                                src="{% static 'main/image/Phone-Screenshot-03_1Phone-Screenshot-03.webp' %}"
+                                loading="eager" alt=""
+                                sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
+                                srcset="{% static 'main/image/Phone-Screenshot-03_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-03_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-03_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-03_1Phone-Screenshot-03.webp' %} 1125w"
+                                class="iphone-screen-image"></div>
+                        <div class="iphone-shadow-container"><img
+                                src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
+                                loading="eager"
+                                sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
+                                srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
+                                alt="" class="harsh-shadow"></div>
+                    </div>
+                </div>
+                <div class="iphone-container _02">
+                    <div class="iphone-holder"><img
+                            src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
+                            loading="lazy"
+                            sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
+                            srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
+                            alt="" class="iphone-image">
+                        <div class="iphone-screen-container"><img
+                                src="{% static 'main/image/Phone-Screenshot-05_1Phone-Screenshot-05.webp' %}"
+                                loading="lazy" alt=""
+                                sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
+                                srcset="{% static 'main/image/Phone-Screenshot-05_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-05_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-05_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-05_1Phone-Screenshot-05.webp' %} 1126w"
+                                class="iphone-screen-image"></div>
+                        <div class="iphone-shadow-container"><img
+                                src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
+                                loading="lazy"
+                                sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
+                                srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
+                                alt="" class="harsh-shadow"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="right-side-iphones">
+            <div class="hero-phone-holder third">
+                <div class="iphone-container _03">
+                    <div class="iphone-holder"><img
+                            src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
+                            loading="eager"
+                            sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
+                            srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
+                            alt="" class="iphone-image">
+                        <div class="iphone-screen-container"><img
+                                src="{% static 'main/image/check_login_background.png' %}" loading="lazy" width="180"
+                                sizes="(max-width: 479px) 28vw, (max-width: 767px) 89.6875px, (max-width: 991px) 14vw, (max-width: 1439px) 15vw, 180px"
+                                srcset="{% static 'main/image/check_login_background-p-500.png' %} 500w, {% static 'main/image/check_login_background.png' %} 648w"
+                                alt="" class="test_image"></div>
+                        <div class="iphone-shadow-container"><img
+                                src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
+                                loading="lazy"
+                                sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
+                                srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
+                                alt="" class="harsh-shadow"></div>
+                    </div>
+                </div>
+                <div class="iphone-container _03">
+                    <div class="iphone-holder"><img
+                            src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
+                            loading="lazy"
+                            sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
+                            srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
+                            alt="" class="iphone-image">
+                        <div class="iphone-screen-container"><img
+                                src="{% static 'main/image/Phone-Screenshot-08_1Phone-Screenshot-08.webp' %}"
+                                loading="lazy" alt=""
+                                sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
+                                srcset="{% static 'main/image/Phone-Screenshot-08_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-08_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-08_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-08_1Phone-Screenshot-08.webp' %} 1129w"
+                                class="iphone-screen-image"></div>
+                        <div class="iphone-shadow-container"><img
+                                src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
+                                loading="lazy"
+                                sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
+                                srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
+                                alt="" class="harsh-shadow"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-phone-holder forth">
+                <div class="iphone-container _04">
+                    <div class="iphone-holder"><img
+                            src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
+                            loading="lazy"
+                            sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
+                            srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
+                            alt="" class="iphone-image">
+                        <div class="iphone-screen-container"><img
+                                src="{% static 'main/image/Phone-Screenshot-04_1Phone-Screenshot-04.webp' %}"
+                                loading="lazy" alt=""
+                                sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
+                                srcset="{% static 'main/image/Phone-Screenshot-04_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-04_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-04_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-04_1Phone-Screenshot-04.webp' %} 1125w"
+                                class="iphone-screen-image"></div>
+                        <div class="iphone-shadow-container"><img
+                                src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
+                                loading="lazy"
+                                sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
+                                srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
+                                alt="" class="harsh-shadow"></div>
+                    </div>
+                </div>
+                <div class="iphone-container _04">
+                    <div class="iphone-holder"><img
+                            src="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %}"
+                            loading="eager"
+                            sizes="(max-width: 479px) 32vw, (max-width: 767px) 100px, (max-width: 1439px) 16vw, 17vw"
+                            srcset="{% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-500.png' %} 500w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1-p-800.png' %} 800w, {% static 'main/image/Apple-iPhone-13-—-Blue-1_1Apple-iPhone-13-—-Blue-1.webp' %} 1087w"
+                            alt="" class="iphone-image">
+                        <div class="iphone-screen-container"><img
+                                src="{% static 'main/image/Phone-Screenshot-06_1Phone-Screenshot-06.webp' %}"
+                                loading="eager" alt=""
+                                sizes="(max-width: 479px) 68.109375px, (max-width: 991px) 89.609375px, 15vw"
+                                srcset="{% static 'main/image/Phone-Screenshot-06_1-p-500.jpg' %} 500w, {% static 'main/image/Phone-Screenshot-06_1-p-800.jpg' %} 800w, {% static 'main/image/Phone-Screenshot-06_1-p-1080.jpg' %} 1080w, {% static 'main/image/Phone-Screenshot-06_1Phone-Screenshot-06.webp' %} 1125w"
+                                class="iphone-screen-image"></div>
+                        <div class="iphone-shadow-container"><img
+                                src="{% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %}"
+                                loading="eager"
+                                sizes="(max-width: 479px) 51vw, (max-width: 767px) 160px, (max-width: 1439px) 26vw, 27vw"
+                                srcset="{% static 'main/image/Harsh-Shadow-Mobile_1-p-500.png' %} 500w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-800.png' %} 800w, {% static 'main/image/Harsh-Shadow-Mobile_1-p-1080.png' %} 1080w, {% static 'main/image/Harsh-Shadow-Mobile_1Harsh-Shadow-Mobile.webp' %} 1434w"
+                                alt="" class="harsh-shadow"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=64c4bf42a0442cfa0e21a063"
+        type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+        crossorigin="anonymous"></script>
+<script src="{% static 'main/js/webflow.js' %}" type="text/javascript"></script>
 </body>
 
 </html>
