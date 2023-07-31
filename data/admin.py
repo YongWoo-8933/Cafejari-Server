@@ -4,7 +4,7 @@ import time
 from django.contrib import admin
 from cafe.models import District, Brand, CongestionArea
 from cafe.serializers import DistrictSerializer, BrandSerializer, CongestionAreaSerializer
-from cafejari.settings import LOCAL, MEDIA_ROOT, BASE_DIR
+from cafejari.settings import LOCAL, MEDIA_ROOT, BASE_DIR, AWS_S3_DOMAIN
 from cron.congestion import update_congestion_area
 from cron.item import update_item_list
 from data.models import DistrictDataUpdate, ItemDataUpdate, CongestionDataUpdate, BrandDataUpdate, \
@@ -15,15 +15,18 @@ from utils import S3Manager
 class CsvFileManageAdmin(admin.ModelAdmin):
 
     @staticmethod
-    def get_opened_csv_file(path):
+    def get_opened_csv_file(file):
         if LOCAL:
-            path = f"{BASE_DIR}/{path}"
+            path = f"{BASE_DIR}/{file.url}"
             return open(path, "r", encoding="utf-8-sig")
         else:
-            file_path = f"{MEDIA_ROOT}/temp.csv"
-            S3Manager.download_file(path= path, filename=file_path)
+            print(file)
+            print(file.url)
+            print(file.path)
+            temp_file_path = f"{MEDIA_ROOT}/temp.csv"
+            S3Manager.download_file(path=file.path, filename=temp_file_path)
             time.sleep(1)
-            return open(file_path, "r", encoding="utf-8-sig")
+            return open(temp_file_path, "r", encoding="utf-8-sig")
 
 
 @admin.register(DistrictDataUpdate)
@@ -38,7 +41,7 @@ class DistrictUpdateAdmin(CsvFileManageAdmin):
     def save_model(self, request, obj, form, change):
         obj.save()
         time.sleep(0.2)
-        f = self.get_opened_csv_file(path=obj.gu_dong_csv_file.url)
+        f = self.get_opened_csv_file(file=obj.gu_dong_csv_file)
         reader = csv.reader(f)
         response_dict = {}
         current_dong_list = []
