@@ -15,7 +15,7 @@ BASE_IMAGE_URL = "cafejariimage.co.kr"
 DEBUG = True
 
 # 로컬환경 / 서버환경 설정
-LOCAL = True
+LOCAL = False
 
 # 허용 호스트
 ALLOWED_HOSTS = ["*"]
@@ -235,6 +235,12 @@ USE_TZ = False
 # static 파일
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static', 'admin'),
+    os.path.join(BASE_DIR, 'static', 'drf-yasg'),
+    os.path.join(BASE_DIR, 'static', 'main'),
+    os.path.join(BASE_DIR, 'static', 'rest-framework'),
+]
 
 # media 파일
 MEDIA_URL = "/media/"
