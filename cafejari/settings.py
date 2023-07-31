@@ -235,12 +235,6 @@ USE_TZ = False
 # static 파일
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static', 'admin'),
-    os.path.join(BASE_DIR, 'static', 'drf-yasg'),
-    os.path.join(BASE_DIR, 'static', 'main'),
-    os.path.join(BASE_DIR, 'static', 'rest-framework'),
-]
 
 # media 파일
 MEDIA_URL = "/media/"
