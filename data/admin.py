@@ -20,11 +20,8 @@ class CsvFileManageAdmin(admin.ModelAdmin):
             path = f"{BASE_DIR}/{file.url}"
             return open(path, "r", encoding="utf-8-sig")
         else:
-            print(file)
-            print(file.url)
-            print(file.path)
             temp_file_path = f"{MEDIA_ROOT}/temp.csv"
-            S3Manager.download_file(path=file.path, filename=temp_file_path)
+            S3Manager.download_file(path=str(file), filename=temp_file_path)
             time.sleep(1)
             return open(temp_file_path, "r", encoding="utf-8-sig")
 
@@ -88,7 +85,7 @@ class CongestionAreaDataUpdateAdmin(CsvFileManageAdmin):
     def save_model(self, request, obj, form, change):
         obj.save()
         time.sleep(0.5)
-        f = self.get_opened_csv_file(path=obj.congestion_area_csv_file.url)
+        f = self.get_opened_csv_file(file=obj.congestion_area_csv_file)
         reader = csv.reader(f)
         areas = CongestionArea.objects.all()
         area_name_list = [area.name for area in areas]
@@ -133,7 +130,7 @@ class BrandDataUpdateAdmin(CsvFileManageAdmin):
     def save_model(self, request, obj, form, change):
         obj.save()
         time.sleep(0.5)
-        f = self.get_opened_csv_file(path=obj.brand_csv_file.url)
+        f = self.get_opened_csv_file(file=obj.brand_csv_file)
         reader = csv.reader(f)
         brand_name_list = [obj.name for obj in Brand.objects.all()]
         for row in reader:
