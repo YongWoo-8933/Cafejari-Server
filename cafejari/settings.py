@@ -15,7 +15,7 @@ BASE_IMAGE_URL = "cafejariimage.co.kr"
 DEBUG = True
 
 # 로컬환경 / 서버환경 설정
-LOCAL = False
+LOCAL = True
 
 # 허용 호스트
 ALLOWED_HOSTS = ["*"]
@@ -78,7 +78,7 @@ NAVER_API_SECRET = os.environ.get('NAVER_API_SECRET')
 NAVER_SMS_CALLING_NUMBER = os.environ.get('NAVER_SMS_CALLING_NUMBER')
 ADMIN_PHONE_NUMBER_LIST = [os.environ.get('ADMIN_PHONE_NUMBER_1')]
 DB_NAME = os.environ.get('DB_NAME')
-DB_USER = os.environ.get('DB_LOCAL_USER') if LOCAL else os.environ.get('DB_USER')
+DB_USER = os.environ.get('DB_USER')
 DB_PASSWORD = os.environ.get('DB_PASSWORD')
 DB_PORT = os.environ.get('DB_PORT')
 DB_HOST = 'db' if LOCAL else os.environ.get('DB_HOST')

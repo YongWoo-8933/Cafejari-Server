@@ -1,9 +1,10 @@
-
+import csv
 import time
 
 from django.contrib import admin
-from cafe.models import District, Brand
+from cafe.models import District, Brand, CongestionArea
 from cafe.serializers import DistrictSerializer, BrandSerializer, CongestionAreaSerializer
+from cafejari.settings import LOCAL, MEDIA_ROOT, BASE_DIR
 from cron.congestion import update_congestion_area
 from cron.item import update_item_list
 from data.models import DistrictDataUpdate, ItemDataUpdate, CongestionDataUpdate, BrandDataUpdate, \
@@ -11,8 +12,22 @@ from data.models import DistrictDataUpdate, ItemDataUpdate, CongestionDataUpdate
 from utils import S3Manager
 
 
+class CsvFileManageAdmin(admin.ModelAdmin):
+
+    @staticmethod
+    def get_opened_csv_file(path):
+        if LOCAL:
+            path = f"{BASE_DIR}/{path}"
+            return open(path, "r", encoding="utf-8-sig")
+        else:
+            file_path = f"{MEDIA_ROOT}/temp.csv"
+            S3Manager.download_file(path= path, filename=file_path)
+            time.sleep(1)
+            return open(file_path, "r", encoding="utf-8-sig")
+
+
 @admin.register(DistrictDataUpdate)
-class DistrictUpdateAdmin(admin.ModelAdmin):
+class DistrictUpdateAdmin(CsvFileManageAdmin):
     list_display = ("id", "last_update", "city", "gu_dong_csv_file",)
     list_filter = ("city",)
     date_hierarchy = "last_update"
@@ -22,9 +37,9 @@ class DistrictUpdateAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.save()
-        time.sleep(1)
-        f = request.FILES.get("gu_dong_csv_file")
-        reader = f.read().decode('utf-8').splitlines()
+        time.sleep(0.2)
+        f = self.get_opened_csv_file(path=obj.gu_dong_csv_file.url)
+        reader = csv.reader(f)
         response_dict = {}
         current_dong_list = []
         current_gu = ""
@@ -37,9 +52,9 @@ class DistrictUpdateAdmin(admin.ModelAdmin):
                 if row[0] == '번호':
                     continue
                 else:
-                    current_dong_list.append({"name": row[1], "latitude": float(row[3]), "longitude": float(row[4])})
+                    current_dong_list.append({"name": row[1].strip(), "latitude": float(row[3].strip()), "longitude": float(row[4].strip())})
             else:
-                current_gu = row[0]
+                current_gu = row[0].strip()
         response_dict[current_gu] = current_dong_list
         for gu in response_dict.keys():
             for dong_dict in response_dict[gu]:
@@ -56,12 +71,11 @@ class DistrictUpdateAdmin(admin.ModelAdmin):
                               "longitude": longitude})
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
-        S3Manager.delete_file(obj.gu_dong_csv_file)
         f.close()
 
 
 @admin.register(CongestionAreaDataUpdate)
-class CongestionAreaDataUpdateAdmin(admin.ModelAdmin):
+class CongestionAreaDataUpdateAdmin(CsvFileManageAdmin):
     list_display = ("id", "last_update", "congestion_area_csv_file")
     date_hierarchy = "last_update"
     ordering = ("-last_update",)
@@ -70,27 +84,43 @@ class CongestionAreaDataUpdateAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.save()
-        time.sleep(1)
-        f = request.FILES.get("congestion_area_csv_file")
-        reader = f.read().decode('utf-8').splitlines()
-        for row in reader[1:]:
+        time.sleep(0.5)
+        f = self.get_opened_csv_file(path=obj.congestion_area_csv_file.url)
+        reader = csv.reader(f)
+        areas = CongestionArea.objects.all()
+        area_name_list = [area.name for area in areas]
+        first = True
+        for row in reader:
+            if first:
+                first = False
+                continue
             if len(row) > 6:
-                serializer = CongestionAreaSerializer(data={
-                    "name": row[3],
-                    "category": row[0],
-                    "south_west_latitude": row[4],
-                    "south_west_longitude": row[5],
-                    "north_east_latitude": row[6],
-                    "north_east_longitude": row[7]
-                })
+                name = row[3].strip()
+                if name in area_name_list:
+                    obj = CongestionArea.objects.get(name=name)
+                    serializer = CongestionAreaSerializer(obj, data={
+                        "category": row[0],
+                        "south_west_latitude": row[4],
+                        "south_west_longitude": row[5],
+                        "north_east_latitude": row[6],
+                        "north_east_longitude": row[7]
+                    }, partial=True)
+                else:
+                    serializer = CongestionAreaSerializer(data={
+                        "name": name,
+                        "category": row[0],
+                        "south_west_latitude": row[4],
+                        "south_west_longitude": row[5],
+                        "north_east_latitude": row[6],
+                        "north_east_longitude": row[7]
+                    })
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
-        S3Manager.delete_file(obj.congestion_area_csv_file)
         f.close()
 
 
 @admin.register(BrandDataUpdate)
-class BrandDataUpdateAdmin(admin.ModelAdmin):
+class BrandDataUpdateAdmin(CsvFileManageAdmin):
     list_display = ("id", "last_update", "brand_csv_file",)
     date_hierarchy = "last_update"
     ordering = ("-last_update",)
@@ -99,18 +129,16 @@ class BrandDataUpdateAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.save()
-        time.sleep(1)
-        f = request.FILES.get("brand_csv_file")
-        reader = f.read().decode('utf-8').splitlines()
-        brand_queryset = Brand.objects.all()
-        brand_name_list = [obj.name for obj in brand_queryset]
+        time.sleep(0.5)
+        f = self.get_opened_csv_file(path=obj.brand_csv_file.url)
+        reader = csv.reader(f)
+        brand_name_list = [obj.name for obj in Brand.objects.all()]
         for row in reader:
-            brand_name = row[0]
+            brand_name = row[0].strip()
             if brand_name not in brand_name_list:
                 serializer = BrandSerializer(data={"name": brand_name})
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
-        S3Manager.delete_file(obj.brand_csv_file)
         f.close()
 
 

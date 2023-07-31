@@ -1,8 +1,6 @@
 
 import boto3
-import botocore
 from django.contrib import admin
-from django.utils.html import format_html
 from drf_yasg import openapi
 from rest_framework import mixins, status, serializers
 from rest_framework.response import Response
@@ -63,6 +61,10 @@ class S3Manager:
     @classmethod
     def delete_file(cls, path):
         boto3.client('s3').delete_object(Bucket=AWS_STORAGE_BUCKET_NAME, Key=str(path))
+
+    @classmethod
+    def download_file(cls, path, filename):
+        boto3.client('s3').download_file(Bucket=AWS_STORAGE_BUCKET_NAME, Key=path, Filename='media/' + filename)
 
 
 # 이미지 파일을 가지고 있는 모델의 admin

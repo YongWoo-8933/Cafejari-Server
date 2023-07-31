@@ -42,6 +42,7 @@ WORKDIR /cafejari
 # 필요한 라이브러리 설치
 ADD . /cafejari/
 RUN pip3 install --upgrade pip && pip3 install -r requirements.txt
+RUN pip3 install boto3
 
 # 컨테이너에서 실행될 명령어
 #ENTRYPOINT python3 manage.py makemigrations && python3 manage.py migrate && gunicorn cafejari.wsgi -b 0.0.0.0:8000:application
