@@ -18,7 +18,7 @@ class SwaggerCafeFloorCafeRepresentationSerializer(CafeFloorCafeRepresentationSe
 
 
 class SwaggerCafeResponseSerializer(CafeResponseSerializer):
-    cafe_floor = SwaggerCafeFloorCafeRepresentationSerializer(read_only=True)
+    cafe_floor = SwaggerCafeFloorCafeRepresentationSerializer(many=True, read_only=True)
 
 
 class SwaggerCafeSearchResponseSerializer(SwaggerSerializer):
