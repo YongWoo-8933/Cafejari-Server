@@ -13,8 +13,7 @@ class SwaggerOccupancyRegistrationRequestSerializer(SwaggerSerializer):
 
 # Response
 class SwaggerCafeFloorCafeRepresentationSerializer(CafeFloorCafeRepresentationSerializer):
-    recent_user_updated_log = OccupancyRateUpdateLogCafeFloorRepresentationSerializer(many=True, read_only=True)
-    recent_guest_updated_log = OccupancyRateUpdateLogCafeFloorRepresentationSerializer(many=True, read_only=True)
+    recent_updated_log = OccupancyRateUpdateLogCafeFloorRepresentationSerializer(many=True, read_only=True)
 
 
 class SwaggerCafeResponseSerializer(CafeResponseSerializer):

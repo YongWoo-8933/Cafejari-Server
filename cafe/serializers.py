@@ -129,31 +129,14 @@ class OccupancyRateUpdateLogCafeFloorRepresentationSerializer(OccupancyRateUpdat
 
 # 맵 cafe 정보 속 cafe_floor 참조 serializer
 class CafeFloorCafeRepresentationSerializer(CafeFloorSerializer):
-    recent_user_updated_log = serializers.SerializerMethodField(read_only=True)
-    recent_guest_updated_log = serializers.SerializerMethodField(read_only=True)
+    recent_updated_log = serializers.SerializerMethodField(read_only=True)
     occupancy_rate_prediction = OccupancyRatePredictionSerializer(read_only=True)
 
     @staticmethod
-    def get_recent_user_updated_log(obj):
+    def get_recent_updated_log(obj):
         filtered_logs = obj.occupancy_rate_update_log.filter(
-            update__gte=(datetime.now() - timedelta(hours=RECENT_HOUR)), user__isnull=False
+            update__gte=(datetime.now() - timedelta(hours=RECENT_HOUR))
         )
-        if not filtered_logs:
-            filtered_logs = obj.occupancy_rate_update_log.filter(
-                update__gte=(datetime.now() - timedelta(hours=RECENT_HOUR))
-            )
-        serializer = OccupancyRateUpdateLogCafeFloorRepresentationSerializer(filtered_logs, many=True, read_only=True)
-        return serializer.data
-
-    @staticmethod
-    def get_recent_guest_updated_log(obj):
-        filtered_logs = obj.occupancy_rate_update_log.filter(
-            update__gte=(datetime.now() - timedelta(hours=RECENT_HOUR)), user__isnull=True
-        )
-        if not filtered_logs:
-            filtered_logs = obj.occupancy_rate_update_log.filter(
-                update__gte=(datetime.now() - timedelta(hours=RECENT_HOUR))
-            )
         serializer = OccupancyRateUpdateLogCafeFloorRepresentationSerializer(filtered_logs, many=True, read_only=True)
         return serializer.data
 
