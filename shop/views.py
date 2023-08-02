@@ -207,7 +207,7 @@ class UserCouponViewSet(UserListDestroyViewSet):
         operation_id='유저 쿠폰 리스트',
         operation_description='자신이 가지고 있는 모든 쿠폰 리스트',
         request_body=no_body,
-        responses={200: CouponSerializer(many=True)},
+        responses={200: UserCouponResponseSerializer(many=True)},
         manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
     )
     def list(self, request, *args, **kwargs):
