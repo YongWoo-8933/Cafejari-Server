@@ -71,12 +71,14 @@ class S3Manager:
 class ImageModelAdmin(admin.ModelAdmin):
 
     def delete_model(self, request, obj):
-        S3Manager.delete_file(path=obj.image)
+        if obj.image:
+            S3Manager.delete_file(path=obj.image)
         obj.delete()
 
     def delete_queryset(self, request, queryset):
         for obj in queryset:
-            S3Manager.delete_file(path=obj.image)
+            if obj.image:
+                S3Manager.delete_file(path=obj.image)
             obj.delete()
 
 
