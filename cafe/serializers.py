@@ -159,7 +159,7 @@ class OccupancyRateUpdateLogResponseSerializer(OccupancyRateUpdateLogSerializer)
         return super(OccupancyRateUpdateLogResponseSerializer, self).to_representation(instance)
 
 
-# query 검색, 맵 검색 등에서 표시할 카페 정보
+# 맵 검색에서 표시할 카페 정보
 class CafeResponseSerializer(CafeSerializer):
     cafe_floor = CafeFloorCafeRepresentationSerializer(many=True, read_only=True)
     cafe_vip = CafeVIPRepresentationSerializer(many=True, read_only=True)
@@ -170,4 +170,12 @@ class CafeResponseSerializer(CafeSerializer):
     def to_representation(self, instance):
         self.fields['brand'] = BrandResponseSerializer(read_only=True)
         return super(CafeResponseSerializer, self).to_representation(instance)
+
+
+# query 검색에서 표시할 카페 정보
+class CafeSearchResponseSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Cafe
+        fields = ["id", "name", "address"]
 

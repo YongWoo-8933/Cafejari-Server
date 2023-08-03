@@ -20,8 +20,8 @@ class SwaggerCafeResponseSerializer(CafeResponseSerializer):
     cafe_floor = SwaggerCafeFloorCafeRepresentationSerializer(many=True, read_only=True)
 
 
-class SwaggerCafeSearchResponseSerializer(SwaggerSerializer):
-    count = serializers.IntegerField()
-    next = serializers.CharField()
-    previous = serializers.CharField()
-    results = SwaggerCafeResponseSerializer(many=True)
+# class SwaggerCafeSearchResponseSerializer(SwaggerSerializer):
+#     count = serializers.IntegerField()
+#     next = serializers.CharField()
+#     previous = serializers.CharField()
+#     results = SwaggerCafeResponseSerializer(many=True)

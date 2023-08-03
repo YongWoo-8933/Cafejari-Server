@@ -12,7 +12,8 @@ from rest_framework.viewsets import GenericViewSet
 
 from cafe.models import Cafe, CafeFloor, OccupancyRateUpdateLog, DailyActivityStack
 from cafe.serializers import CafeResponseSerializer, \
-    OccupancyRateUpdateLogResponseSerializer, OccupancyRateUpdateLogSerializer, DailyActivityStackSerializer
+    OccupancyRateUpdateLogResponseSerializer, OccupancyRateUpdateLogSerializer, DailyActivityStackSerializer, \
+    CafeSearchResponseSerializer
 from cafe.swagger_serializers import SwaggerOccupancyRegistrationRequestSerializer, SwaggerCafeResponseSerializer, \
     SwaggerCafeSearchResponseSerializer
 from cafejari.settings import UPDATE_COOLTIME, OCCUPANCY_INSUFFICIENT_THRESHOLD, OCCUPANCY_ENOUGH_THRESHOLD, \
@@ -80,8 +81,8 @@ class CafeViewSet(
 
     @swagger_auto_schema(
         operation_id='카페 검색 정보',
-        operation_description='검색 했을 때 카페 리스트 정보를 받음',
-        responses={200: SwaggerCafeSearchResponseSerializer(many=True)},
+        operation_description='검색 했을 때 카페 이름+주소 정보를 받음',
+        responses={200: CafeSearchResponseSerializer(many=True)},
         manual_parameters=[
             openapi.Parameter(
                 name='query',
@@ -89,14 +90,7 @@ class CafeViewSet(
                 type=openapi.TYPE_STRING,
                 required=True,
                 description='검색어',
-            ),
-            openapi.Parameter(
-                name='page',
-                in_=openapi.IN_QUERY,
-                type=openapi.TYPE_INTEGER,
-                required=False,
-                description='몇 번째 페이지를 조회할지, default=1',
-            ),
+            )
         ]
     )
     @action(detail=False, methods=['get'], permission_classes=[AllowAny])
@@ -108,10 +102,43 @@ class CafeViewSet(
             for query_word in query_list:
                 queryset = queryset.filter(Q(name__icontains=query_word) | Q(address__icontains=query_word))
 
-        paginator = CafePagination()
-        page = paginator.paginate_queryset(queryset, self.request)
-        serializer = self.get_serializer(page, many=True)
-        return paginator.get_paginated_response(data=serializer.data)
+        serializer = CafeSearchResponseSerializer(queryset)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    # @swagger_auto_schema(
+    #     operation_id='카페 검색 정보',
+    #     operation_description='검색 했을 때 카페 리스트 정보를 받음',
+    #     responses={200: SwaggerCafeSearchResponseSerializer(many=True)},
+    #     manual_parameters=[
+    #         openapi.Parameter(
+    #             name='query',
+    #             in_=openapi.IN_QUERY,
+    #             type=openapi.TYPE_STRING,
+    #             required=True,
+    #             description='검색어',
+    #         ),
+    #         openapi.Parameter(
+    #             name='page',
+    #             in_=openapi.IN_QUERY,
+    #             type=openapi.TYPE_INTEGER,
+    #             required=False,
+    #             description='몇 번째 페이지를 조회할지, default=1',
+    #         ),
+    #     ]
+    # )
+    # @action(detail=False, methods=['get'], permission_classes=[AllowAny])
+    # def search(self, queryset):
+    #     query = self.request.query_params.get('query')
+    #     queryset = self.queryset.filter(is_closed=False, is_visible=True)
+    #     if query:
+    #         query_list = query.split()
+    #         for query_word in query_list:
+    #             queryset = queryset.filter(Q(name__icontains=query_word) | Q(address__icontains=query_word))
+    #
+    #     paginator = CafePagination()
+    #     page = paginator.paginate_queryset(queryset, self.request)
+    #     serializer = self.get_serializer(page, many=True)
+    #     return paginator.get_paginated_response(data=serializer.data)
 
 
 class OccupancyRateUpdateLogViewSet(
