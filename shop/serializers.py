@@ -40,6 +40,11 @@ class UserCouponSerializer(serializers.ModelSerializer):
 # 기본 serializer ------------------------------------------------------------------------
 # 기프티콘 이미지 응답용 serializer
 class GifticonResponseSerializer(ImageModelSerializer):
+    description = serializers.SerializerMethodField(read_only=True)
+
+    @staticmethod
+    def get_description(obj):
+        return obj.item.description
 
     class Meta:
         model = Gifticon
