@@ -14,8 +14,7 @@ from cafe.models import Cafe, CafeFloor, OccupancyRateUpdateLog, DailyActivitySt
 from cafe.serializers import CafeResponseSerializer, \
     OccupancyRateUpdateLogResponseSerializer, OccupancyRateUpdateLogSerializer, DailyActivityStackSerializer, \
     CafeSearchResponseSerializer
-from cafe.swagger_serializers import SwaggerOccupancyRegistrationRequestSerializer, SwaggerCafeResponseSerializer, \
-    SwaggerCafeSearchResponseSerializer
+from cafe.swagger_serializers import SwaggerOccupancyRegistrationRequestSerializer, SwaggerCafeResponseSerializer
 from cafejari.settings import UPDATE_COOLTIME, OCCUPANCY_INSUFFICIENT_THRESHOLD, OCCUPANCY_ENOUGH_THRESHOLD, \
     ENOUGH_DATA_POINT, INSUFFICIENT_DATA_POINT, NO_DATA_POINT
 from error import ServiceError
