@@ -114,7 +114,7 @@ class UserViewSet(GenericViewSet):
             if fcm_token:
                 profile_data["fcm_token"] = fcm_token
             if profile_image_id:
-                profile_data["profile_image_id"] = int(profile_image_id)
+                profile_data["profile_image"] = int(profile_image_id)
             if social_account_object.provider == "kakao":
                 extra_json_data = social_account_object.extra_data.get("kakao_account")
                 age_range = extra_json_data.get("age_range")
