@@ -308,10 +308,10 @@ def kakao_login_callback(request):
     try:
         SocialAccount.objects.get(provider="Kakao", uid=social_id)
         # 유저 정보가 있는 경우(로그인)
-        return Response(data={"user_exists": True, "code": code, "access_token": access_token}, status=status.HTTP_200_OK)
+        return Response(data={"user_exists": True, "access_token": access_token}, status=status.HTTP_200_OK)
     except SocialAccount.DoesNotExist:
         # 유저 정보가 없는 경우(새로 가입)
-        return Response(data={"user_exists": False, "code": code, "access_token": access_token}, status=status.HTTP_200_OK)
+        return Response(data={"user_exists": False, "access_token": access_token}, status=status.HTTP_200_OK)
 
 
 class KakaoLogin(SocialLoginView):
