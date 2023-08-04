@@ -30,14 +30,7 @@ class SwaggerProfileUpdateRequestSerializer(SwaggerSerializer):
 
 
 class SwaggerKakaoLoginRequestSerializer(SwaggerSerializer):
-    # code = serializers.CharField(max_length=255)
     access_token = serializers.CharField(max_length=255)
-
-
-class SwaggerKakaoLoginFinishRequestSerializer(SwaggerSerializer):
-    code = serializers.CharField(max_length=255)
-    access_token = serializers.CharField(max_length=255)
-    id_token = serializers.CharField(max_length=255)
 
 
 

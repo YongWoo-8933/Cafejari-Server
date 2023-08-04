@@ -275,7 +275,7 @@ def kakao_login(request):
 @swagger_auto_schema(
     method='post',
     operation_id='카카오 로그인',
-    operation_description='카카오 로그인 정보로 가입 여부 결과 발송',
+    operation_description="카카오 로그인 정보로 가입 여부 결과 발송(debug에서는 'code' 보낼것)",
     request_body=SwaggerKakaoLoginRequestSerializer(),
     responses={200: SwaggerKakaoCallbackResponseSerializer()}
 )
@@ -285,7 +285,7 @@ def kakao_login_callback(request):
     code = request.data.get('code')
     access_token = request.data.get('access_token')
 
-    if not access_token:
+    if code is not None and access_token is None:
         token_response = requests.post(
             "https://kauth.kakao.com/oauth/token",
             data={
