@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from user.models import User, Profile, Grade, ProfileImage
+from user.models import User, Profile, Grade, ProfileImage, NicknameAdjective, NicknameNoun
 from utils import ImageModelAdmin, replace_image_domain
 
 
@@ -66,3 +66,25 @@ class ProfileImageAdmin(ImageModelAdmin):
         return format_html('<img src="{}" width="85" height="85" />', replace_image_domain(profile_image.image.url))
 
     image_tag.short_description = "이미지"
+
+
+@admin.register(NicknameAdjective)
+class NicknameAdjectiveAdmin(admin.ModelAdmin):
+    list_display = ("id", "length", "value", "update")
+    list_filter = ("length",)
+    search_fields = ("value",)
+    ordering = ("length", "value")
+    date_hierarchy = "update"
+    save_as = True
+    preserve_filters = True
+
+
+@admin.register(NicknameNoun)
+class NicknameNounAdmin(admin.ModelAdmin):
+    list_display = ("id", "type", "value", "update")
+    list_filter = ("type",)
+    search_fields = ("value",)
+    ordering = ("type", "value")
+    date_hierarchy = "update"
+    save_as = True
+    preserve_filters = True

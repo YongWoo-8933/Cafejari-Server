@@ -1,4 +1,4 @@
-
+import random
 import re
 import time
 
@@ -21,7 +21,8 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from cafejari import settings
 from cafejari.settings import KAKAO_REST_API_KEY, KAKAO_REDIRECT_URL, DEBUG
 from error import ServiceError
-from user.models import User, Profile, Grade
+from notification.naver_sms import send_sms_to_admin
+from user.models import User, Profile, Grade, NicknameAdjective, NicknameNoun
 from user.swagger_serializers import SwaggerMakeNewProfileRequestSerializer, \
     SwaggerProfileUpdateRequestSerializer, SwaggerKakaoCallbackResponseSerializer, \
     SwaggerKakaoLoginFinishResponseSerializer, SwaggerTokenRequestSerializer, \
@@ -177,6 +178,38 @@ class ProfileViewSet(
                 return ServiceError.duplicated_nickname_response()
             except Profile.DoesNotExist:
                 return Response({'nickname': nickname}, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        method='get',
+        operation_id='닉네임 자동 생성',
+        operation_description='자동으로 생성된 닉네임 반환',
+        request_body=no_body,
+        responses={200: SwaggerValidateNicknameResponseSerializer()}
+    )
+    @action(methods=['get'], detail=False)
+    def auto_generate_nickname(self, queryset):
+        adjectives = [obj.value for obj in NicknameAdjective.objects.all()]
+        nouns = [obj.value for obj in NicknameNoun.objects.all()]
+        stack = 0
+        if adjectives and nouns:
+            while True:
+                stack += 1
+                nickname = random.choice(adjectives) + random.choice(nouns)
+                try:
+                    _ = Profile.objects.get(value=nickname)
+                    if stack > 50:
+                        break
+                    else:
+                        continue
+                except Profile.DoesNotExist:
+                    break
+            if stack > 50:
+                send_sms_to_admin(content="닉네임 자동 생성 스택이 50회가 넘었습니다. 경우의 수를 늘려주세요")
+                return Response(data={"nickname": ""}, status=status.HTTP_200_OK)
+            else:
+                return Response(data={"nickname": nickname}, status=status.HTTP_200_OK)
+        send_sms_to_admin(content="형용사나 명사가 없어 닉네임 자동생성에 실패했습니다")
+        return Response(data={"nickname": ""}, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_id='프로필 업데이트',

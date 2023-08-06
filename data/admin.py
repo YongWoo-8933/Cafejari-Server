@@ -8,7 +8,9 @@ from cafejari.settings import LOCAL, MEDIA_ROOT, BASE_DIR, AWS_S3_DOMAIN
 from cron.congestion import update_congestion_area
 from cron.item import update_item_list
 from data.models import DistrictDataUpdate, ItemDataUpdate, CongestionDataUpdate, BrandDataUpdate, \
-    CongestionAreaDataUpdate
+    CongestionAreaDataUpdate, NicknameAdjectiveDataUpdate, NicknameNounDataUpdate
+from user.models import NicknameAdjective, NicknameNoun
+from user.serializers import NicknameAdjectiveSerializer, NicknameNounSerializer
 from utils import S3Manager
 
 
@@ -166,3 +168,66 @@ class CongestionUpdateAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.save()
         update_congestion_area()
+
+
+@admin.register(NicknameAdjectiveDataUpdate)
+class NicknameAdjectiveDataUpdateAdmin(CsvFileManageAdmin):
+    list_display = ("id", "last_update",)
+    date_hierarchy = "last_update"
+    ordering = ("-last_update",)
+    save_as = True
+    preserve_filters = True
+
+    def save_model(self, request, obj, form, change):
+        obj.save()
+        time.sleep(0.5)
+        f = self.get_opened_csv_file(file=obj.adjective_csv_file)
+        reader = csv.reader(f)
+        adjective_queryset = NicknameAdjective.objects.all()
+        filter_set = set()
+        for row in reader:
+            adjective = row[0].strip()
+            if adjective not in filter_set:
+                filter_set.add(adjective)
+                try:
+                    adjective_object = adjective_queryset.get(value=adjective)
+                    serializer = NicknameAdjectiveSerializer(adjective_object,
+                                                             data={"value": adjective, "length": len(adjective)},
+                                                             partial=True)
+                except NicknameAdjective.DoesNotExist:
+                    serializer = NicknameAdjectiveSerializer(data={"value": adjective, "length": len(adjective)})
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+        f.close()
+
+
+@admin.register(NicknameNounDataUpdate)
+class NicknameNounDataUpdateAdmin(CsvFileManageAdmin):
+    list_display = ("id", "last_update",)
+    date_hierarchy = "last_update"
+    ordering = ("-last_update",)
+    save_as = True
+    preserve_filters = True
+
+    def save_model(self, request, obj, form, change):
+        obj.save()
+        time.sleep(0.5)
+        f = self.get_opened_csv_file(file=obj.noun_csv_file)
+        reader = csv.reader(f)
+        noun_queryset = NicknameNoun.objects.all()
+        filter_set = set()
+        for row in reader:
+            noun_type = row[0].strip()
+            noun = row[1].strip()
+            if noun not in filter_set:
+                filter_set.add(noun)
+                try:
+                    noun_object = noun_queryset.get(type=noun_type, value=noun)
+                    serializer = NicknameNounSerializer(noun_object,
+                                                        data={"value": noun, "type": noun_type},
+                                                        partial=True)
+                except NicknameNoun.DoesNotExist:
+                    serializer = NicknameNounSerializer(data={"value": noun, "type": noun_type})
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+        f.close()

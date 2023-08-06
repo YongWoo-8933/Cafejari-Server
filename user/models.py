@@ -116,3 +116,35 @@ class Profile(models.Model):
         db_table_comment = '프로필'
         app_label = 'user'
         ordering = ['-user__date_joined']
+
+
+class NicknameAdjective(models.Model):
+    value = models.CharField(max_length=4, unique=True)
+    length = models.IntegerField()
+    update = models.DateTimeField(auto_now_add=True),
+
+    class Meta:
+        db_table = 'user_nickname_adjective'
+        db_table_comment = '닉네임 자동생성 형용사 후보'
+        app_label = 'user'
+        ordering = ['length', 'value']
+
+
+class NounType(Enum):
+    Coffee = "커피"
+    Latte = "라떼"
+    NoneCoffee = "논커피"
+    Tea = "티"
+    dessert = "디저트"
+
+
+class NicknameNoun(models.Model):
+    value = models.CharField(max_length=5, unique=True)
+    type = models.CharField(choices=((noun_type.value, noun_type.value) for noun_type in NounType))
+    update = models.DateTimeField(auto_now_add=True),
+
+    class Meta:
+        db_table = 'user_nickname_noun'
+        db_table_comment = '닉네임 자동생성 명사 후보'
+        app_label = 'user'
+        ordering = ['type', 'value']

@@ -1,8 +1,7 @@
 
 from rest_framework import serializers
 
-from user.models import User, Profile, Grade, ProfileImage
-
+from user.models import User, Profile, Grade, ProfileImage, NicknameAdjective, NicknameNoun
 
 # 기본 serializer ----------------------------------------------------------------------------
 from utils import ImageModelSerializer
@@ -34,6 +33,20 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         exclude = ['password']
+
+
+class NicknameAdjectiveSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = NicknameAdjective
+        fields = "__all__"
+
+
+class NicknameNounSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = NicknameNoun
+        fields = "__all__"
 
 
 
