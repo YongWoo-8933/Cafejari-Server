@@ -196,7 +196,7 @@ class ProfileViewSet(
                 stack += 1
                 nickname = random.choice(adjectives) + random.choice(nouns)
                 try:
-                    _ = Profile.objects.get(value=nickname)
+                    _ = Profile.objects.get(nickname=nickname)
                     if stack > 50:
                         break
                     else:
