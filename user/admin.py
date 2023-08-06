@@ -74,7 +74,6 @@ class NicknameAdjectiveAdmin(admin.ModelAdmin):
     list_filter = ("length",)
     search_fields = ("value",)
     ordering = ("length", "value")
-    date_hierarchy = "update"
     save_as = True
     preserve_filters = True
 
@@ -85,6 +84,5 @@ class NicknameNounAdmin(admin.ModelAdmin):
     list_filter = ("type",)
     search_fields = ("value",)
     ordering = ("type", "value")
-    date_hierarchy = "update"
     save_as = True
     preserve_filters = True
