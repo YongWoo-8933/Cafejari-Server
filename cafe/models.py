@@ -168,7 +168,7 @@ class OpeningHour(models.Model):
     thu = models.CharField(max_length=31)
     fri = models.CharField(max_length=31)
     sat = models.CharField(max_length=31)
-    son = models.CharField(max_length=31)
+    sun = models.CharField(max_length=31)
     cafe = models.OneToOneField(
         'Cafe',
         on_delete=models.CASCADE,
