@@ -336,6 +336,7 @@ def kakao_login_callback(request):
         headers={"Authorization": f"Bearer {access_token}"}
     )
     profile_json = profile_request.json()
+    return Response(data=profile_json, status=status.HTTP_200_OK)
     social_id = profile_json.get('id')
 
     try:
