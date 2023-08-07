@@ -336,11 +336,10 @@ def kakao_login_callback(request):
         headers={"Authorization": f"Bearer {access_token}"}
     )
     profile_json = profile_request.json()
-    return Response(data=profile_json, status=status.HTTP_200_OK)
-    social_id = profile_json.get('id')
+    uid = str(profile_json.get('id'))
 
     try:
-        SocialAccount.objects.get(provider="Kakao", uid=social_id)
+        SocialAccount.objects.get(provider="Kakao", uid=uid)
         # 유저 정보가 있는 경우(로그인)
         return Response(data={"user_exists": True, "access_token": access_token}, status=status.HTTP_200_OK)
     except SocialAccount.DoesNotExist:
