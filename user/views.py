@@ -28,7 +28,7 @@ from user.swagger_serializers import SwaggerMakeNewProfileRequestSerializer, \
     SwaggerKakaoLoginFinishResponseSerializer, SwaggerTokenRequestSerializer, \
     SwaggerValidateNicknameResponseSerializer, SwaggerKakaoLoginRequestSerializer, SwaggerRefreshTokenResponseSerializer
 from user.serializers import ProfileResponseSerializer, UserResponseSerializer, ProfileSerializer, \
-    ProfileImageSerializer, GradeResponseSerializer
+    ProfileImageSerializer, GradeResponseSerializer, ProfileImageResponseSerializer
 from drf_yasg.utils import swagger_auto_schema, no_body
 
 from utils import AUTHORIZATION_MANUAL_PARAMETER
@@ -284,11 +284,11 @@ class ProfileImageViewSet(
         operation_id='프로필 이미지',
         operation_description='존재하는 모든 default profile image를 반환',
         request_body=no_body,
-        responses={200: ProfileImageSerializer(many=True)},
+        responses={200: ProfileImageResponseSerializer(many=True)},
     )
     def list(self, request, *args, **kwargs):
         self.queryset.filter(is_default=True)
-        serializer = self.get_serializer(self.queryset.filter(is_default=True))
+        serializer = ProfileImageResponseSerializer(self.queryset.filter(is_default=True))
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

@@ -51,7 +51,7 @@ class NicknameNounSerializer(serializers.ModelSerializer):
 
 
 # 응용 serializer ----------------------------------------------------------------------------
-# grade image 저장용 serializer
+# grade image 응답용 serializer
 class GradeResponseSerializer(ImageModelSerializer):
 
     class Meta:
@@ -59,7 +59,7 @@ class GradeResponseSerializer(ImageModelSerializer):
         fields = "__all__"
 
 
-# profile_image image 저장용 serializer
+# profile_image image 응답용 serializer
 class ProfileImageResponseSerializer(ImageModelSerializer):
 
     class Meta:
