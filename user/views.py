@@ -288,7 +288,7 @@ class ProfileImageViewSet(
     )
     def list(self, request, *args, **kwargs):
         self.queryset.filter(is_default=True)
-        serializer = ProfileImageResponseSerializer(self.queryset.filter(is_default=True))
+        serializer = ProfileImageResponseSerializer(self.queryset.filter(is_default=True), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
