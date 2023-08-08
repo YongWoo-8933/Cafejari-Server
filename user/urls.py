@@ -5,11 +5,12 @@ from rest_framework import routers
 
 from cafejari.settings import DEBUG
 from user import views
-from user.views import UserViewSet, ProfileViewSet, CustomTokenRefreshView, GradeViewSet
+from user.views import UserViewSet, ProfileViewSet, CustomTokenRefreshView, GradeViewSet, ProfileImageViewSet
 
 router = routers.DefaultRouter()
 router.register('', UserViewSet)
 router.register('profile', ProfileViewSet)
+router.register('profile_image', ProfileImageViewSet)
 router.register('grade', GradeViewSet)
 
 urlpatterns = [

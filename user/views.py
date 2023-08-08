@@ -22,7 +22,7 @@ from cafejari import settings
 from cafejari.settings import KAKAO_REST_API_KEY, KAKAO_REDIRECT_URL, DEBUG
 from error import ServiceError
 from notification.naver_sms import send_sms_to_admin
-from user.models import User, Profile, Grade, NicknameAdjective, NicknameNoun
+from user.models import User, Profile, Grade, NicknameAdjective, NicknameNoun, ProfileImage
 from user.swagger_serializers import SwaggerMakeNewProfileRequestSerializer, \
     SwaggerProfileUpdateRequestSerializer, SwaggerKakaoCallbackResponseSerializer, \
     SwaggerKakaoLoginFinishResponseSerializer, SwaggerTokenRequestSerializer, \
@@ -270,6 +270,26 @@ class ProfileViewSet(
 
         time.sleep(0.1)
         return Response(UserResponseSerializer(request.user, read_only=True).data, status=status.HTTP_201_CREATED)
+
+
+class ProfileImageViewSet(
+    mixins.ListModelMixin,
+    GenericViewSet
+):
+    queryset = ProfileImage.objects.all()
+    serializer_class = ProfileImageSerializer
+    permission_classes = [AllowAny]
+
+    @swagger_auto_schema(
+        operation_id='프로필 이미지',
+        operation_description='존재하는 모든 default profile image를 반환',
+        request_body=no_body,
+        responses={200: ProfileImageSerializer(many=True)},
+    )
+    def list(self, request, *args, **kwargs):
+        self.queryset.filter(is_default=True)
+        serializer = self.get_serializer(self.queryset.filter(is_default=True))
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class CustomTokenRefreshView(TokenRefreshView):
