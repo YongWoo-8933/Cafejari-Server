@@ -39,16 +39,6 @@ class ChallengePointSerializer(serializers.ModelSerializer):
 
 
 # 응용 serializer ------------------------------------------------------------
-# 챌린저 응답용 serializer
-class ChallengerResponseSerializer(ChallengerSerializer):
-    challenge = ChallengeSerializer(read_only=True)
-    challenge_point = ChallengePointSerializer(read_only=True, many=True)
-
-    def to_representation(self, instance):
-        self.fields['challenge'] = ChallengeSerializer(read_only=True)
-        return super(ChallengerResponseSerializer, self).to_representation(instance)
-
-
 # 챌린지 응답용 serializer
 class ChallengeResponseSerializer(ImageModelSerializer):
     challenger = serializers.SerializerMethodField(read_only=True)
@@ -61,3 +51,13 @@ class ChallengeResponseSerializer(ImageModelSerializer):
     class Meta:
         model = Challenge
         fields = "__all__"
+
+
+# 챌린저 응답용 serializer
+class ChallengerResponseSerializer(ChallengerSerializer):
+    challenge = ChallengeResponseSerializer(read_only=True)
+    challenge_point = ChallengePointSerializer(read_only=True, many=True)
+
+    def to_representation(self, instance):
+        self.fields['challenge'] = ChallengeResponseSerializer(read_only=True)
+        return super(ChallengerResponseSerializer, self).to_representation(instance)
