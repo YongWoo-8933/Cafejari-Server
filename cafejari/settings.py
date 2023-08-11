@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'notification',
     'cafe_log',
     'data',
+    'challenge',
 
     # crontab
     'django_crontab',

@@ -150,3 +150,30 @@ class ServiceError:
             error_code=1107, error_message="해당 글을 이미 신고하셨습니다. 확인 후 조치하겠습니다"), status=status.HTTP_409_CONFLICT)
 
 
+    # 1200번대 challenge
+    @classmethod
+    def no_challenge_response(cls):
+        return Response(cls._error_dict(
+            error_code=1200, error_message="존재하지 않는 챌린지입니다"), status=status.HTTP_409_CONFLICT)
+
+    @classmethod
+    def already_participate_response(cls):
+        return Response(cls._error_dict(
+            error_code=1201, error_message="이미 참여중인 챌린지입니다"), status=status.HTTP_409_CONFLICT)
+
+    @classmethod
+    def participant_limit_exceed_response(cls):
+        return Response(cls._error_dict(
+            error_code=1202, error_message="참여 정원이 제한되어 더이상 참여할 수 없습니다"), status=status.HTTP_409_CONFLICT)
+
+    @classmethod
+    def unavailable_challenge_response(cls):
+        return Response(cls._error_dict(
+            error_code=1203, error_message="현재는 참여가 불가능한 챌린지입니다"), status=status.HTTP_409_CONFLICT)
+
+    @classmethod
+    def expired_challenge_response(cls):
+        return Response(cls._error_dict(
+            error_code=1204, error_message="참여 가능 날짜가 아닙니다"), status=status.HTTP_409_CONFLICT)
+
+

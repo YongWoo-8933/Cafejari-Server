@@ -30,6 +30,7 @@ urlpatterns = [
     path('push/', include('notification.urls')),
     path('shop/', include('shop.urls')),
     path('request/', include('request.urls')),
+    path('challenge/', include('challenge.urls')),
 ]
 
 if DEBUG:
