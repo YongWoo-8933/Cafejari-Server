@@ -46,7 +46,7 @@ class ChallengeResponseSerializer(ImageModelSerializer):
 
     @staticmethod
     def get_challenger(obj):
-        return [challenger.id for challenger in obj.challenger.all()]
+        return [challenger.user.id for challenger in obj.challenger.all()]
 
     class Meta:
         model = Challenge
