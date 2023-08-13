@@ -101,7 +101,7 @@ class CafeViewSet(
             for query_word in query_list:
                 queryset = queryset.filter(Q(name__icontains=query_word) | Q(address__icontains=query_word))
 
-        serializer = CafeSearchResponseSerializer(queryset)
+        serializer = CafeSearchResponseSerializer(queryset, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     # @swagger_auto_schema(
