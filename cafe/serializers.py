@@ -163,13 +163,19 @@ class OccupancyRateUpdateLogResponseSerializer(OccupancyRateUpdateLogSerializer)
 class CafeResponseSerializer(CafeSerializer):
     cafe_floor = CafeFloorCafeRepresentationSerializer(many=True, read_only=True)
     cafe_vip = CafeVIPRepresentationSerializer(many=True, read_only=True)
-    cafe_image = CafeImageResponseSerializer(many=True, read_only=True)
+    cafe_image = serializers.SerializerMethodField(read_only=True)
     opening_hour = OpeningHourSerializer(read_only=True)
     brand = BrandResponseSerializer(read_only=True)
 
     def to_representation(self, instance):
         self.fields['brand'] = BrandResponseSerializer(read_only=True)
         return super(CafeResponseSerializer, self).to_representation(instance)
+
+    @staticmethod
+    def get_cafe_image(obj):
+        filtered_images = obj.cafe_image.filter(is_visible=True)
+        serializer = CafeImageResponseSerializer(filtered_images, many=True, read_only=True)
+        return serializer.data
 
 
 # query 검색에서 표시할 카페 정보
