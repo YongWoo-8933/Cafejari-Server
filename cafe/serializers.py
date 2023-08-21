@@ -183,5 +183,5 @@ class CafeSearchResponseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cafe
-        fields = ["id", "name", "address"]
+        fields = ["id", "name", "address", "latitude", "longitude"]
 
