@@ -100,7 +100,8 @@ class CafeViewSet(
             query_list = query.split()
             for query_word in query_list:
                 queryset = queryset.filter(Q(name__icontains=query_word) | Q(address__icontains=query_word))
-
+        if len(queryset) > 300:
+            queryset = queryset[:300]
         serializer = CafeSearchResponseSerializer(queryset, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
