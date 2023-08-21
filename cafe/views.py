@@ -73,8 +73,10 @@ class CafeViewSet(
         queryset = self.queryset.filter(
             is_visible=True,
             is_closed=False,
-            latitude__range=(latitude - latitude_bound, latitude + latitude_bound),
-            longitude__range=(longitude - longitude_bound, longitude + longitude_bound)
+            latitude__gte=latitude - latitude_bound,
+            latitude__lte=latitude + latitude_bound,
+            longitude__gte=longitude - longitude_bound,
+            longitude__lte=longitude + longitude_bound,
         )
         return Response(data=self.get_serializer(queryset, many=True).data, status=status.HTTP_200_OK)
 
