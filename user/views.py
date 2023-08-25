@@ -229,6 +229,7 @@ class ProfileViewSet(
         age_range = request.data.get("age_range")
         date_of_birth = request.data.get("date_of_birth")
         phone_number = request.data.get("phone_number")
+        fcm_token = request.data.get("fcm_token")
         marketing_push_enabled = request.data.get("marketing_push_enabled")
         occupancy_push_enabled = request.data.get("occupancy_push_enabled")
         log_push_enabled = request.data.get("log_push_enabled")
@@ -248,6 +249,8 @@ class ProfileViewSet(
             data["date_of_birth"] = str(date_of_birth)
         if phone_number is not None:
             data["phone_number"] = str(phone_number)
+        if fcm_token is not None:
+            data["fcm_token"] = str(fcm_token)
         if marketing_push_enabled is not None:
             data["marketing_push_enabled"] = marketing_push_enabled
         if occupancy_push_enabled is not None:

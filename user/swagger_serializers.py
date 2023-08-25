@@ -21,6 +21,7 @@ class SwaggerProfileUpdateRequestSerializer(SwaggerSerializer):
     age_range = serializers.CharField(max_length=15)
     date_of_birth = serializers.CharField(max_length=4)
     phone_number = serializers.CharField(max_length=8)
+    fcm_token = serializers.CharField(max_length=255)
     marketing_push_enabled = serializers.BooleanField()
     occupancy_push_enabled = serializers.BooleanField()
     log_push_enabled = serializers.BooleanField()
