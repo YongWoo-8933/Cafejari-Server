@@ -13,6 +13,7 @@ class SwaggerMakeNewProfileRequestSerializer(SwaggerSerializer):
     nickname = serializers.CharField(max_length=10, min_length=2)
     fcm_token = serializers.CharField(max_length=255)
     profile_image_id = serializers.IntegerField()
+    marketing_push_enabled = serializers.BooleanField()
 
 
 class SwaggerProfileUpdateRequestSerializer(SwaggerSerializer):

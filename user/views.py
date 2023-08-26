@@ -102,6 +102,7 @@ class UserViewSet(GenericViewSet):
         user_object = self.request.user
         nickname = self.request.data.get('nickname')
         fcm_token = self.request.data.get('fcm_token')
+        marketing_push_enabled = self.request.data.get('marketing_push_enabled')
         profile_image_id = self.request.data.get('profile_image_id')
         try:
             _ = user_object.profile
@@ -116,6 +117,8 @@ class UserViewSet(GenericViewSet):
                 profile_data["fcm_token"] = fcm_token
             if profile_image_id:
                 profile_data["profile_image"] = int(profile_image_id)
+            if marketing_push_enabled:
+                profile_data["marketing_push_enabled"] = bool(marketing_push_enabled)
             if social_account_object.provider == "kakao":
                 extra_json_data = social_account_object.extra_data.get("kakao_account")
                 age_range = extra_json_data.get("age_range")
