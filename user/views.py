@@ -385,5 +385,13 @@ class KakaoLogin(SocialLoginView):
         responses={200: SwaggerKakaoLoginFinishResponseSerializer()}
     )
     def post(self, request, *args, **kwargs):
-        return super(KakaoLogin, self).post(request, *args, **kwargs)
+
+        response = super(KakaoLogin, self).post(request, *args, **kwargs)
+
+        if 'user' in response.data:
+            user_data = response.data.pop('user')
+            user_serializer = UserResponseSerializer(User.objects.get(id=user_data.get('id')), read_only=True)
+            response.data['user'] = user_serializer.data
+
+        return response
 
