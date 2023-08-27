@@ -262,7 +262,7 @@ class ProfileViewSet(
             data["log_push_enabled"] = log_push_enabled
         if profile_image_id is not None:
             data["profile_image"] = int(profile_image_id)
-        if favorite_cafe_id_list:
+        if favorite_cafe_id_list is not None:
             favorite_cafe_data = [int(cafe_id) for cafe_id in favorite_cafe_id_list]
             data["favorite_cafe"] = favorite_cafe_data
         if new_profile_image is not None:
