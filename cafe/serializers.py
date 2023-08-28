@@ -3,7 +3,7 @@ from rest_framework import serializers
 from cafe.models import District, Brand, CongestionArea, Cafe, OccupancyRatePrediction, CafeVIP, CafeImage, \
     OpeningHour, OccupancyRateUpdateLog, CafeFloor, CafeTypeTag, DailyActivityStack
 from cafejari.settings import RECENT_HOUR
-from user.serializers import PartialUserSerializer
+from user.models import Grade, ProfileImage, Profile, User
 from utils import ImageModelSerializer
 
 # 기본 serializer ------------------------------------------------------------
@@ -109,21 +109,60 @@ class CafeImageResponseSerializer(ImageModelSerializer):
         fields = "__all__"
 
 
-# 맵 cafe 정보에 같이 실리는 vip 정보
-class CafeVIPRepresentationSerializer(CafeVIPSerializer):
-    user = PartialUserSerializer(read_only=True)
+# partial user grade image 응답용 serializer
+class PartialUserGradeResponseSerializer(ImageModelSerializer):
+
+    class Meta:
+        model = Grade
+        fields = "__all__"
+
+
+# partial user profile_image image 응답용 serializer
+class PartialProfileImageResponseSerializer(ImageModelSerializer):
+
+    class Meta:
+        model = ProfileImage
+        fields = "__all__"
+
+
+# partial user profile_image image 응답용 serializer
+class PartialProfileForRepSerializer(serializers.ModelSerializer):
+    grade = PartialUserGradeResponseSerializer(read_only=True)
+    profile_image = PartialProfileImageResponseSerializer(read_only=True)
 
     def to_representation(self, instance):
-        self.fields['user'] = PartialUserSerializer(read_only=True)
+        self.fields['grade'] = PartialUserGradeResponseSerializer(read_only=True)
+        self.fields['profile_image'] = PartialProfileImageResponseSerializer(read_only=True)
+        return super(PartialProfileForRepSerializer, self).to_representation(instance)
+
+    class Meta:
+        model = Profile
+        fields = ["id", "nickname", "grade", "profile_image"]
+
+
+class PartialUserForRepSerializer(serializers.ModelSerializer):
+    profile = PartialProfileForRepSerializer(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ["id", 'profile', 'date_joined']
+
+
+# 맵 cafe 정보에 같이 실리는 vip 정보
+class CafeVIPRepresentationSerializer(CafeVIPSerializer):
+    user = PartialUserForRepSerializer(read_only=True)
+
+    def to_representation(self, instance):
+        self.fields['user'] = PartialUserForRepSerializer(read_only=True)
         return super(CafeVIPRepresentationSerializer, self).to_representation(instance)
 
 
 # 맵 cafe 정보 속 cafe_floor안에 recent_log에 포함되는 업데이트 로그
 class OccupancyRateUpdateLogCafeFloorRepresentationSerializer(OccupancyRateUpdateLogSerializer):
-    user = PartialUserSerializer(read_only=True)
+    user = PartialUserForRepSerializer(read_only=True)
 
     def to_representation(self, instance):
-        self.fields['user'] = PartialUserSerializer(read_only=True)
+        self.fields['user'] = PartialUserForRepSerializer(read_only=True)
         return super(OccupancyRateUpdateLogCafeFloorRepresentationSerializer, self).to_representation(instance)
 
 
