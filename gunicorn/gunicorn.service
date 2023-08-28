@@ -7,8 +7,8 @@ User=ubuntu
 Group=www-data
 WorkingDirectory=/srv/cafejari
 ExecStart=/home/ubuntu/.local/bin/gunicorn \
-        --access-logfile /var/log/gunicorn/access.log \
-        --error-logfile /var/log/gunicorn/error.log \
+        --access-logfile /srv/cafejari/log/gunicorn/access.log \
+        --error-logfile /srv/cafejari/log/gunicorn/error.log \
         --workers 3 \
         --bind unix:/run/gunicorn.sock \
         cafejari.wsgi:application
