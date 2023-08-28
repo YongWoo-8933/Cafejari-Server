@@ -93,12 +93,12 @@ class PartialUserSerializer(serializers.ModelSerializer):
 class ProfileResponseSerializer(ProfileSerializer):
     grade = GradeResponseSerializer(read_only=True)
     profile_image = ProfileImageResponseSerializer(read_only=True)
-    favorite_cafe = CafeSerializer(read_only=True, many=True)
+    # favorite_cafe = CafeSerializer(read_only=True, many=True)
 
     def to_representation(self, instance):
         self.fields['grade'] = GradeResponseSerializer(read_only=True)
         self.fields['profile_image'] = ProfileImageResponseSerializer(read_only=True)
-        self.fields['favorite_cafe'] = CafeSerializer(read_only=True, many=True)
+        # self.fields['favorite_cafe'] = CafeSerializer(read_only=True, many=True)
         return super(ProfileResponseSerializer, self).to_representation(instance)
 
 
