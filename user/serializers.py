@@ -1,7 +1,7 @@
 
 from rest_framework import serializers
 
-from cafe.serializers import CafeSerializer
+# from cafe.serializers import CafeSerializer
 from user.models import User, Profile, Grade, ProfileImage, NicknameAdjective, NicknameNoun
 
 # 기본 serializer ----------------------------------------------------------------------------
