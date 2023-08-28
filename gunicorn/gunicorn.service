@@ -10,7 +10,7 @@ ExecStart=/home/ubuntu/.local/bin/gunicorn \
         --access-logfile /srv/cafejari/log/gunicorn/access.log \
         --error-logfile /srv/cafejari/log/gunicorn/error.log \
         --workers 3 \
-        --bind unix:/run/gunicorn.sock \
+        --bind unix:/srv/cafejari/gunicorn/gunicorn.socket \
         cafejari.wsgi:application
 EnvironmentFile=/srv/cafejari/.env
 
