@@ -175,7 +175,7 @@ class CafeFloorCafeRepresentationSerializer(CafeFloorSerializer):
     def get_recent_updated_log(obj):
         filtered_logs = obj.occupancy_rate_update_log.filter(
             update__gte=(datetime.now() - timedelta(hours=RECENT_HOUR))
-        )
+        ).order_by("-update")
         serializer = OccupancyRateUpdateLogCafeFloorRepresentationSerializer(filtered_logs, many=True, read_only=True)
         return serializer.data
 
