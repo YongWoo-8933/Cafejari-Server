@@ -154,7 +154,6 @@ class CafeViewSet(
 
 class OccupancyRateUpdateLogViewSet(
     mixins.ListModelMixin,
-    mixins.CreateModelMixin,
     GenericViewSet
 ):
     queryset = OccupancyRateUpdateLog.objects.all()
@@ -198,24 +197,14 @@ class OccupancyRateUpdateLogViewSet(
         return Response(self.get_serializer(saved_object, read_only=True).data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
-        operation_id='내 활동 이력',
-        operation_description='내 혼잡도 등록 활동 모두 보기',
-        request_body=no_body,
-        responses={200: OccupancyRateUpdateLogResponseSerializer(many=True)},
-        manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
-    )
-    def list(self, request, *args, **kwargs):
-        queryset = self.queryset.filter(user__id=request.user.id)
-        return Response(data=self.get_serializer(queryset, many=True).data, status=status.HTTP_200_OK)
-
-    @swagger_auto_schema(
         operation_id='유저 혼잡도 등록',
         operation_description='로그인한 유저의 혼잡도 등록',
         request_body=SwaggerOccupancyRegistrationRequestSerializer,
         responses={201: OccupancyRateUpdateLogResponseSerializer()},
         manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
     )
-    def create(self, request, *args, **kwargs):
+    @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
+    def user_registration(self, request):
         occupancy_rate = float(request.data.get("occupancy_rate"))
         cafe_floor_id = int(request.data.get("cafe_floor_id"))
 
@@ -244,7 +233,7 @@ class OccupancyRateUpdateLogViewSet(
             count_restriction = request.user.profile.grade.sharing_restriction_per_cafe
             if today_this_cafe_update_logs.count() > count_restriction:
                 saved_object = self.save_log(occupancy_rate=occupancy_rate, cafe_floor_id=cafe_floor_id,
-                                     user_id=request.user.id, point=0)
+                                             user_id=request.user.id, point=0)
                 return Response(self.get_serializer(saved_object, read_only=True).data, status=status.HTTP_201_CREATED)
         else:
             # 오늘 이 카페에서 활동 이력 없음
@@ -253,11 +242,12 @@ class OccupancyRateUpdateLogViewSet(
             if today_other_cafe_stacks.count() >= stack_restriction:
                 # stack 초과(포인트 지급 불가)
                 saved_object = self.save_log(occupancy_rate=occupancy_rate, cafe_floor_id=cafe_floor_id,
-                                     user_id=request.user.id, point=0)
+                                             user_id=request.user.id, point=0)
                 return Response(self.get_serializer(saved_object, read_only=True).data, status=status.HTTP_201_CREATED)
             else:
                 # stack 하나 쌓기
-                stack_serializer = DailyActivityStackSerializer(data={"user": request.user.id, "cafe_floor": cafe_floor_id})
+                stack_serializer = DailyActivityStackSerializer(
+                    data={"user": request.user.id, "cafe_floor": cafe_floor_id})
                 stack_serializer.is_valid(raise_exception=True)
                 stack_serializer.save()
         # 카페의 데이터 충분 여부 판단
@@ -275,6 +265,17 @@ class OccupancyRateUpdateLogViewSet(
 
         return Response(self.get_serializer(saved_object, read_only=True).data,
                         status=status.HTTP_201_CREATED)
+
+    @swagger_auto_schema(
+        operation_id='내 활동 이력',
+        operation_description='내 혼잡도 등록 활동 모두 보기',
+        request_body=no_body,
+        responses={200: OccupancyRateUpdateLogResponseSerializer(many=True)},
+        manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
+    )
+    def list(self, request, *args, **kwargs):
+        queryset = self.queryset.filter(user__id=request.user.id)
+        return Response(data=self.get_serializer(queryset, many=True).data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_id='최근 30분 내 업데이트',
