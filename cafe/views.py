@@ -28,6 +28,7 @@ class CafePagination(PageNumberPagination):
 
 class CafeViewSet(
     mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
     GenericViewSet
 ):
     queryset = Cafe.objects.all()
@@ -79,6 +80,14 @@ class CafeViewSet(
             longitude__lte=longitude + longitude_bound,
         )
         return Response(data=self.get_serializer(queryset, many=True).data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        operation_id='개별 카페 정보',
+        operation_description='카페 id를 통해 개별 카페 정보를 받음',
+        responses={200: SwaggerCafeResponseSerializer()},
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super(CafeViewSet, self).retrieve(request, *args, **kwargs)
 
     @swagger_auto_schema(
         operation_id='카페 검색 정보',
