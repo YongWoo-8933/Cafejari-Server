@@ -18,6 +18,7 @@ from cafe.swagger_serializers import SwaggerOccupancyRegistrationRequestSerializ
 from cafejari.settings import UPDATE_COOLTIME, OCCUPANCY_INSUFFICIENT_THRESHOLD, OCCUPANCY_ENOUGH_THRESHOLD, \
     ENOUGH_DATA_POINT, INSUFFICIENT_DATA_POINT, NO_DATA_POINT
 from error import ServiceError
+from user.serializers import ProfileSerializer
 from utils import AUTHORIZATION_MANUAL_PARAMETER
 
 
@@ -262,6 +263,11 @@ class OccupancyRateUpdateLogViewSet(
         # occupancy_rate_update_log 작성
         saved_object = self.save_log(occupancy_rate=occupancy_rate, cafe_floor_id=cafe_floor_id,
                                      user_id=request.user.id, point=point)
+
+        # 얻은 포인트 부여
+        serializer = ProfileSerializer(request.user.profile, data={"point": request.user.profile.point + point}, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
         return Response(self.get_serializer(saved_object, read_only=True).data,
                         status=status.HTTP_201_CREATED)
