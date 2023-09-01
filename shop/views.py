@@ -163,7 +163,6 @@ class GifticonViewSet(
         return super(GifticonViewSet, self).destroy(request, *args, **kwargs)
 
     @swagger_auto_schema(
-        method='put',
         operation_id='기프티콘 정보수정',
         operation_description='사용여부 등 기프티콘의 내용 수정',
         request_body=SwaggerGifticonUpdateRequestSerializer,
