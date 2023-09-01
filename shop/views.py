@@ -170,7 +170,15 @@ class GifticonViewSet(
         manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
     )
     def update(self, request, *args, **kwargs):
-        super(GifticonViewSet, self).update(request, *args, **kwargs)
+        is_used = request.data.get("is_used")
+        data = {}
+        if is_used is not None:
+            data["is_used"] = str(is_used)
+        gifticon_obj = self.get_object()
+        serializer = GifticonSerializer(gifticon_obj, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(self.get_serializer(gifticon_obj, read_only=True).data, status=status.HTTP_201_CREATED)
 
 
 class CouponViewSet(
