@@ -19,7 +19,7 @@ from shop.models import Item, Gifticon, Coupon, UserCoupon
 from cafe.serializers import BrandSerializer
 from shop.serializers import ItemSerializer, GifticonSerializer, CouponSerializer, UserCouponResponseSerializer, \
     GifticonResponseSerializer, CouponResponseSerializer
-from shop.swagger_serializers import SwaggerGifticonRequestSerializer
+from shop.swagger_serializers import SwaggerGifticonRequestSerializer, SwaggerGifticonUpdateRequestSerializer
 from user.serializers import ProfileResponseSerializer, ProfileSerializer
 from utils import UserListDestroyViewSet, AUTHORIZATION_MANUAL_PARAMETER
 
@@ -65,6 +65,7 @@ class ItemViewSet(
 
 class GifticonViewSet(
     mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
     UserListDestroyViewSet
 ):
     queryset = Gifticon.objects.all()
@@ -163,21 +164,14 @@ class GifticonViewSet(
 
     @swagger_auto_schema(
         method='put',
-        operation_id='기프티콘 사용처리',
-        operation_description='기프티콘 사용 완료 처리',
-        request_body=no_body,
+        operation_id='기프티콘 정보수정',
+        operation_description='사용여부 등 기프티콘의 내용 수정',
+        request_body=SwaggerGifticonUpdateRequestSerializer,
         responses={201: GifticonResponseSerializer()},
         manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
     )
-    @action(methods=['put'], detail=True, )
-    def use(self, request, *args, **kwargs):
-        gifticon_object = self.get_object()
-        if gifticon_object.user.id != request.user.id:
-            return ServiceError.unauthorized_user_response()
-        serializer = self.get_serializer(gifticon_object, data={"is_used": True}, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+    def update(self, request, *args, **kwargs):
+        super(GifticonViewSet, self).update(request, *args, **kwargs)
 
 
 class CouponViewSet(
