@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from rest_framework import serializers
 from cafe.models import District, Brand, CongestionArea, Cafe, OccupancyRatePrediction, CafeVIP, CafeImage, \
-    OpeningHour, OccupancyRateUpdateLog, CafeFloor, CafeTypeTag, DailyActivityStack
+    OpeningHour, OccupancyRateUpdateLog, CafeFloor, CafeTypeTag, DailyActivityStack, Location
 from cafejari.settings import RECENT_HOUR
 from user.models import Grade, ProfileImage, Profile, User
 from utils import ImageModelSerializer
@@ -11,6 +11,13 @@ class DistrictSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = District
+        fields = "__all__"
+
+
+class LocationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Location
         fields = "__all__"
 
 
@@ -93,6 +100,14 @@ class DailyActivityStackSerializer(serializers.ModelSerializer):
 
 
 # 응용 serializer ------------------------------------------------------------
+# location image 응답용 serializer
+class LocationResponseSerializer(ImageModelSerializer):
+
+    class Meta:
+        model = Location
+        fields = "__all__"
+
+
 # brand image 응답용 serializer
 class BrandResponseSerializer(ImageModelSerializer):
 

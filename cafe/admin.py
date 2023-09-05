@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 from cafe.models import Cafe, Brand, District, OpeningHour, CafeFloor, CafeImage, OccupancyRatePrediction, \
-    OccupancyRateUpdateLog, CongestionArea, CafeVIP, CafeTypeTag, DailyActivityStack
+    OccupancyRateUpdateLog, CongestionArea, CafeVIP, CafeTypeTag, DailyActivityStack, Location
 from utils import ImageModelAdmin, replace_image_domain
 
 
@@ -14,6 +14,20 @@ class DistrictAdmin(admin.ModelAdmin):
     ordering = ("city", "gu", "dong")
     save_as = True
     preserve_filters = True
+
+
+@admin.register(Location)
+class LocationAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "image_tag", "latitude", "longitude")
+    search_fields = ("name",)
+    ordering = ("name",)
+    save_as = True
+    preserve_filters = True
+
+    def image_tag(self, location):
+        return format_html('<img src="{}" width="85" height="85" />', replace_image_domain(location.image.url)) if location.image else None
+
+    image_tag.short_description = "이미지"
 
 
 @admin.register(CongestionArea)

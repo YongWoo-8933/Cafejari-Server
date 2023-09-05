@@ -18,6 +18,22 @@ class District(models.Model):
         ordering = ['city', 'gu', 'dong']
 
 
+def location_image_upload_path(instance, filename): return f"cafe/location/{instance.name}_지역사진_{filename}"
+
+
+class Location(models.Model):
+    name = models.CharField(max_length=31)
+    image = models.ImageField(upload_to=location_image_upload_path)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+
+    class Meta:
+        db_table = 'cafe_location'
+        db_table_comment = '깃발 지역'
+        app_label = 'cafe'
+        ordering = ['name']
+
+
 class Congestion(Enum):
     Zero = '여유'
     One = '보통'

@@ -10,10 +10,10 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from cafe.models import Cafe, CafeFloor, OccupancyRateUpdateLog, DailyActivityStack
+from cafe.models import Cafe, CafeFloor, OccupancyRateUpdateLog, DailyActivityStack, Location
 from cafe.serializers import CafeResponseSerializer, \
     OccupancyRateUpdateLogResponseSerializer, OccupancyRateUpdateLogSerializer, DailyActivityStackSerializer, \
-    CafeSearchResponseSerializer
+    CafeSearchResponseSerializer, LocationResponseSerializer
 from cafe.swagger_serializers import SwaggerOccupancyRegistrationRequestSerializer, SwaggerCafeResponseSerializer
 from cafejari.settings import UPDATE_COOLTIME, OCCUPANCY_INSUFFICIENT_THRESHOLD, OCCUPANCY_ENOUGH_THRESHOLD, \
     ENOUGH_DATA_POINT, INSUFFICIENT_DATA_POINT, NO_DATA_POINT
@@ -294,3 +294,20 @@ class OccupancyRateUpdateLogViewSet(
         now = datetime.datetime.now()
         recent_updated_logs = self.queryset.filter(user__id=request.user.id, update__gt=now - datetime.timedelta(minutes=30))
         return Response(data=self.get_serializer(recent_updated_logs, many=True).data, status=status.HTTP_200_OK)
+
+
+class LocationViewSet(
+    mixins.ListModelMixin,
+    GenericViewSet
+):
+    queryset = Location.objects.all()
+    serializer_class = LocationResponseSerializer
+    permission_classes = [AllowAny]
+
+    @swagger_auto_schema(
+        operation_id='지역 정보',
+        operation_description='지도 깃발에 표시할 지역을 담은 정보',
+        responses={200: LocationResponseSerializer(many=True)}
+    )
+    def list(self, request, *args, **kwargs):
+        return super(LocationViewSet, self).list(request, *args, **kwargs)
