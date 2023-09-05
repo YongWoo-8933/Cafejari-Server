@@ -310,4 +310,4 @@ class LocationViewSet(
         responses={200: LocationResponseSerializer(many=True)}
     )
     def list(self, request, *args, **kwargs):
-        return super(LocationViewSet, self).list(request, *args, **kwargs)
+        return Response(self.get_serializer(self.queryset, many=True), status=status.HTTP_200_OK)
