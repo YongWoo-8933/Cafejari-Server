@@ -140,7 +140,8 @@ class UserViewSet(GenericViewSet):
 
             time.sleep(0.1)
 
-            return Response(data=self.get_serializer(self.request.user, read_only=True).data, status=status.HTTP_201_CREATED)
+            user_obj = User.objects.get(id=self.request.user.id)
+            return Response(data=self.get_serializer(user_obj, read_only=True).data, status=status.HTTP_201_CREATED)
 
 
 class ProfileViewSet(
