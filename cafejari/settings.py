@@ -181,12 +181,6 @@ AWS_S3_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 if not LOCAL:
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-# firebase
-try:
-    firebase_admin.get_app()
-except ValueError as e:
-    firebase_admin.initialize_app()
-
 
 # 템플릿 설정
 TEMPLATES = [
