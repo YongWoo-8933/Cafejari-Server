@@ -396,3 +396,18 @@ class KakaoLogin(SocialLoginView):
 
         return response
 
+
+@swagger_auto_schema(
+    method='post',
+    operation_id='애플 로그인',
+    operation_description="애플 로그인 정보로 가입 여부 결과 발송",
+    # request_body=SwaggerKakaoLoginRequestSerializer(),
+    # responses={200: SwaggerKakaoCallbackResponseSerializer()}
+)
+@api_view(['POST'])
+@permission_classes((AllowAny,))
+def apple_login_callback(request):
+    print(request.POST)
+
+
+

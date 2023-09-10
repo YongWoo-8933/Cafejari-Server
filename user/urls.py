@@ -18,6 +18,7 @@ urlpatterns = [
     path('kakao/login/', views.kakao_login),
     path('kakao/login/callback/', views.kakao_login_callback),
     path('kakao/login/finish/', views.KakaoLogin.as_view(), name='kakao_login_todjango'),
+    path('apple/login/callback/', views.apple_login_callback),
     path('token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh')
 ]
 
