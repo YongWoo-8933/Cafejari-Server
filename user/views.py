@@ -420,10 +420,10 @@ def apple_login_callback(request):
     try:
         SocialAccount.objects.get(provider="apple", uid=uid)
         # 유저 정보가 있는 경우(로그인)
-        return Response(data={"user_exists": True, "code": code, id_token: id_token}, status=status.HTTP_200_OK)
+        return Response(data={"user_exists": True, "code": code, "id_token": id_token}, status=status.HTTP_200_OK)
     except SocialAccount.DoesNotExist:
         # 유저 정보가 없는 경우(새로 가입)
-        return Response(data={"user_exists": False, "code": code, id_token: id_token}, status=status.HTTP_200_OK)
+        return Response(data={"user_exists": False, "code": code, "id_token": id_token}, status=status.HTTP_200_OK)
 
 
 class AppleLogin(SocialLoginView):
