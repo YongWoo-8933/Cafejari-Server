@@ -35,9 +35,14 @@ class SwaggerKakaoLoginRequestSerializer(SwaggerSerializer):
     access_token = serializers.CharField(max_length=255)
 
 
+class SwaggerAppleLoginRequestSerializer(SwaggerSerializer):
+    id_token = serializers.CharField(max_length=255)
+    code = serializers.CharField(max_length=255)
+
+
 
 # response
-class SwaggerKakaoLoginFinishResponseSerializer(SwaggerSerializer):
+class SwaggerSocialLoginFinishResponseSerializer(SwaggerSerializer):
     access = serializers.CharField(max_length=255)
     refresh = serializers.CharField(max_length=255)
     user = UserResponseSerializer()
@@ -47,6 +52,12 @@ class SwaggerKakaoCallbackResponseSerializer(SwaggerSerializer):
     user_exists = serializers.BooleanField()
     code = serializers.CharField(max_length=255)
     access_token = serializers.CharField(max_length=255)
+
+
+class SwaggerAppleCallbackResponseSerializer(SwaggerSerializer):
+    user_exists = serializers.BooleanField()
+    code = serializers.CharField(max_length=255)
+    id_token = serializers.CharField(max_length=255)
 
 
 class SwaggerValidateNicknameResponseSerializer(SwaggerSerializer):

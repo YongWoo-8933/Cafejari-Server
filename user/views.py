@@ -2,8 +2,11 @@ import random
 import re
 import time
 
+import jwt
 import requests
 from allauth.socialaccount.models import SocialAccount
+from allauth.socialaccount.providers.apple.client import AppleOAuth2Client
+from allauth.socialaccount.providers.apple.views import AppleOAuth2Adapter
 from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.jwt_auth import unset_jwt_cookies
@@ -19,14 +22,15 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from cafejari import settings
-from cafejari.settings import KAKAO_REST_API_KEY, KAKAO_REDIRECT_URL, DEBUG
+from cafejari.settings import KAKAO_REST_API_KEY, KAKAO_REDIRECT_URL, DEBUG, APPLE_REDIRECT_URL
 from error import ServiceError
 from notification.naver_sms import send_sms_to_admin
 from user.models import User, Profile, Grade, NicknameAdjective, NicknameNoun, ProfileImage
 from user.swagger_serializers import SwaggerMakeNewProfileRequestSerializer, \
     SwaggerProfileUpdateRequestSerializer, SwaggerKakaoCallbackResponseSerializer, \
-    SwaggerKakaoLoginFinishResponseSerializer, SwaggerTokenRequestSerializer, \
-    SwaggerValidateNicknameResponseSerializer, SwaggerKakaoLoginRequestSerializer, SwaggerRefreshTokenResponseSerializer
+    SwaggerSocialLoginFinishResponseSerializer, SwaggerTokenRequestSerializer, \
+    SwaggerValidateNicknameResponseSerializer, SwaggerKakaoLoginRequestSerializer, \
+    SwaggerRefreshTokenResponseSerializer, SwaggerAppleLoginRequestSerializer, SwaggerAppleCallbackResponseSerializer
 from user.serializers import ProfileResponseSerializer, UserResponseSerializer, ProfileSerializer, \
     ProfileImageSerializer, GradeResponseSerializer, ProfileImageResponseSerializer
 from drf_yasg.utils import swagger_auto_schema, no_body
@@ -383,7 +387,7 @@ class KakaoLogin(SocialLoginView):
         operation_id='카카오 로그인 완료',
         operation_description='유저가 존재하면 해당 user 정보를 반환하고, 존재하지 않으면 만들어서 반환',
         request_body=SwaggerKakaoLoginRequestSerializer,
-        responses={200: SwaggerKakaoLoginFinishResponseSerializer()}
+        responses={200: SwaggerSocialLoginFinishResponseSerializer()}
     )
     def post(self, request, *args, **kwargs):
 
@@ -401,13 +405,47 @@ class KakaoLogin(SocialLoginView):
     method='post',
     operation_id='애플 로그인',
     operation_description="애플 로그인 정보로 가입 여부 결과 발송",
-    # request_body=SwaggerKakaoLoginRequestSerializer(),
-    # responses={200: SwaggerKakaoCallbackResponseSerializer()}
+    request_body=SwaggerAppleLoginRequestSerializer(),
+    responses={200: SwaggerAppleCallbackResponseSerializer()}
 )
 @api_view(['POST'])
 @permission_classes((AllowAny,))
 def apple_login_callback(request):
-    print(request.POST)
+    id_token = request.POST["id_token"]
+    code = request.POST["code"]
+
+    decoded_token = jwt.decode(id_token, algorithms=['RS256'], options={'verify_signature': False, 'verify_aud': False})
+    uid = str(decoded_token.get("sub"))
+
+    try:
+        SocialAccount.objects.get(provider="apple", uid=uid)
+        # 유저 정보가 있는 경우(로그인)
+        return Response(data={"user_exists": True, "code": code, id_token: id_token}, status=status.HTTP_200_OK)
+    except SocialAccount.DoesNotExist:
+        # 유저 정보가 없는 경우(새로 가입)
+        return Response(data={"user_exists": False, "code": code, id_token: id_token}, status=status.HTTP_200_OK)
+
+
+class AppleLogin(SocialLoginView):
+    adapter_class = AppleOAuth2Adapter
+    callback_url = APPLE_REDIRECT_URL
+    client_class = AppleOAuth2Client
+
+    @swagger_auto_schema(
+        operation_id='애플 로그인 완료',
+        operation_description='유저가 존재하면 해당 user 정보를 반환하고, 존재하지 않으면 만들어서 반환',
+        request_body=SwaggerAppleLoginRequestSerializer,
+        responses={200: SwaggerSocialLoginFinishResponseSerializer()}
+    )
+    def post(self, request, *args, **kwargs):
+        response = super(AppleLogin, self).post(request, *args, **kwargs)
+
+        if 'user' in response.data:
+            user_data = response.data.pop('user')
+            user_serializer = UserResponseSerializer(User.objects.get(id=user_data.get('id')), read_only=True)
+            response.data['user'] = user_serializer.data
+
+        return response
 
 
 

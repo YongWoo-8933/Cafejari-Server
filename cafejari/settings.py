@@ -72,6 +72,16 @@ INSTALLED_APPS = [
 SEOUL_CITY_DATA_API_KEY = os.environ.get('SEOUL_CITY_DATA_API_KEY')
 KAKAO_REST_API_KEY = os.environ.get('KAKAO_REST_API_KEY')
 KAKAO_REDIRECT_URL = os.environ.get('KAKAO_REDIRECT_URL')
+APPLE_REDIRECT_URL = os.environ.get('APPLE_REDIRECT_URL')
+APPLE_CLIENT_ID = os.environ.get('APPLE_CLIENT_ID')
+APPLE_KEY_ID = os.environ.get('APPLE_KEY_ID')
+APPLE_APP_ID_PREFIX = os.environ.get('APPLE_APP_ID_PREFIX')
+APPLE_CERTIFICATE_KEY = f"""-----BEGIN PRIVATE KEY-----
+{os.environ.get('APPLE_CERTIFICATE_KEY_1st_line')}
+{os.environ.get('APPLE_CERTIFICATE_KEY_2nd_line')}
+{os.environ.get('APPLE_CERTIFICATE_KEY_3rd_line')}
+{os.environ.get('APPLE_CERTIFICATE_KEY_4th_line')}
+-----END PRIVATE KEY-----"""
 GIFTISHOW_AUTH_CODE = os.environ.get('GIFTISHOW_AUTH_CODE')
 GIFTISHOW_AUTH_TOKEN = os.environ.get('GIFTISHOW_AUTH_TOKEN')
 GIFTISHOW_USER_ID = os.environ.get('GIFTISHOW_USER_ID')
@@ -155,21 +165,16 @@ SIMPLE_JWT = {
 
 # All auth 앱 설정
 ACCOUNT_EMAIL_VERIFICATION = 'none'
-# SOCIALACCOUNT_PROVIDERS = {
-    # "apple": {
-    #     "APP": {
-    #         "client_id": APPLE_CLIENT_ID,
-    #         "secret": APPLE_CLIENT_SECRET,
-    #         "key": APPLE_PREFIX_KEY,
-    #         "certificate_key": "-----BEGIN PRIVATE KEY-----\n"
-    #                            f"{APPLE_CERTIFICATE_KEY_LINE_1}\n" +
-    #                            f"{APPLE_CERTIFICATE_KEY_LINE_2}\n" +
-    #                            f"{APPLE_CERTIFICATE_KEY_LINE_3}\n" +
-    #                            f"{APPLE_CERTIFICATE_KEY_LINE_4}\n" +
-    #                            "-----END PRIVATE KEY-----"
-    #     }
-    # }
-# }
+SOCIALACCOUNT_PROVIDERS = {
+    "apple": {
+        "APP": {
+            "client_id": APPLE_CLIENT_ID,
+            "secret": APPLE_KEY_ID,
+            "key": APPLE_APP_ID_PREFIX,
+            "certificate_key": APPLE_CERTIFICATE_KEY
+        }
+    }
+}
 
 # cronjab 설정
 CRONJOBS = [
