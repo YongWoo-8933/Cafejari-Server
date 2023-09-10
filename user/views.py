@@ -411,8 +411,8 @@ class KakaoLogin(SocialLoginView):
 @api_view(['POST'])
 @permission_classes((AllowAny,))
 def apple_login_callback(request):
-    id_token = request.POST["id_token"]
-    code = request.POST["code"]
+    id_token = request.data.get("id_token")
+    code = request.data.get("code")
 
     decoded_token = jwt.decode(id_token, algorithms=['RS256'], options={'verify_signature': False, 'verify_aud': False})
     uid = str(decoded_token.get("sub"))
