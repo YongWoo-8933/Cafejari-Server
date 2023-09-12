@@ -8,9 +8,8 @@ from cafe.models import Cafe, District, CongestionArea, Brand
 from cafe.serializers import CafeSerializer, CafeFloorSerializer
 from error import ServiceError
 from notification.naver_sms import send_sms_to_admin
-from request.models import CafeAdditionRequest, WithdrawalRequest, UserMigrationRequest
-from request.serializers import CafeAdditionRequestResponseSerializer, CafeAdditionRequestSerializer, \
-    WithdrawalRequestSerializer, UserMigrationRequestSerializer
+from request.models import CafeAdditionRequest
+from request.serializers import CafeAdditionRequestResponseSerializer, CafeAdditionRequestSerializer
 from request.swagger_serializers import SwaggerCafeAdditionRequestSerializer, SwaggerWithdrawalRequestSerializer, \
     SwaggerUserMigrationRequestSerializer
 from user.serializers import UserSerializer
@@ -150,48 +149,48 @@ class CafeInformationSuggestionViewSet(
         # return Response(data=cafe_addition_request_serializer.data, status=status.HTTP_201_CREATED)
 
 
-class WithdrawalRequestViewSet(
-    mixins.CreateModelMixin,
-    GenericViewSet
-):
-    queryset = WithdrawalRequest.objects.all()
-    serializer_class = WithdrawalRequestSerializer
-    permission_classes = [IsAuthenticated]
-
-    @swagger_auto_schema(
-        operation_id='회원탈퇴 요청',
-        operation_description='회원 탈퇴 요청, 탈퇴 사유 받고 유저 비활성화',
-        request_body=SwaggerWithdrawalRequestSerializer,
-        responses={204: ""},
-        manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
-    )
-    def create(self, request, *args, **kwargs):
-        request_serializer = self.get_serializer(data={"reason": request.data.get("reason"), "user": request.user.id})
-        request_serializer.is_valid(raise_exception=True)
-        request_serializer.save()
-        user_serializer = UserSerializer(request.user, data={"is_active": False}, partial=True)
-        user_serializer.is_valid(raise_exception=True)
-        user_serializer.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class UserMigrationRequestViewSet(
-    mixins.CreateModelMixin,
-    GenericViewSet
-):
-    queryset = UserMigrationRequest.objects.all()
-    serializer_class = UserMigrationRequestSerializer
-    permission_classes = [IsAuthenticated]
-
-    @swagger_auto_schema(
-        operation_id='사용자 정보 이전 요청',
-        operation_description='이전 버전 유저의 사용자 정보 이전요청',
-        request_body=SwaggerUserMigrationRequestSerializer,
-        responses={201: UserMigrationRequestSerializer()},
-        manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
-    )
-    def create(self, request, *args, **kwargs):
-        request_serializer = self.get_serializer(data={"phone_number": request.data.get("phone_number"), "user": request.user.id})
-        request_serializer.is_valid(raise_exception=True)
-        request_serializer.save()
-        return Response(data=request_serializer.data,status=status.HTTP_201_CREATED)
+# class WithdrawalRequestViewSet(
+#     mixins.CreateModelMixin,
+#     GenericViewSet
+# ):
+#     queryset = WithdrawalRequest.objects.all()
+#     serializer_class = WithdrawalRequestSerializer
+#     permission_classes = [IsAuthenticated]
+#
+#     @swagger_auto_schema(
+#         operation_id='회원탈퇴 요청',
+#         operation_description='회원 탈퇴 요청, 탈퇴 사유 받고 유저 비활성화',
+#         request_body=SwaggerWithdrawalRequestSerializer,
+#         responses={204: ""},
+#         manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
+#     )
+#     def create(self, request, *args, **kwargs):
+#         request_serializer = self.get_serializer(data={"reason": request.data.get("reason"), "user": request.user.id})
+#         request_serializer.is_valid(raise_exception=True)
+#         request_serializer.save()
+#         user_serializer = UserSerializer(request.user, data={"is_active": False}, partial=True)
+#         user_serializer.is_valid(raise_exception=True)
+#         user_serializer.save()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+#
+#
+# class UserMigrationRequestViewSet(
+#     mixins.CreateModelMixin,
+#     GenericViewSet
+# ):
+#     queryset = UserMigrationRequest.objects.all()
+#     serializer_class = UserMigrationRequestSerializer
+#     permission_classes = [IsAuthenticated]
+#
+#     @swagger_auto_schema(
+#         operation_id='사용자 정보 이전 요청',
+#         operation_description='이전 버전 유저의 사용자 정보 이전요청',
+#         request_body=SwaggerUserMigrationRequestSerializer,
+#         responses={201: UserMigrationRequestSerializer()},
+#         manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
+#     )
+#     def create(self, request, *args, **kwargs):
+#         request_serializer = self.get_serializer(data={"phone_number": request.data.get("phone_number"), "user": request.user.id})
+#         request_serializer.is_valid(raise_exception=True)
+#         request_serializer.save()
+#         return Response(data=request_serializer.data,status=status.HTTP_201_CREATED)

@@ -90,43 +90,43 @@ class WithdrawalReason(Enum):
     Etc = "기타"
 
 
-class WithdrawalRequest(models.Model):
-    requested_at = models.DateTimeField(auto_now_add=True)
-    reason = models.CharField(max_length=63, choices=((reason.value, reason.value) for reason in WithdrawalReason))
-    user = models.ForeignKey(
-        'user.User',
-        on_delete=models.SET_NULL,
-        related_name="withdrawal_request",
-        db_column="user",
-        default=None,
-        blank=True,
-        null=True
-    )
-
-    class Meta:
-        db_table = 'request_withdrawal_request'
-        db_table_comment = '회원탈퇴 요청'
-        app_label = 'request'
-        ordering = ["-requested_at"]
-
-
-class UserMigrationRequest(models.Model):
-    requested_at = models.DateTimeField(auto_now_add=True)
-    phone_number = models.CharField(max_length=8)
-    is_completed = models.BooleanField(default=False)
-    is_notified = models.BooleanField(default=False)
-    user = models.ForeignKey(
-        'user.User',
-        on_delete=models.SET_NULL,
-        related_name="user_migration_request",
-        db_column="user",
-        default=None,
-        blank=True,
-        null=True
-    )
-
-    class Meta:
-        db_table = 'user_migration_request'
-        db_table_comment = '사용자 정보이전 요청'
-        app_label = 'request'
-        ordering = ["-requested_at"]
+# class WithdrawalRequest(models.Model):
+#     requested_at = models.DateTimeField(auto_now_add=True)
+#     reason = models.CharField(max_length=63, choices=((reason.value, reason.value) for reason in WithdrawalReason))
+#     user = models.ForeignKey(
+#         'user.User',
+#         on_delete=models.SET_NULL,
+#         related_name="withdrawal_request",
+#         db_column="user",
+#         default=None,
+#         blank=True,
+#         null=True
+#     )
+#
+#     class Meta:
+#         db_table = 'request_withdrawal_request'
+#         db_table_comment = '회원탈퇴 요청'
+#         app_label = 'request'
+#         ordering = ["-requested_at"]
+#
+#
+# class UserMigrationRequest(models.Model):
+#     requested_at = models.DateTimeField(auto_now_add=True)
+#     phone_number = models.CharField(max_length=8)
+#     is_completed = models.BooleanField(default=False)
+#     is_notified = models.BooleanField(default=False)
+#     user = models.ForeignKey(
+#         'user.User',
+#         on_delete=models.SET_NULL,
+#         related_name="user_migration_request",
+#         db_column="user",
+#         default=None,
+#         blank=True,
+#         null=True
+#     )
+#
+#     class Meta:
+#         db_table = 'user_migration_request'
+#         db_table_comment = '사용자 정보이전 요청'
+#         app_label = 'request'
+#         ordering = ["-requested_at"]
