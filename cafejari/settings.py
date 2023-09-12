@@ -1,19 +1,28 @@
 import os
+import environ
 from datetime import timedelta
 from pathlib import Path
 
+# 환경설정
+env = environ.Env(
+    DEBUG=(bool, True)
+)
+
+# 루트 폴더
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# .env에서 파일 읽기
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+# 디버그 모드
+DEBUG = env('DEBUG')
+
 # 시크릿 키
-print(os.environ.get('SECRET_KEY'))
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
-# url
-BASE_URL = "cafejari.co.kr"
-BASE_IMAGE_URL = "cafejariimage.co.kr"
-
-# 디버그 모드 설정
-DEBUG = True
+# 도메인
+BASE_DOMAIN = "cafejari.co.kr"
+BASE_IMAGE_DOMAIN = "cafejariimage.co.kr"
 
 # 로컬환경 / 서버환경 설정
 LOCAL = False
@@ -68,34 +77,34 @@ INSTALLED_APPS = [
 ]
 
 # 앱 보안 설정
-SEOUL_CITY_DATA_API_KEY = os.environ.get('SEOUL_CITY_DATA_API_KEY')
-KAKAO_REST_API_KEY = os.environ.get('KAKAO_REST_API_KEY')
-KAKAO_REDIRECT_URL = os.environ.get('KAKAO_REDIRECT_URL')
-APPLE_REDIRECT_URL = os.environ.get('APPLE_REDIRECT_URL')
-APPLE_CLIENT_ID = os.environ.get('APPLE_CLIENT_ID')
-APPLE_KEY_ID = os.environ.get('APPLE_KEY_ID')
-APPLE_APP_ID_PREFIX = os.environ.get('APPLE_APP_ID_PREFIX')
+SEOUL_CITY_DATA_API_KEY = env('SEOUL_CITY_DATA_API_KEY')
+KAKAO_REST_API_KEY = env('KAKAO_REST_API_KEY')
+KAKAO_REDIRECT_URL = env('KAKAO_REDIRECT_URL')
+APPLE_REDIRECT_URL = env('APPLE_REDIRECT_URL')
+APPLE_CLIENT_ID = env('APPLE_CLIENT_ID')
+APPLE_KEY_ID = env('APPLE_KEY_ID')
+APPLE_APP_ID_PREFIX = env('APPLE_APP_ID_PREFIX')
 APPLE_CERTIFICATE_KEY = f"""-----BEGIN PRIVATE KEY-----
-{os.environ.get('APPLE_CERTIFICATE_KEY_1st_line')}
-{os.environ.get('APPLE_CERTIFICATE_KEY_2nd_line')}
-{os.environ.get('APPLE_CERTIFICATE_KEY_3rd_line')}
-{os.environ.get('APPLE_CERTIFICATE_KEY_4th_line')}
+{env('APPLE_CERTIFICATE_KEY_1st_line')}
+{env('APPLE_CERTIFICATE_KEY_2nd_line')}
+{env('APPLE_CERTIFICATE_KEY_3rd_line')}
+{env('APPLE_CERTIFICATE_KEY_4th_line')}
 -----END PRIVATE KEY-----"""
-GIFTISHOW_AUTH_CODE = os.environ.get('GIFTISHOW_AUTH_CODE')
-GIFTISHOW_AUTH_TOKEN = os.environ.get('GIFTISHOW_AUTH_TOKEN')
-GIFTISHOW_USER_ID = os.environ.get('GIFTISHOW_USER_ID')
-NAVER_SERVICE_ID = os.environ.get('NAVER_SERVICE_ID')
-NAVER_API_ID = os.environ.get('NAVER_API_ID')
-NAVER_API_SECRET = os.environ.get('NAVER_API_SECRET')
-NAVER_SMS_CALLING_NUMBER = os.environ.get('NAVER_SMS_CALLING_NUMBER')
-ADMIN_PHONE_NUMBER_LIST = [os.environ.get('ADMIN_PHONE_NUMBER_1')]
-DB_NAME = os.environ.get('DB_NAME')
-DB_USER = os.environ.get('DB_USER')
-DB_PASSWORD = os.environ.get('DB_PASSWORD')
-DB_PORT = os.environ.get('DB_PORT')
-DB_HOST = 'db' if LOCAL else os.environ.get('DB_HOST')
-AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME')
+GIFTISHOW_AUTH_CODE = env('GIFTISHOW_AUTH_CODE')
+GIFTISHOW_AUTH_TOKEN = env('GIFTISHOW_AUTH_TOKEN')
+GIFTISHOW_USER_ID = env('GIFTISHOW_USER_ID')
+NAVER_SERVICE_ID = env('NAVER_SERVICE_ID')
+NAVER_API_ID = env('NAVER_API_ID')
+NAVER_API_SECRET = env('NAVER_API_SECRET')
+NAVER_SMS_CALLING_NUMBER = env('NAVER_SMS_CALLING_NUMBER')
+ADMIN_PHONE_NUMBER_LIST = [env('ADMIN_PHONE_NUMBER_1')]
+DB_NAME = env('DB_NAME')
+DB_USER = env('DB_USER')
+DB_PASSWORD = env('DB_PASSWORD')
+DB_PORT = env('DB_PORT')
+DB_HOST = 'db' if LOCAL else env('DB_HOST')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
 
 # Sites 앱 설정
 SITE_ID = 1

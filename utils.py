@@ -6,7 +6,7 @@ from rest_framework import mixins, status, serializers
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from cafejari.settings import AWS_STORAGE_BUCKET_NAME, AWS_S3_DOMAIN, BASE_IMAGE_URL, LOCAL
+from cafejari.settings import AWS_STORAGE_BUCKET_NAME, AWS_S3_DOMAIN, BASE_IMAGE_DOMAIN, LOCAL
 from error import ServiceError
 
 # 유저가 자신의 모델만 받아오고, 삭제할 수 있는 viewset
@@ -93,4 +93,4 @@ class ImageModelSerializer(serializers.ModelSerializer):
 
 # s3 도메인을 image 도메인으로 교체
 def replace_image_domain(url):
-    return str(url).replace(AWS_S3_DOMAIN, BASE_IMAGE_URL) if not LOCAL else url
+    return str(url).replace(AWS_S3_DOMAIN, BASE_IMAGE_DOMAIN) if not LOCAL else url
