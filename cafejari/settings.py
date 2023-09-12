@@ -2,8 +2,6 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
-import firebase_admin
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 시크릿 키
