@@ -167,11 +167,7 @@ SOCIALACCOUNT_PROVIDERS = {
             "client_id": APPLE_CLIENT_ID,
             "secret": APPLE_KEY_ID,
             "key": APPLE_APP_ID_PREFIX,
-            "certificate_key": f"""-----BEGIN PRIVATE KEY-----
-{APPLE_CERTIFICATE_KEY_LINE_1}
-{APPLE_CERTIFICATE_KEY_LINE_2}
-{APPLE_CERTIFICATE_KEY_LINE_3}
-{APPLE_CERTIFICATE_KEY_LINE_4}
+            "certificate_key": """-----BEGIN PRIVATE KEY-----
 -----END PRIVATE KEY-----"""
         }
     }
