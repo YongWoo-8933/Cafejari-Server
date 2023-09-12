@@ -3,7 +3,7 @@ from django.contrib import admin
 from cafe.serializers import CafeSerializer
 from notification.firebase_message import FirebaseMessage
 from notification.models import PushNotificationType
-from request.models import CafeAdditionRequest, CafeInformationSuggestion
+from request.models import CafeAdditionRequest, CafeInformationSuggestion, WithdrawalRequest, UserMigrationRequest
 
 
 @admin.register(CafeAdditionRequest)
@@ -76,33 +76,33 @@ class CafeInformationSuggestionAdmin(admin.ModelAdmin):
             obj.delete()
 
 
-# @admin.register(WithdrawalRequest)
-# class WithdrawalRequestAdmin(admin.ModelAdmin):
-#     list_display = ("id", "nickname", "requested_at", "reason",)
-#     list_filter = ("reason",)
-#     date_hierarchy = "requested_at"
-#     search_fields = ("user__profile__nickname",)
-#     ordering = ("-requested_at",)
-#     list_select_related = ["user"]
-#     save_as = True
-#     preserve_filters = True
-#
-#     def nickname(self, request): return request.user.profile.nickname if request.user else None
-#
-#     nickname.short_description = "요청자"
-#
-#
-# @admin.register(UserMigrationRequest)
-# class UserMigrationRequestAdmin(admin.ModelAdmin):
-#     list_display = ("id", "nickname", "requested_at", "phone_number", "is_completed", "is_notified")
-#     list_filter = ("is_completed",)
-#     date_hierarchy = "requested_at"
-#     search_fields = ("user__profile__nickname",)
-#     ordering = ("-requested_at",)
-#     list_select_related = ["user"]
-#     save_as = True
-#     preserve_filters = True
-#
-#     def nickname(self, request): return request.user.profile.nickname if request.user else None
-#
-#     nickname.short_description = "요청자"
+@admin.register(WithdrawalRequest)
+class WithdrawalRequestAdmin(admin.ModelAdmin):
+    list_display = ("id", "nickname", "requested_at", "reason",)
+    list_filter = ("reason",)
+    date_hierarchy = "requested_at"
+    search_fields = ("user__profile__nickname",)
+    ordering = ("-requested_at",)
+    list_select_related = ["user"]
+    save_as = True
+    preserve_filters = True
+
+    def nickname(self, request): return request.user.profile.nickname if request.user else None
+
+    nickname.short_description = "요청자"
+
+
+@admin.register(UserMigrationRequest)
+class UserMigrationRequestAdmin(admin.ModelAdmin):
+    list_display = ("id", "nickname", "requested_at", "phone_number", "is_completed", "is_notified")
+    list_filter = ("is_completed",)
+    date_hierarchy = "requested_at"
+    search_fields = ("user__profile__nickname",)
+    ordering = ("-requested_at",)
+    list_select_related = ["user"]
+    save_as = True
+    preserve_filters = True
+
+    def nickname(self, request): return request.user.profile.nickname if request.user else None
+
+    nickname.short_description = "요청자"

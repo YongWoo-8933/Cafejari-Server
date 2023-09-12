@@ -2,7 +2,7 @@
 from rest_framework import serializers
 
 from cafe.serializers import CafeSerializer
-from request.models import CafeAdditionRequest, CafeInformationSuggestion
+from request.models import CafeAdditionRequest, CafeInformationSuggestion, WithdrawalRequest, UserMigrationRequest
 
 # 기본 serializer ------------------------------------------------------------------------------------
 from utils import ImageModelSerializer
@@ -22,18 +22,18 @@ class CafeInformationSuggestionSerializer(ImageModelSerializer):
         fields = "__all__"
 
 
-# class WithdrawalRequestSerializer(serializers.ModelSerializer):
-#
-#     class Meta:
-#         model = WithdrawalRequest
-#         fields = "__all__"
-#
-#
-# class UserMigrationRequestSerializer(serializers.ModelSerializer):
-#
-#     class Meta:
-#         model = UserMigrationRequest
-#         fields = "__all__"
+class WithdrawalRequestSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = WithdrawalRequest
+        fields = "__all__"
+
+
+class UserMigrationRequestSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserMigrationRequest
+        fields = "__all__"
 
 
 
