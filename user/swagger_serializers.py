@@ -50,12 +50,14 @@ class SwaggerSocialLoginFinishResponseSerializer(SwaggerSerializer):
 
 class SwaggerKakaoCallbackResponseSerializer(SwaggerSerializer):
     user_exists = serializers.BooleanField()
+    is_inactive = serializers.BooleanField()
     code = serializers.CharField(max_length=255)
     access_token = serializers.CharField(max_length=255)
 
 
 class SwaggerAppleCallbackResponseSerializer(SwaggerSerializer):
     user_exists = serializers.BooleanField()
+    is_inactive = serializers.BooleanField()
     code = serializers.CharField(max_length=255)
     id_token = serializers.CharField(max_length=255)
 

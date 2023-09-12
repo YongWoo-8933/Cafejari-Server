@@ -35,7 +35,7 @@ class GifticonAdmin(ImageModelAdmin):
     list_display = ("id", "item_name", "user_nickname", 'image_tag', "expiration_period", "is_used",)
     list_filter = ("user__profile__nickname", "item__name", "is_used")
     search_fields = ("user__profile__nickname", "item__name",)
-    ordering = ("expiration_period", "is_used",)
+    ordering = ("-expiration_period", "is_used",)
     date_hierarchy = "expiration_period"
     list_select_related = ["item", "user"]
     save_as = True
@@ -75,7 +75,7 @@ class UserCouponAdmin(admin.ModelAdmin):
     list_filter = ("user__profile__nickname", "coupon__name", "is_used")
     search_fields = ("user__profile__nickname", "item__name",)
     ordering = ("expiration_period", "is_used",)
-    date_hierarchy = "expiration_period"
+    date_hierarchy = "-expiration_period"
     list_select_related = ["coupon", "user"]
     save_as = True
     preserve_filters = True

@@ -14,3 +14,11 @@ class SwaggerCafeAdditionRequestSerializer(SwaggerSerializer):
     no_seat_floor_list = serializers.ListField()
 
 
+class SwaggerWithdrawalRequestSerializer(SwaggerSerializer):
+    reason = serializers.CharField()
+
+
+class SwaggerUserMigrationRequestSerializer(SwaggerSerializer):
+    phone_number = serializers.CharField(max_length=8)
+
+
