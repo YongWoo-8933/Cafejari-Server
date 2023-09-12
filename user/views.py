@@ -371,9 +371,8 @@ def kakao_login_callback(request):
 
     try:
         social_user = SocialAccount.objects.get(provider="kakao", uid=uid)
-        user_object = social_user.user_set.first()
         # 유저 정보가 있는 경우(로그인)
-        return Response(data={"user_exists": True, "access_token": access_token, "is_inactive": not user_object.is_active}, status=status.HTTP_200_OK)
+        return Response(data={"user_exists": True, "access_token": access_token, "is_inactive": not social_user.user.is_active}, status=status.HTTP_200_OK)
     except SocialAccount.DoesNotExist:
         # 유저 정보가 없는 경우(새로 가입)
         return Response(data={"user_exists": False, "access_token": access_token, "is_inactive": False}, status=status.HTTP_200_OK)
@@ -420,9 +419,8 @@ def apple_login_callback(request):
 
     try:
         social_user = SocialAccount.objects.get(provider="apple", uid=uid)
-        user_object = social_user.user_set.first()
         # 유저 정보가 있는 경우(로그인)
-        return Response(data={"user_exists": True, "code": code, "id_token": id_token, "is_inactive": not user_object.is_active}, status=status.HTTP_200_OK)
+        return Response(data={"user_exists": True, "code": code, "id_token": id_token, "is_inactive": not social_user.user.is_active}, status=status.HTTP_200_OK)
     except SocialAccount.DoesNotExist:
         # 유저 정보가 없는 경우(새로 가입)
         return Response(data={"user_exists": False, "code": code, "id_token": id_token, "is_inactive": False}, status=status.HTTP_200_OK)
