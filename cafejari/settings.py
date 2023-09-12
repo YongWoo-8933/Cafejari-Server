@@ -74,12 +74,10 @@ APPLE_REDIRECT_URL = os.environ.get('APPLE_REDIRECT_URL')
 APPLE_CLIENT_ID = os.environ.get('APPLE_CLIENT_ID')
 APPLE_KEY_ID = os.environ.get('APPLE_KEY_ID')
 APPLE_APP_ID_PREFIX = os.environ.get('APPLE_APP_ID_PREFIX')
-APPLE_CERTIFICATE_KEY = f"""-----BEGIN PRIVATE KEY-----
-{os.environ.get('APPLE_CERTIFICATE_KEY_1st_line')}
-{os.environ.get('APPLE_CERTIFICATE_KEY_2nd_line')}
-{os.environ.get('APPLE_CERTIFICATE_KEY_3rd_line')}
-{os.environ.get('APPLE_CERTIFICATE_KEY_4th_line')}
------END PRIVATE KEY-----"""
+APPLE_CERTIFICATE_KEY_LINE_1 = os.environ.get('APPLE_CERTIFICATE_KEY_1st_line')
+APPLE_CERTIFICATE_KEY_LINE_2 = os.environ.get('APPLE_CERTIFICATE_KEY_2nd_line')
+APPLE_CERTIFICATE_KEY_LINE_3 = os.environ.get('APPLE_CERTIFICATE_KEY_3rd_line')
+APPLE_CERTIFICATE_KEY_LINE_4 = os.environ.get('APPLE_CERTIFICATE_KEY_4th_line')
 GIFTISHOW_AUTH_CODE = os.environ.get('GIFTISHOW_AUTH_CODE')
 GIFTISHOW_AUTH_TOKEN = os.environ.get('GIFTISHOW_AUTH_TOKEN')
 GIFTISHOW_USER_ID = os.environ.get('GIFTISHOW_USER_ID')
@@ -169,7 +167,12 @@ SOCIALACCOUNT_PROVIDERS = {
             "client_id": APPLE_CLIENT_ID,
             "secret": APPLE_KEY_ID,
             "key": APPLE_APP_ID_PREFIX,
-            "certificate_key": APPLE_CERTIFICATE_KEY
+            "certificate_key": f"""-----BEGIN PRIVATE KEY-----
+{APPLE_CERTIFICATE_KEY_LINE_1}
+{APPLE_CERTIFICATE_KEY_LINE_2}
+{APPLE_CERTIFICATE_KEY_LINE_3}
+{APPLE_CERTIFICATE_KEY_LINE_4}
+-----END PRIVATE KEY-----"""
         }
     }
 }
