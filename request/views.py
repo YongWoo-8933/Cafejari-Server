@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from cafe.models import Cafe, District, CongestionArea, Brand
-from cafe.serializers import CafeSerializer, CafeFloorSerializer
+from cafe.serializers import CafeSerializer, CafeFloorSerializer, OpeningHourSerializer
 from error import ServiceError
 from notification.naver_sms import send_sms_to_admin
 from request.models import CafeAdditionRequest, WithdrawalRequest, UserMigrationRequest
@@ -48,9 +48,10 @@ class CafeAdditionRequestViewSet(
         road_address = request.data.get("road_address")
         latitude = float(request.data.get("latitude"))
         longitude = float(request.data.get("longitude"))
-        total_floor = int(request.data.get("total_floor"))
-        first_floor = int(request.data.get("first_floor"))
-        no_seat_floor_list = request.data.get("no_seat_floor_list")
+        top_floor = int(request.data.get("top_floor"))
+        bottom_floor = int(request.data.get("bottom_floor"))
+        wall_socket_rate_list = request.data.get("wall_socket_rate_list")
+        opening_hour_list = request.data.get("opening_hour_list")
 
         try:
             Cafe.objects.get(name=cafe_name, address=road_address)
@@ -58,7 +59,7 @@ class CafeAdditionRequestViewSet(
         except Cafe.DoesNotExist:
             # district 체크
             dong_address_list = dong_address.split()
-            districts = District.objects.filter(city__in=dong_address_list, gu__in=dong_address_list, dong__in=dong_address_list)
+            districts = District.objects.filter(gu__in=dong_address_list, dong__in=dong_address_list)
 
             # congestion area 체크
             congestion_areas = CongestionArea.objects.filter(
@@ -92,15 +93,32 @@ class CafeAdditionRequestViewSet(
             new_cafe_object = cafe_serializer.save()
 
             # cafe floor 생성
-            for floor in range(first_floor, first_floor + total_floor):
-                floor += 1 if first_floor < 0 <= floor else 0
+            index = 0
+            for floor in range(bottom_floor, top_floor):
+                if floor == 0: continue
                 cafe_floor_serializer = CafeFloorSerializer(data={
                     "floor": floor,
-                    "has_seat": str(floor) not in no_seat_floor_list,
+                    "wall_socket_rate": float(wall_socket_rate_list[index]) if wall_socket_rate_list else None,
                     "cafe": new_cafe_object.id
                 })
                 cafe_floor_serializer.is_valid(raise_exception=True)
                 cafe_floor_serializer.save()
+                index += 1
+
+            # opening hour 설정
+            if opening_hour_list:
+                opening_hour_serializer = OpeningHourSerializer(data={
+                    "mon": opening_hour_list[0],
+                    "tue": opening_hour_list[1],
+                    "wed": opening_hour_list[2],
+                    "thu": opening_hour_list[3],
+                    "fri": opening_hour_list[4],
+                    "sat": opening_hour_list[5],
+                    "sun": opening_hour_list[6],
+                    "cafe": new_cafe_object.id
+                })
+                opening_hour_serializer.is_valid(raise_exception=True)
+                opening_hour_serializer.save()
 
             # request 작성
             cafe_addition_request_serializer = CafeAdditionRequestSerializer(data={
