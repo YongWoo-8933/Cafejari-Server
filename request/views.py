@@ -52,6 +52,7 @@ class CafeAdditionRequestViewSet(
         bottom_floor = int(request.data.get("bottom_floor"))
         wall_socket_rate_list = request.data.get("wall_socket_rate_list")
         opening_hour_list = request.data.get("opening_hour_list")
+        etc = request.data.get("etc")
 
         try:
             Cafe.objects.get(name=cafe_name, address=road_address)
@@ -59,7 +60,8 @@ class CafeAdditionRequestViewSet(
         except Cafe.DoesNotExist:
             # district 체크
             dong_address_list = dong_address.split()
-            districts = District.objects.filter(gu__in=dong_address_list, dong__in=dong_address_list)
+            road_address_list = road_address.split()
+            districts = District.objects.filter(gu__in=road_address_list, dong__in=dong_address_list)
 
             # congestion area 체크
             congestion_areas = CongestionArea.objects.filter(
@@ -94,7 +96,7 @@ class CafeAdditionRequestViewSet(
 
             # cafe floor 생성
             index = 0
-            for floor in range(bottom_floor, top_floor):
+            for floor in range(bottom_floor, top_floor+1):
                 if floor == 0: continue
                 cafe_floor_serializer = CafeFloorSerializer(data={
                     "floor": floor,
@@ -122,7 +124,9 @@ class CafeAdditionRequestViewSet(
 
             # request 작성
             cafe_addition_request_serializer = CafeAdditionRequestSerializer(data={
-                "user": request.user.id, "cafe": new_cafe_object.id
+                "user": request.user.id, 
+                "cafe": new_cafe_object.id,
+                "etc": etc if etc else None
             })
             cafe_addition_request_serializer.is_valid(raise_exception=True)
             obj = cafe_addition_request_serializer.save()

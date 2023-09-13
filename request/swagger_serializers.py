@@ -13,6 +13,7 @@ class SwaggerCafeAdditionRequestSerializer(SwaggerSerializer):
     bottom_floor = serializers.IntegerField()
     wall_socket_rate_list = serializers.ListField()
     opening_hour_list = serializers.ListField()
+    etc = serializers.CharField()
 
 
 class SwaggerWithdrawalRequestSerializer(SwaggerSerializer):

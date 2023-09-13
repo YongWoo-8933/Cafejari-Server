@@ -9,6 +9,7 @@ class CafeAdditionRequest(models.Model):
     is_notified = models.BooleanField(default=False)
     requested_at = models.DateTimeField(auto_now_add=True)
     answered_at = models.DateTimeField(default=timezone.now)
+    etc = models.TextField(default=None, null=True, blank=True)
     rejection_reason = models.TextField(default=None, null=True, blank=True)
     cafe = models.ForeignKey(
         'cafe.Cafe',
