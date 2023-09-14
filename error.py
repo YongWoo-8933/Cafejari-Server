@@ -90,6 +90,16 @@ class ServiceError:
         return Response(cls._error_dict(
             error_code=900, error_message="이미 존재하는 카페이거나, 등록 요청이 거절된 카페입니다"), status=status.HTTP_409_CONFLICT)
 
+    @classmethod
+    def duplicated_user_migration_response(cls):
+        return Response(cls._error_dict(
+            error_code=901, error_message="사용자 정보 이전이 진행중인 계정입니다"), status=status.HTTP_409_CONFLICT)
+
+    @classmethod
+    def already_completed_user_migration_response(cls):
+        return Response(cls._error_dict(
+            error_code=902, error_message="사용자 정보 이전이 완료된 계정입니다"), status=status.HTTP_409_CONFLICT)
+
 
     # 1000번대 shop
     @classmethod

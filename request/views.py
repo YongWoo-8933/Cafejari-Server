@@ -124,7 +124,7 @@ class CafeAdditionRequestViewSet(
 
             # request 작성
             cafe_addition_request_serializer = CafeAdditionRequestSerializer(data={
-                "user": request.user.id, 
+                "user": request.user.id,
                 "cafe": new_cafe_object.id,
                 "etc": etc if etc else None
             })
@@ -213,7 +213,15 @@ class UserMigrationRequestViewSet(
         manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
     )
     def create(self, request, *args, **kwargs):
-        request_serializer = self.get_serializer(data={"phone_number": request.data.get("phone_number"), "user": request.user.id})
-        request_serializer.is_valid(raise_exception=True)
-        request_serializer.save()
-        return Response(data=request_serializer.data,status=status.HTTP_201_CREATED)
+        phone_number = request.data.get("phone_number")
+        try:
+            request_object = self.queryset.get(phone_number=phone_number, user=request.user.id)
+            if request_object.is_completed:
+                return ServiceError.already_completed_user_migration_response()
+            else:
+                return ServiceError.duplicated_user_migration_response()
+        except UserMigrationRequest.DoesNotExist:
+            request_serializer = self.get_serializer(data={"phone_number": phone_number, "user": request.user.id})
+            request_serializer.is_valid(raise_exception=True)
+            request_serializer.save()
+            return Response(data=request_serializer.data,status=status.HTTP_201_CREATED)
