@@ -237,7 +237,7 @@ class CafeResponseSerializer(CafeSerializer):
     @staticmethod
     def get_cati(obj):
         filtered_cati_queryset = obj.cati.all()
-        if filtered_cati_queryset.exist():
+        if filtered_cati_queryset.exists():
             openness_avg_dict = filtered_cati_queryset.aggregate(avg=Avg('openness'))
             coffee_avg_dict = filtered_cati_queryset.aggregate(avg=Avg('coffee'))
             workspace_avg_dict = filtered_cati_queryset.aggregate(avg=Avg('workspace'))
