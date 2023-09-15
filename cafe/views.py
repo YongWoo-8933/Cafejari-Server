@@ -321,10 +321,7 @@ class CATIViewSet(
 ):
     queryset = CATI.objects.all()
     serializer_class = CATISerializer
-    permission_classes_per_method = {
-        "list": [AllowAny],
-        "create": [IsAuthenticated]
-    }
+    permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
         operation_id='CATI정보',
