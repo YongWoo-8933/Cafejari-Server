@@ -344,7 +344,7 @@ class CATIViewSet(
         ]
     )
     def list(self, request, *args, **kwargs):
-        cafe_id = request.query_params.get('cafe_id')
+        cafe_id = self.request.query_params.get('cafe_id', None)
         if not cafe_id:
             return ServiceError.cati_cafe_id_missing_response()
         cafe_cati_queryset = self.queryset.filter(cafe__id=cafe_id)
