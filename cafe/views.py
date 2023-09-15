@@ -332,11 +332,20 @@ class CATIViewSet(
     @swagger_auto_schema(
         operation_id='CATI정보',
         operation_description='query로 받은 cafe의 CATI 투표 정보를 모두 불러옴',
-        responses={200: CATISerializer(many=True)}
+        responses={200: CATISerializer(many=True)},
+        manual_parameters=[
+            openapi.Parameter(
+                name='cafe_id',
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_NUMBER,
+                required=True,
+                description='조회를 원하는 카페 id',
+            )
+        ]
     )
     def list(self, request, *args, **kwargs):
-        cafe_id = request.data.get("cafe_id")
-        if cafe_id is None:
+        cafe_id = request.query_params.get('cafe_id')
+        if not cafe_id:
             return ServiceError.cati_cafe_id_missing_response()
         cafe_cati_queryset = self.queryset.filter(cafe__id=cafe_id)
         return Response(data=self.get_serializer(cafe_cati_queryset, many=True).data, status=status.HTTP_200_OK)
