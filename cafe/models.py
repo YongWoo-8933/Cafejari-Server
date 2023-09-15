@@ -88,7 +88,6 @@ def tag_image_upload_path(instance, filename):
 class CafeTypeTag(models.Model):
     has_openness = models.BooleanField()
     is_coffee_focused = models.BooleanField()
-    is_work_friendly = models.BooleanField()
     user = models.ForeignKey(
         'user.User',
         on_delete=models.SET_NULL,

@@ -57,8 +57,8 @@ class BrandAdmin(ImageModelAdmin):
 
 @admin.register(CafeTypeTag)
 class CafeTypeTagAdmin(admin.ModelAdmin):
-    list_display = ("id", "cafe_name", "nickname", "custom_has_openness", "custom_is_coffee_focused", "custom_is_work_friendly",)
-    list_filter = ("cafe__brand__name", "has_openness", "is_coffee_focused", "is_work_friendly",)
+    list_display = ("id", "cafe_name", "nickname", "custom_has_openness", "custom_is_coffee_focused",)
+    list_filter = ("cafe__brand__name", "has_openness", "is_coffee_focused",)
     search_fields = ("cafe__name", "user__profile__nickname",)
     ordering = ("cafe__name",)
     list_select_related = ["cafe", "user"]
@@ -73,13 +73,10 @@ class CafeTypeTagAdmin(admin.ModelAdmin):
 
     def custom_is_coffee_focused(self, tag): return "커피주력" if tag.is_coffee_focused else "디저트주력"
 
-    def custom_is_work_friendly(self, tag): return "공부/업무" if tag.is_work_friendly else "감성/사진"
-
     cafe_name.short_description = "카페"
     nickname.short_description = "닉네임"
     custom_has_openness.short_description = "개방/아늑"
     custom_is_coffee_focused.short_description = "커피/디저트"
-    custom_is_work_friendly.short_description = "공부/감성성"
 
 
 class OpeningHourInline(admin.TabularInline):
