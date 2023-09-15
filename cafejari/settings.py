@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'storages',
 
     # 카페자리
+    'app_config',
     'cafe',
     'user',
     'request',
