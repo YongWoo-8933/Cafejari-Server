@@ -10,11 +10,12 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from cafe.models import Cafe, CafeFloor, OccupancyRateUpdateLog, DailyActivityStack, Location
+from cafe.models import Cafe, CafeFloor, OccupancyRateUpdateLog, DailyActivityStack, Location, CATI
 from cafe.serializers import CafeResponseSerializer, \
     OccupancyRateUpdateLogResponseSerializer, OccupancyRateUpdateLogSerializer, DailyActivityStackSerializer, \
-    CafeSearchResponseSerializer, LocationResponseSerializer
-from cafe.swagger_serializers import SwaggerOccupancyRegistrationRequestSerializer, SwaggerCafeResponseSerializer
+    CafeSearchResponseSerializer, LocationResponseSerializer, CATISerializer
+from cafe.swagger_serializers import SwaggerOccupancyRegistrationRequestSerializer, SwaggerCafeResponseSerializer, \
+    SwaggerCATIRequestSerializer
 from cafejari.settings import UPDATE_COOLTIME, OCCUPANCY_INSUFFICIENT_THRESHOLD, OCCUPANCY_ENOUGH_THRESHOLD, \
     ENOUGH_DATA_POINT, INSUFFICIENT_DATA_POINT, NO_DATA_POINT
 from error import ServiceError
@@ -311,3 +312,62 @@ class LocationViewSet(
     )
     def list(self, request, *args, **kwargs):
         return Response(data=self.get_serializer(self.queryset, many=True).data, status=status.HTTP_200_OK)
+
+
+class CATIViewSet(
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    GenericViewSet
+):
+    queryset = CATI.objects.all()
+    serializer_class = CATISerializer
+
+    def get_permissions(self):
+        if self.action == 'list':
+            return [AllowAny()]
+        elif self.action == 'create':
+            return [IsAuthenticated()]
+        return []
+
+    @swagger_auto_schema(
+        operation_id='CATI정보',
+        operation_description='query로 받은 cafe의 CATI 투표 정보를 모두 불러옴',
+        responses={200: CATISerializer(many=True)}
+    )
+    def list(self, request, *args, **kwargs):
+        cafe_id = request.data.get("cafe_id")
+        if cafe_id is None:
+            return ServiceError.cati_cafe_id_missing_response()
+        cafe_cati_queryset = self.queryset.filter(cafe__id=cafe_id)
+        return Response(data=self.get_serializer(cafe_cati_queryset, many=True).data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        operation_id='CATI투표',
+        operation_description='해당 카페의 CATI를 투표함',
+        request_body=SwaggerCATIRequestSerializer,
+        responses={201: CATISerializer(many=True)},
+        manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
+    )
+    def create(self, request, *args, **kwargs):
+        cafe_id = int(request.data.get("cafe_id"))
+        openness = int(request.data.get("openness"))
+        coffee = int(request.data.get("coffee"))
+        workspace = int(request.data.get("workspace"))
+        acidity = int(request.data.get("acidity"))
+        try:
+            cati_object = self.queryset.get(user__id=request.user.id, cafe__id=cafe_id)
+            serializer = self.get_serializer(cati_object, partial=True, data={
+                "openness": openness, "coffee": coffee, "workspace": workspace, "acidity": acidity
+            })
+        except CATI.DoesNotExist:
+            serializer = self.get_serializer(data={
+                "cafe": cafe_id,
+                "user": request.user.id,
+                "openness": openness,
+                "coffee": coffee,
+                "workspace": workspace,
+                "acidity": acidity
+            })
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED)

@@ -10,6 +10,13 @@ class SwaggerOccupancyRegistrationRequestSerializer(SwaggerSerializer):
     occupancy_rate = serializers.DecimalField(max_digits=3, decimal_places=2)
     cafe_floor_id = serializers.IntegerField()
 
+class SwaggerCATIRequestSerializer(SwaggerSerializer):
+    cafe_id = serializers.IntegerField()
+    openness = serializers.IntegerField()
+    coffee = serializers.IntegerField()
+    workspace = serializers.IntegerField()
+    acidity = serializers.IntegerField()
+
 
 # Response
 class SwaggerCafeFloorCafeRepresentationSerializer(CafeFloorCafeRepresentationSerializer):

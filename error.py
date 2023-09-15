@@ -83,6 +83,11 @@ class ServiceError:
         return Response(cls._error_dict(
             error_code=802, error_message=f"마지막 업데이트로부터 {UPDATE_COOLTIME}분 후 업데이트 가능합니다"), status=status.HTTP_409_CONFLICT)
 
+    @classmethod
+    def cati_cafe_id_missing_response(cls):
+        return Response(cls._error_dict(
+            error_code=803, error_message=f"카페 id를 선택해주세요"), status=status.HTTP_409_CONFLICT)
+
 
     # 900번대 request
     @classmethod
