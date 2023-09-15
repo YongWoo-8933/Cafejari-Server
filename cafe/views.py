@@ -321,7 +321,13 @@ class CATIViewSet(
 ):
     queryset = CATI.objects.all()
     serializer_class = CATISerializer
-    permission_classes = [IsAuthenticated]
+
+    def get_permissions(self):
+        if self.action == 'list':
+            return [AllowAny()]
+        elif self.action == 'create':
+            return [IsAuthenticated()]
+        return []
 
     @swagger_auto_schema(
         operation_id='CATI정보',
