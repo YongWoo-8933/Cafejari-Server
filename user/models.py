@@ -3,6 +3,8 @@ from enum import Enum
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from utils import CATIScore
+
 
 def grade_image_upload_path(instance, filename):
     return f"user/grade/{instance.name}_등급_{filename}"
@@ -81,6 +83,30 @@ class Profile(models.Model):
     occupancy_push_enabled = models.BooleanField(default=True)
     log_push_enabled = models.BooleanField(default=True)
     fcm_token = models.CharField(max_length=255, null=True, default=None, blank=True)
+    cati_openness = models.IntegerField(default=1, choices=(
+        (CATIScore.never.value, "매우 아늑함"),
+        (CATIScore.rarely.value, "아늑함"),
+        (CATIScore.somtimes.value, "개방적임"),
+        (CATIScore.always.value, "매우 개방적임"),
+    ))
+    cati_coffee = models.IntegerField(default=-1, choices=(
+        (CATIScore.never.value, "음료가 매우 맛있음"),
+        (CATIScore.rarely.value, "음료가 맛있음"),
+        (CATIScore.somtimes.value, "커피가 맛있음"),
+        (CATIScore.always.value, "커피가 매우 맛있음"),
+    ))
+    cati_workspace = models.IntegerField(default=1, choices=(
+        (CATIScore.never.value, "매우 감성적임"),
+        (CATIScore.rarely.value, "감성적임"),
+        (CATIScore.somtimes.value, "업무하기 좋음"),
+        (CATIScore.always.value, "매우 업무하기 좋음"),
+    ))
+    cati_acidity = models.IntegerField(default=-1, choices=(
+        (CATIScore.never.value, "매우 씁쓸함"),
+        (CATIScore.rarely.value, "씁쓸함"),
+        (CATIScore.somtimes.value, "산미가 있음"),
+        (CATIScore.always.value, "산미가 강함"),
+    ))
     grade = models.ForeignKey(
         "Grade",
         on_delete=models.SET_NULL,
@@ -106,7 +132,7 @@ class Profile(models.Model):
     )
     favorite_cafe = models.ManyToManyField(
         'cafe.Cafe',
-        related_name='user',
+        related_name='profile',
         db_column="favorite_cafe",
         blank=True
     )

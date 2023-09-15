@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 from cafe.models import Cafe, Brand, District, OpeningHour, CafeFloor, CafeImage, OccupancyRatePrediction, \
-    OccupancyRateUpdateLog, CongestionArea, CafeVIP, CafeTypeTag, DailyActivityStack, Location
+    OccupancyRateUpdateLog, CongestionArea, CafeVIP, DailyActivityStack, Location, CATI
 from utils import ImageModelAdmin, replace_image_domain
 
 
@@ -55,28 +55,22 @@ class BrandAdmin(ImageModelAdmin):
     image_tag.short_description = "이미지"
 
 
-@admin.register(CafeTypeTag)
-class CafeTypeTagAdmin(admin.ModelAdmin):
-    list_display = ("id", "cafe_name", "nickname", "custom_has_openness", "custom_is_coffee_focused",)
-    list_filter = ("cafe__brand__name", "has_openness", "is_coffee_focused",)
+@admin.register(CATI)
+class CATIAdmin(admin.ModelAdmin):
+    list_display = ("id", "cafe_name", "nickname", "openness", "coffee", "workspace", "acidity",)
+    list_filter = ("cafe__brand__name", "openness", "coffee", "workspace", "acidity",)
     search_fields = ("cafe__name", "user__profile__nickname",)
     ordering = ("cafe__name",)
     list_select_related = ["cafe", "user"]
     save_as = True
     preserve_filters = True
 
-    def cafe_name(self, tag): return tag.cafe.name
+    def cafe_name(self, cati): return cati.cafe.name
 
-    def nickname(self, tag): return tag.user.profile.nickname if tag.user else None
-
-    def custom_has_openness(self, tag): return "개방감" if tag.has_openness else "아늑함"
-
-    def custom_is_coffee_focused(self, tag): return "커피주력" if tag.is_coffee_focused else "디저트주력"
+    def nickname(self, cati): return cati.user.profile.nickname if cati.user else None
 
     cafe_name.short_description = "카페"
     nickname.short_description = "닉네임"
-    custom_has_openness.short_description = "개방/아늑"
-    custom_is_coffee_focused.short_description = "커피/디저트"
 
 
 class OpeningHourInline(admin.TabularInline):

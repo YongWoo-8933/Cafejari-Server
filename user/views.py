@@ -243,6 +243,10 @@ class ProfileViewSet(
         log_push_enabled = request.data.get("log_push_enabled")
         profile_image_id = request.data.get("profile_image_id")
         favorite_cafe_id_list = request.data.get("favorite_cafe_id_list")
+        cati_openness = request.data.get("cati_openness")
+        cati_coffee = request.data.get("cati_coffee")
+        cati_workspace = request.data.get("cati_workspace")
+        cati_acidity = request.data.get("cati_acidity")
         new_profile_image = request.FILES["new_profile_image"] if "new_profile_image" in request.FILES else None
 
         data = {}
@@ -270,6 +274,14 @@ class ProfileViewSet(
         if favorite_cafe_id_list is not None:
             favorite_cafe_data = [int(cafe_id) for cafe_id in favorite_cafe_id_list]
             data["favorite_cafe"] = favorite_cafe_data
+        if cati_openness is not None:
+            data["cati_openness"] = int(cati_openness)
+        if cati_coffee is not None:
+            data["cati_coffee"] = int(cati_coffee)
+        if cati_workspace is not None:
+            data["cati_workspace"] = int(cati_workspace)
+        if cati_acidity is not None:
+            data["cati_acidity"] = int(cati_acidity)
         if new_profile_image is not None:
             profile_image_serializer = ProfileImageSerializer(data={"is_default": False, "image": new_profile_image[0]})
             profile_image_serializer.is_valid(raise_exception=True)

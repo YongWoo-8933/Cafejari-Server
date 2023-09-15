@@ -15,9 +15,15 @@ class SwaggerOccupancyRegistrationRequestSerializer(SwaggerSerializer):
 class SwaggerCafeFloorCafeRepresentationSerializer(CafeFloorCafeRepresentationSerializer):
     recent_updated_log = OccupancyRateUpdateLogCafeFloorRepresentationSerializer(many=True, read_only=True)
 
+class SwaggerCATIRepSerializer(SwaggerSerializer):
+    openness = serializers.IntegerField()
+    coffee = serializers.IntegerField()
+    workspace = serializers.IntegerField()
+    acidity = serializers.IntegerField()
 
 class SwaggerCafeResponseSerializer(CafeResponseSerializer):
     cafe_floor = SwaggerCafeFloorCafeRepresentationSerializer(many=True, read_only=True)
+    cati = SwaggerCATIRepSerializer(read_only=True)
 
 
 # class SwaggerCafeSearchResponseSerializer(SwaggerSerializer):

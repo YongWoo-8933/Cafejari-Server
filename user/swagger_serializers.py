@@ -29,6 +29,10 @@ class SwaggerProfileUpdateRequestSerializer(SwaggerSerializer):
     profile_image_id = serializers.IntegerField()
     favorite_cafe_id_list = serializers.ListField()
     new_profile_image = serializers.CharField()
+    cati_openness = serializers.IntegerField()
+    cati_coffee = serializers.IntegerField()
+    cati_workspace = serializers.IntegerField()
+    cati_acidity = serializers.IntegerField()
 
 
 class SwaggerKakaoLoginRequestSerializer(SwaggerSerializer):

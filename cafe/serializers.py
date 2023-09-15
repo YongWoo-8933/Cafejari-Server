@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
+
+from django.db.models import Avg
 from rest_framework import serializers
 from cafe.models import District, Brand, CongestionArea, Cafe, OccupancyRatePrediction, CafeVIP, CafeImage, \
-    OpeningHour, OccupancyRateUpdateLog, CafeFloor, CafeTypeTag, DailyActivityStack, Location
+    OpeningHour, OccupancyRateUpdateLog, CafeFloor, DailyActivityStack, Location, CATI
 from cafejari.settings import RECENT_HOUR
 from user.models import Grade, ProfileImage, Profile, User
 from utils import ImageModelSerializer
@@ -35,10 +37,10 @@ class BrandSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class CafeTypeTagSerializer(serializers.ModelSerializer):
+class CATISerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = CafeTypeTag
+        model = CATI
         fields = "__all__"
 
 
@@ -218,6 +220,7 @@ class CafeResponseSerializer(CafeSerializer):
     cafe_floor = CafeFloorCafeRepresentationSerializer(many=True, read_only=True)
     cafe_vip = CafeVIPRepresentationSerializer(many=True, read_only=True)
     cafe_image = serializers.SerializerMethodField(read_only=True)
+    cati = serializers.SerializerMethodField(read_only=True, allow_null=True)
     opening_hour = OpeningHourSerializer(read_only=True)
     brand = BrandResponseSerializer(read_only=True)
 
@@ -230,6 +233,23 @@ class CafeResponseSerializer(CafeSerializer):
         filtered_images = obj.cafe_image.filter(is_visible=True)
         serializer = CafeImageResponseSerializer(filtered_images, many=True, read_only=True)
         return serializer.data
+
+    @staticmethod
+    def get_cati(obj):
+        filtered_cati_queryset = obj.cati.all()
+        if filtered_cati_queryset.exist():
+            openness_avg_dict = filtered_cati_queryset.aggregate(avg=Avg('openness'))
+            coffee_avg_dict = filtered_cati_queryset.aggregate(avg=Avg('coffee'))
+            workspace_avg_dict = filtered_cati_queryset.aggregate(avg=Avg('workspace'))
+            acidity_avg_dict = filtered_cati_queryset.aggregate(avg=Avg('acidity'))
+            return {
+                "openness": openness_avg_dict["avg"],
+                "coffee": coffee_avg_dict["avg"],
+                "workspace": workspace_avg_dict["avg"],
+                "acidity": acidity_avg_dict["avg"]
+            }
+        else:
+            return None
 
 
 # query 검색에서 표시할 카페 정보

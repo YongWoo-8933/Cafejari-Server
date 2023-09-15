@@ -1,3 +1,4 @@
+from enum import Enum
 
 import boto3
 from django.contrib import admin
@@ -94,3 +95,12 @@ class ImageModelSerializer(serializers.ModelSerializer):
 # s3 도메인을 image 도메인으로 교체
 def replace_image_domain(url):
     return str(url).replace(AWS_S3_DOMAIN, BASE_IMAGE_DOMAIN) if not LOCAL else url
+
+
+# CATI 점수 enum
+class CATIScore(Enum):
+    never = -2
+    rarely = -1
+    neutral = 0
+    somtimes = 1
+    always = 2

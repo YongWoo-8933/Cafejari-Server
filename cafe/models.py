@@ -3,6 +3,8 @@ from enum import Enum
 
 from django.db import models
 
+from utils import CATIScore
+
 
 class District(models.Model):
     city = models.CharField(max_length=15)
@@ -85,13 +87,40 @@ def tag_image_upload_path(instance, filename):
     return f"cafe/tag/{instance.name}_태그_{filename}"
 
 
-class CafeTypeTag(models.Model):
-    has_openness = models.BooleanField()
-    is_coffee_focused = models.BooleanField()
+
+class CATI(models.Model):
+    openness = models.IntegerField(choices=(
+        (CATIScore.never.value, "매우 아늑함"),
+        (CATIScore.rarely.value, "아늑함"),
+        (CATIScore.neutral.value, "보통"),
+        (CATIScore.somtimes.value, "개방적임"),
+        (CATIScore.always.value, "매우 개방적임"),
+    ))
+    coffee = models.IntegerField(choices=(
+        (CATIScore.never.value, "음료가 매우 맛있음"),
+        (CATIScore.rarely.value, "음료가 맛있음"),
+        (CATIScore.neutral.value, "보통"),
+        (CATIScore.somtimes.value, "커피가 맛있음"),
+        (CATIScore.always.value, "커피가 매우 맛있음"),
+    ))
+    workspace = models.IntegerField(choices=(
+        (CATIScore.never.value, "매우 감성적임"),
+        (CATIScore.rarely.value, "감성적임"),
+        (CATIScore.neutral.value, "보통"),
+        (CATIScore.somtimes.value, "업무하기 좋음"),
+        (CATIScore.always.value, "매우 업무하기 좋음"),
+    ))
+    acidity = models.IntegerField(choices=(
+        (CATIScore.never.value, "매우 씁쓸함"),
+        (CATIScore.rarely.value, "씁쓸함"),
+        (CATIScore.neutral.value, "보통"),
+        (CATIScore.somtimes.value, "산미가 있음"),
+        (CATIScore.always.value, "산미가 강함"),
+    ))
     user = models.ForeignKey(
         'user.User',
         on_delete=models.SET_NULL,
-        related_name="cafe_type_tag",
+        related_name="cati",
         db_column="user",
         default=None,
         blank=True,
@@ -100,12 +129,12 @@ class CafeTypeTag(models.Model):
     cafe = models.ForeignKey(
         'Cafe',
         on_delete=models.CASCADE,
-        related_name="cafe_type_tag",
+        related_name="cati",
         db_column="cafe"
     )
 
     class Meta:
-        db_table = 'cafe_cafe_type_tag'
+        db_table = 'cafe_cati'
         db_table_comment = 'CATI 구분을 위한 type tag 모델'
         app_label = 'cafe'
         ordering = ['cafe__name']
