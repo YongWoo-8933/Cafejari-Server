@@ -285,16 +285,17 @@ class OccupancyRateUpdateLogViewSet(
         return Response(data=self.get_serializer(queryset, many=True).data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
-        operation_id='최근 30분 내 업데이트',
-        operation_description='내가 한 최근 30분 동안의 모든 혼잡도 업데이트 정보',
-        responses={201: OccupancyRateUpdateLogResponseSerializer(many=True)},
+        operation_id='오늘 나의 업데이트',
+        operation_description='내가 오늘 한 모든 혼잡도 업데이트 정보',
+        responses={200: OccupancyRateUpdateLogResponseSerializer(many=True)},
         manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
     )
     @action(methods=['get'], detail=False)
-    def recent_updated_log(self, request):
+    def today_updated_log(self, request):
         now = datetime.datetime.now()
-        recent_updated_logs = self.queryset.filter(user__id=request.user.id, update__gt=now - datetime.timedelta(minutes=30))
-        return Response(data=self.get_serializer(recent_updated_logs, many=True).data, status=status.HTTP_200_OK)
+        today_updated_logs = self.queryset.filter(user__id=request.user.id, update__gt=datetime.datetime(
+            year=now.year, month=now.month, day=now.day, hour=0, minute=0, second=1))
+        return Response(data=self.get_serializer(today_updated_logs, many=True).data, status=status.HTTP_200_OK)
 
 
 class LocationViewSet(

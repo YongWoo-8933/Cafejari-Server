@@ -6,6 +6,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from cafe.models import Cafe, District, CongestionArea, Brand
 from cafe.serializers import CafeSerializer, CafeFloorSerializer, OpeningHourSerializer
+from cafejari.settings import BASE_DOMAIN
 from error import ServiceError
 from notification.naver_sms import send_sms_to_admin
 from request.models import CafeAdditionRequest, WithdrawalRequest, UserMigrationRequest
@@ -133,7 +134,7 @@ class CafeAdditionRequestViewSet(
 
             # 관리자에게 요청 알림
             send_sms_to_admin(
-                content=f"카페 등록 요청 by {obj.user.profile.nickname}\n{obj.cafe.name}\nhttp://localhost/admin/request/")
+                content=f"카페 등록 요청 by {obj.user.profile.nickname}\n{obj.cafe.name}\nhttps://{BASE_DOMAIN}/admin/request/")
 
             return Response(data=self.get_serializer(obj, read_only=True).data, status=status.HTTP_201_CREATED)
 
@@ -224,4 +225,8 @@ class UserMigrationRequestViewSet(
             request_serializer = self.get_serializer(data={"phone_number": phone_number, "user": request.user.id})
             request_serializer.is_valid(raise_exception=True)
             request_serializer.save()
+
+            # 관리자에게 요청 알림
+            send_sms_to_admin(
+                content=f"사용자 정보 이전 요청 by {request.user.profile.nickname}\n번호: {phone_number}\nhttps://{BASE_DOMAIN}/admin/request/")
             return Response(data=request_serializer.data,status=status.HTTP_201_CREATED)

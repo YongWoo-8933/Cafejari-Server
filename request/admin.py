@@ -32,7 +32,7 @@ class CafeAdditionRequestAdmin(admin.ModelAdmin):
         if obj.is_notified:
             approve_title = "승인" if obj.is_approved else "거절"
             if obj.is_approved:
-                approve_body = f"{obj.cafe.name} 등록요청이 승인되었습니다. 혼잡도를 공유하고 포인트 받아가세요!"
+                approve_body = f"{obj.cafe.name} 등록요청이 승인되었습니다. 혼잡도를 등록하고 포인트 받아가세요!"
             else:
                 approve_body = f"{obj.cafe.name} 등록요청이 거절되었습니다. 사유: {obj.rejection_reason}"
             FirebaseMessage.push_message(
