@@ -1373,7 +1373,7 @@ figcaption {
     width: 39px;
     height: 45px;
     background-color: rgba(0, 0, 0, 0);
-    background-image: url('../images/Blue-Arrow.svg');
+    background-image: url('../image/Blue-Arrow.svg');
     background-position: 50%;
     background-repeat: no-repeat;
     background-size: auto;
@@ -1963,7 +1963,7 @@ figcaption {
 .webflow-icon {
     width: 20px;
     height: 20px;
-    background-image: url('../images/webflow-blue-icon.svg');
+    background-image: url('../image/webflow-blue-icon.svg');
     background-position: 50%;
     background-repeat: no-repeat;
     background-size: cover;

@@ -1338,7 +1338,7 @@ textarea.w-select {
 /*
  * 1. We use content-box to avoid having to do `width: calc(10vh + 2vw)`
  *    which doesn’t work in Safari anyway.
- * 2. Chrome renders images pixelated when switching to GPU. Making sure
+ * 2. Chrome renders image pixelated when switching to GPU. Making sure
  *    the parent is also rendered on the GPU (by setting translate3d for
  *    example) fixes this behavior.
  */
