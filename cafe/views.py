@@ -277,7 +277,7 @@ class OccupancyRateUpdateLogViewSet(
         manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
     )
     def list(self, request, *args, **kwargs):
-        queryset = self.queryset.filter(user__id=request.user.id)
+        queryset = self.queryset.filter(user__id=request.user.id).order_by("-update")
         return Response(data=self.get_serializer(queryset, many=True).data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
@@ -290,7 +290,7 @@ class OccupancyRateUpdateLogViewSet(
     def today_updated_log(self, request):
         now = datetime.datetime.now()
         today_updated_logs = self.queryset.filter(user__id=request.user.id, update__gt=datetime.datetime(
-            year=now.year, month=now.month, day=now.day, hour=0, minute=0, second=1))
+            year=now.year, month=now.month, day=now.day, hour=0, minute=0, second=1)).order_by("-update")
         return Response(data=self.get_serializer(today_updated_logs, many=True).data, status=status.HTTP_200_OK)
 
 
