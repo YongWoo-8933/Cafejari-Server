@@ -124,10 +124,10 @@ MIDDLEWARE = [
 # Cafejari 앱 설정
 RECENT_HOUR = 2  # 몇시간 전 업데이트 로그까지 가져올건지
 UPDATE_COOLTIME = 10  # 혼잡도 업데이트 쿨타입(분)
-OCCUPANCY_INSUFFICIENT_THRESHOLD = 10  # 혼잡도 데이터 몇개 째부터 포인트 낮출지
-OCCUPANCY_ENOUGH_THRESHOLD = 30  # 혼잡도 데이터 몇개 째부터 포인트 더 낮출지
+OCCUPANCY_INSUFFICIENT_THRESHOLD = 6  # 혼잡도 데이터 몇개 째부터 포인트 낮출지
+OCCUPANCY_ENOUGH_THRESHOLD = 16  # 혼잡도 데이터 몇개 째부터 포인트 더 낮출지
 NO_DATA_POINT = 50  # 데이터가 없는카페 포인트
-INSUFFICIENT_DATA_POINT = 25  # 데이터가 부족한 카페 포인트
+INSUFFICIENT_DATA_POINT = 20  # 데이터가 부족한 카페 포인트
 ENOUGH_DATA_POINT = 10  # 데이터가 많은 카페 포인트
 
 # 최초 routing 파일 설정

@@ -238,6 +238,12 @@ class OccupancyRateUpdateLogViewSet(
                 saved_object = self.save_log(occupancy_rate=occupancy_rate, cafe_floor_id=cafe_floor_id,
                                              user_id=request.user.id, point=0)
                 return Response(self.get_serializer(saved_object, read_only=True).data, status=status.HTTP_201_CREATED)
+
+            # 오늘 이 카페에서 한 업데이트가 stack 초과한 업데이트인지 확인
+            if not DailyActivityStack.objects.filter(update__gte=midnight, cafe_floor__id=cafe_floor_id).exists():
+                saved_object = self.save_log(occupancy_rate=occupancy_rate, cafe_floor_id=cafe_floor_id,
+                                             user_id=request.user.id, point=0)
+                return Response(self.get_serializer(saved_object, read_only=True).data, status=status.HTTP_201_CREATED)
         else:
             # 오늘 이 카페에서 활동 이력 없음
             stack_restriction = request.user.profile.grade.activity_stack_restriction_per_day
