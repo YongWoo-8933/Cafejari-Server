@@ -4,6 +4,7 @@ from django.db.models import Avg
 from rest_framework import serializers
 from cafe.models import District, Brand, CongestionArea, Cafe, OccupancyRatePrediction, CafeVIP, CafeImage, \
     OpeningHour, OccupancyRateUpdateLog, CafeFloor, DailyActivityStack, Location, CATI
+from cafe.utils import PointCalculator
 from cafejari.settings import RECENT_HOUR
 from user.models import Grade, ProfileImage, Profile, User
 from utils import ImageModelSerializer
@@ -186,6 +187,7 @@ class OccupancyRateUpdateLogCafeFloorRepresentationSerializer(OccupancyRateUpdat
 # 맵 cafe 정보 속 cafe_floor 참조 serializer
 class CafeFloorCafeRepresentationSerializer(CafeFloorSerializer):
     recent_updated_log = serializers.SerializerMethodField(read_only=True)
+    point_prediction = serializers.SerializerMethodField(read_only=True)
     occupancy_rate_prediction = OccupancyRatePredictionSerializer(read_only=True)
 
     @staticmethod
@@ -195,6 +197,10 @@ class CafeFloorCafeRepresentationSerializer(CafeFloorSerializer):
         ).order_by("-update")
         serializer = OccupancyRateUpdateLogCafeFloorRepresentationSerializer(filtered_logs, many=True, read_only=True)
         return serializer.data
+
+    @staticmethod
+    def get_point_prediction(obj):
+        return PointCalculator.calculate_reward_based_on_data(obj.id)
 
 
 # 혼잡도 업데이트 로그 속 cafe_floor 참조 serializer

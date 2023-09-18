@@ -16,6 +16,7 @@ from cafe.serializers import CafeResponseSerializer, \
     CafeSearchResponseSerializer, LocationResponseSerializer, CATISerializer
 from cafe.swagger_serializers import SwaggerOccupancyRegistrationRequestSerializer, SwaggerCafeResponseSerializer, \
     SwaggerCATIRequestSerializer
+from cafe.utils import PointCalculator
 from cafejari.settings import UPDATE_COOLTIME, OCCUPANCY_INSUFFICIENT_THRESHOLD, OCCUPANCY_ENOUGH_THRESHOLD, \
     ENOUGH_DATA_POINT, INSUFFICIENT_DATA_POINT, NO_DATA_POINT
 from error import ServiceError
@@ -252,14 +253,9 @@ class OccupancyRateUpdateLogViewSet(
                     data={"user": request.user.id, "cafe_floor": cafe_floor_id})
                 stack_serializer.is_valid(raise_exception=True)
                 stack_serializer.save()
-        # 카페의 데이터 충분 여부 판단
-        count = OccupancyRateUpdateLog.objects.filter(cafe_floor__id=cafe_floor_id).count()
-        if count < OCCUPANCY_INSUFFICIENT_THRESHOLD:
-            point = NO_DATA_POINT
-        elif count < OCCUPANCY_ENOUGH_THRESHOLD:
-            point = INSUFFICIENT_DATA_POINT
-        else:
-            point = ENOUGH_DATA_POINT
+
+        # 데이터 많고 적음에 따라 포인트 다르게 책정
+        point = PointCalculator.calculate_reward_based_on_data(cafe_floor_id)
 
         # occupancy_rate_update_log 작성
         saved_object = self.save_log(occupancy_rate=occupancy_rate, cafe_floor_id=cafe_floor_id,

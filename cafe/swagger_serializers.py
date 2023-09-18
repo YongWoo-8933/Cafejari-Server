@@ -21,6 +21,7 @@ class SwaggerCATIRequestSerializer(SwaggerSerializer):
 # Response
 class SwaggerCafeFloorCafeRepresentationSerializer(CafeFloorCafeRepresentationSerializer):
     recent_updated_log = OccupancyRateUpdateLogCafeFloorRepresentationSerializer(many=True, read_only=True)
+    point_prediction = serializers.IntegerField()
 
 class SwaggerCATIRepSerializer(SwaggerSerializer):
     openness = serializers.FloatField()
