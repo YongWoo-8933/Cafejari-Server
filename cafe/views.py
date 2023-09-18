@@ -234,7 +234,7 @@ class OccupancyRateUpdateLogViewSet(
 
             # 오늘 이 카페에서 업데이트한 횟수 확인
             count_restriction = request.user.profile.grade.sharing_restriction_per_cafe
-            if today_this_cafe_update_logs.count() > count_restriction:
+            if today_this_cafe_update_logs.count() >= count_restriction:
                 saved_object = self.save_log(occupancy_rate=occupancy_rate, cafe_floor_id=cafe_floor_id,
                                              user_id=request.user.id, point=0)
                 return Response(self.get_serializer(saved_object, read_only=True).data, status=status.HTTP_201_CREATED)
