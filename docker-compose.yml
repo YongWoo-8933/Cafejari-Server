@@ -59,7 +59,7 @@ services:
           python3 manage.py migrate &&
           python3 manage.py crontab add &&
           tail -f /dev/null"
-#          gunicorn cafejari.wsgi -b 0.0.0.0:8000:application -t 600"
+#          gunicorn cafejari.wsgi -b 0.0.0.0:8000:application"
     ports:
       - "22:22"
     expose:

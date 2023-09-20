@@ -1,15 +1,17 @@
+import asyncio
 import csv
 import os
 import time
 import urllib.parse
 import uuid
+from threading import Thread
 
 import requests
-import logging
 from django.contrib import admin
+
 from django.core.files.base import ContentFile
 
-from cafe.models import District, Brand, CongestionArea, Cafe, CafeImage
+from cafe.models import District, Brand, CongestionArea, Cafe
 from cafe.serializers import DistrictSerializer, BrandSerializer, CongestionAreaSerializer, CafeSerializer, \
     CafeFloorSerializer, OpeningHourSerializer, CafeImageSerializer
 from cafejari.settings import LOCAL, MEDIA_ROOT, NAVER_GEO_KEY_ID, NAVER_GEO_KEY, GOOGLE_PLACE_API_KEY
@@ -162,7 +164,7 @@ class ItemUpdateAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.save()
-        update_item_list()
+        Thread(target=update_item_list).start()
 
 
 @admin.register(CongestionDataUpdate)
@@ -251,9 +253,12 @@ class CafeDataUpdateAdmin(CsvFileManageAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.save()
-        time.sleep(0.5)
-        f = self.get_opened_csv_file(file=obj.cafe_csv_file)
-        reader = csv.reader(f)
+        time.sleep(0.4)
+        Thread(target=self.save_cafe_data, args=(obj,)).start()
+
+    def save_cafe_data(self, obj):
+        csv_file = self.get_opened_csv_file(file=obj.cafe_csv_file)
+        reader = csv.reader(csv_file)
 
         # district 체크
         try:
