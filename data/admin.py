@@ -3,6 +3,7 @@ import os
 import time
 import urllib.parse
 import requests
+import logging
 from django.contrib import admin
 from django.core.files.base import ContentFile
 
@@ -392,6 +393,8 @@ class CafeDataUpdateAdmin(CsvFileManageAdmin):
                 try:
                     response = requests.get(url=url, params=params)
                     if response.status_code == 200:
+                        logger = logging.getLogger('my')
+                        logger.info(response.json())
                         result = response.json()['result']
                         if 'photos' in result:
                             photo_raw_json_list = result['photos']
