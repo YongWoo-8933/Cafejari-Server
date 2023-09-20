@@ -1,3 +1,5 @@
+import os
+import urllib.parse
 from enum import Enum
 
 import boto3
@@ -73,14 +75,22 @@ class ImageModelAdmin(admin.ModelAdmin):
 
     def delete_model(self, request, obj):
         if obj.image:
-            S3Manager.delete_file(path=obj.image)
+            if LOCAL:
+                decoded_file_path = urllib.parse.unquote("/cafejari" + obj.image.url)
+                os.remove(decoded_file_path)
+            else:
+                S3Manager.delete_file(path=obj.image)
         obj.delete()
 
     def delete_queryset(self, request, queryset):
         for obj in queryset:
             if obj.image:
-                S3Manager.delete_file(path=obj.image)
-            obj.delete()
+                if LOCAL:
+                    decoded_file_path = urllib.parse.unquote("/cafejari" + obj.image.url)
+                    os.remove(decoded_file_path)
+                else:
+                    S3Manager.delete_file(path=obj.image)
+                obj.delete()
 
 
 # 이미지 파일을 가지고 있는 모델의 serializer

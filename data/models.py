@@ -17,6 +17,9 @@ def nickname_adjective_csv_upload_path(instance, filename): return f"data/nickna
 def nickname_noun_csv_upload_path(instance, filename): return f"data/nickname_noun/{filename}"
 
 
+def cafe_csv_upload_path(instance, filename): return f"data/cafe/{filename}"
+
+
 class DistrictDataUpdate(models.Model):
     last_update = models.DateTimeField(auto_now_add=True)
     city = models.CharField(max_length=15)
@@ -89,5 +92,18 @@ class NicknameNounDataUpdate(models.Model):
     class Meta:
         db_table = 'data_nickname_noun_data_update'
         db_table_comment = '닉네임 자동생성 후보 명사 업데이트'
+        app_label = 'data'
+        ordering = ['-last_update']
+
+
+class CafeDataUpdate(models.Model):
+    gu = models.CharField(max_length=15)
+    dong = models.CharField(max_length=15)
+    last_update = models.DateTimeField(auto_now_add=True)
+    cafe_csv_file = models.FileField(upload_to=cafe_csv_upload_path)
+
+    class Meta:
+        db_table = 'data_cafe_data_update'
+        db_table_comment = '새로운 카페를 추가하고 정보 업데이트'
         app_label = 'data'
         ordering = ['-last_update']
