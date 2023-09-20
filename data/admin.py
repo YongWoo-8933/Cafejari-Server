@@ -394,7 +394,7 @@ class CafeDataUpdateAdmin(CsvFileManageAdmin):
                     response = requests.get(url=url, params=params)
                     if response.status_code == 200:
                         logger = logging.getLogger('my')
-                        logger.info(response.json())
+                        logger.info(msg=response.json())
                         result = response.json()['result']
                         if 'photos' in result:
                             photo_raw_json_list = result['photos']
