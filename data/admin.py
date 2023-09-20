@@ -2,6 +2,8 @@ import csv
 import os
 import time
 import urllib.parse
+import uuid
+
 import requests
 import logging
 from django.contrib import admin
@@ -415,7 +417,8 @@ class CafeDataUpdateAdmin(CsvFileManageAdmin):
                     try:
                         response = requests.get(url=url, params=params)
                         if response.status_code == 200:
-                            temp_file_name = "temp.jpeg"
+
+                            temp_file_name = f"temp_{str(uuid.uuid1())}.jpeg"
                             with open(temp_file_name, 'wb') as file:
                                 for chunk in response.iter_content(1024):
                                     file.write(chunk)
