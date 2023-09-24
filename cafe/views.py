@@ -1,6 +1,8 @@
 import datetime
 
-from django.db.models import Q
+from django.contrib.gis.db.models import PointField
+from django.contrib.gis.geos import Point
+from django.db.models import Q, F
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema, no_body
 from rest_framework import mixins, status
@@ -145,20 +147,19 @@ class CafeViewSet(
         latitude = float(self.request.query_params.get('latitude') or 37.55649747287372)
         longitude = float(self.request.query_params.get('longitude') or 126.93710302643744)
 
-        latitude_bound = 0.01
-        longitude_bound = 0.012
+        # 사용자 위치를 Point 객체로 생성
+        user_location = Point(longitude, latitude, srid=4326)
 
-        queryset = self.queryset.filter(
-            is_visible=True,
-            is_closed=False,
-            latitude__gte=latitude - latitude_bound,
-            latitude__lte=latitude + latitude_bound,
-            longitude__gte=longitude - longitude_bound,
-            longitude__lte=longitude + longitude_bound,
-        )
-        if queryset.count() > 20:
-            queryset = queryset[:20]
-        return Response(data=self.get_serializer(queryset, many=True).data, status=status.HTTP_200_OK)
+        # 가장 가까운 20개 카페를 가져옵니다.
+        cafes = Cafe.objects.annotate(
+            distance=PointField(F('point'), srid=4326).distance(user_location)
+        ).order_by('distance')
+
+        # 20개 넘어가면 20개 컷
+        if cafes.count() > 20:
+            cafes = cafes[:20]
+
+        return Response(data=self.get_serializer(cafes, many=True).data, status=status.HTTP_200_OK)
 
     # @swagger_auto_schema(
     #     operation_id='카페 검색 정보',
