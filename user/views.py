@@ -273,6 +273,8 @@ class ProfileViewSet(
             data["profile_image"] = int(profile_image_id)
         if favorite_cafe_id_list is not None:
             favorite_cafe_data = [int(cafe_id) for cafe_id in favorite_cafe_id_list]
+            if len(favorite_cafe_data) > 10:
+                return ServiceError.favorite_cafe_count_restriction_response()
             data["favorite_cafe"] = favorite_cafe_data
         if cati_openness is not None:
             data["cati_openness"] = int(cati_openness)

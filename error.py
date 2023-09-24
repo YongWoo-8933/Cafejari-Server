@@ -66,6 +66,11 @@ class ServiceError:
         return Response(cls._error_dict(
             error_code=706, error_message="소셜 계정으로 가입되지 않은 사용자입니다"), status=status.HTTP_409_CONFLICT)
 
+    @classmethod
+    def favorite_cafe_count_restriction_response(cls):
+        return Response(cls._error_dict(
+            error_code=707, error_message="내 카페는 최대 10개까지만 등록할 수 있습니다"), status=status.HTTP_409_CONFLICT)
+
 
     # 800번대 - cafe
     @classmethod
