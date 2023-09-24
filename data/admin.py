@@ -19,7 +19,7 @@ from cafejari.settings import LOCAL, MEDIA_ROOT, NAVER_GEO_KEY_ID, NAVER_GEO_KEY
 from cron.congestion import update_congestion_area
 from cron.item import update_item_list
 from data.models import DistrictDataUpdate, ItemDataUpdate, CongestionDataUpdate, BrandDataUpdate, \
-    CongestionAreaDataUpdate, NicknameAdjectiveDataUpdate, NicknameNounDataUpdate, CafeDataUpdate
+    CongestionAreaDataUpdate, NicknameAdjectiveDataUpdate, NicknameNounDataUpdate, CafeDataUpdate, CafePointUpdate
 from user.models import NicknameAdjective, NicknameNoun
 from user.serializers import NicknameAdjectiveSerializer, NicknameNounSerializer
 from utils import S3Manager
@@ -446,3 +446,27 @@ class CafeDataUpdateAdmin(CsvFileManageAdmin):
                         continue
                     except requests.RequestException:
                         continue
+
+
+@admin.register(CafePointUpdate)
+class NicknameNounDataUpdateAdmin(admin.ModelAdmin):
+    list_display = ("id", "last_update",)
+    date_hierarchy = "last_update"
+    ordering = ("-last_update",)
+    save_as = True
+    preserve_filters = True
+
+    def save_model(self, request, obj, form, change):
+        obj.save()
+        Thread(target=self.save_cafe_point).start()
+
+    def save_cafe_point(self):
+        cafe_queryset = Cafe.objects.all()
+        for cafe_object in cafe_queryset:
+            serializer = CafeSerializer(
+                cafe_object,
+                data={"point": Point(cafe_object.longitude, cafe_object.latitude, srid=4326)},
+                partial=True
+            )
+            serializer.is_valid(raise_exception=True)
+            serializer.save()

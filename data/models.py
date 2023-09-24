@@ -107,3 +107,13 @@ class CafeDataUpdate(models.Model):
         db_table_comment = '새로운 카페를 추가하고 정보 업데이트'
         app_label = 'data'
         ordering = ['-last_update']
+
+
+class CafePointUpdate(models.Model):
+    last_update = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'data_cafe_point_update'
+        db_table_comment = '각 카페의 좌표에 따라 point값 지정'
+        app_label = 'data'
+        ordering = ['-last_update']
