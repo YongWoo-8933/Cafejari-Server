@@ -1,7 +1,8 @@
 import datetime
 
 from django.contrib.gis.db.models import PointField
-from django.contrib.gis.geos import Point
+from django.contrib.gis.db.models.functions import Distance
+from django.contrib.gis.geos import Point, GEOSGeometry
 from django.db.models import Q, F
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema, no_body
@@ -150,10 +151,10 @@ class CafeViewSet(
         # 사용자 위치를 Point 객체로 생성
         user_location = Point(longitude, latitude, srid=4326)
 
-        # 가장 가까운 20개 카페를 가져옵니다.
+        # 거리순 카페 정렬
         cafes = Cafe.objects.annotate(
-            distance=PointField(F('point'), srid=4326).distance(user_location)
-        ).order_by('distance')
+            distance=Distance("point", GEOSGeometry(user_location, srid=4326))
+        ).order_by("distance")
 
         # 20개 넘어가면 20개 컷
         if cafes.count() > 20:
