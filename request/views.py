@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import Point
 from drf_yasg.utils import swagger_auto_schema, no_body
 from rest_framework import mixins, status
 from rest_framework.permissions import IsAuthenticated
@@ -86,6 +87,7 @@ class CafeAdditionRequestViewSet(
                 "address": road_address,
                 "latitude": latitude,
                 "longitude": longitude,
+                "point": Point(longitude, latitude, srid=4326),
                 "congestion_area": congestion_area_id_list,
             }
             if districts: cafe_data["district"] = districts[0].id

@@ -8,6 +8,7 @@ from threading import Thread
 
 import requests
 from django.contrib import admin
+from django.contrib.gis.geos import Point
 
 from django.core.files.base import ContentFile
 
@@ -321,6 +322,7 @@ class CafeDataUpdateAdmin(CsvFileManageAdmin):
                 "address": road_address,
                 "latitude": latitude,
                 "longitude": longitude,
+                "point": Point(longitude, latitude, srid=4326),
                 "congestion_area": congestion_area_id_list,
                 "google_place_id": google_place_id,
                 "brand": brand_object.id if brand_object else None,

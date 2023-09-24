@@ -1,4 +1,5 @@
 from django.contrib.gis import admin
+from django.contrib.gis.geos import Point
 from django.utils.html import format_html
 
 from cafe.models import Cafe, Brand, District, OpeningHour, CafeFloor, CafeImage, OccupancyRatePrediction, \
@@ -105,7 +106,8 @@ class CafeAdmin(admin.GeoModelAdmin):
     def brand_name(self, cafe): return cafe.brand.name if cafe.brand else None
     
     def save_model(self, request, obj, form, change):
-        super(CafeAdmin, self).save_model(request, obj, form, change)
+        obj.point = Point(obj.longitude, obj.latitude, srid=4326)
+        obj.save()
 
     floor_count.short_description = "층수"
     district_city.short_description = "구역"
