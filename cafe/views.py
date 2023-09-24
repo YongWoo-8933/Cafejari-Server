@@ -119,6 +119,47 @@ class CafeViewSet(
         serializer = CafeSearchResponseSerializer(queryset, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        operation_id='카페 추천(거리순)',
+        operation_description='거리가 가까운 순으로 카페 추천',
+        responses={200: CafeSearchResponseSerializer(many=True)},
+        manual_parameters=[
+            openapi.Parameter(
+                name='latitude',
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_NUMBER,
+                required=False,
+                description='float값, default=신촌위도',
+            ),
+            openapi.Parameter(
+                name='longitude',
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_NUMBER,
+                required=False,
+                description='float값, default=신촌경도',
+            ),
+        ]
+    )
+    @action(detail=False, methods=['get'], permission_classes=[AllowAny])
+    def recommendation(self, queryset):
+        latitude = float(self.request.query_params.get('latitude') or 37.55649747287372)
+        longitude = float(self.request.query_params.get('longitude') or 126.93710302643744)
+
+        latitude_bound = 0.01
+        longitude_bound = 0.012
+
+        queryset = self.queryset.filter(
+            is_visible=True,
+            is_closed=False,
+            latitude__gte=latitude - latitude_bound,
+            latitude__lte=latitude + latitude_bound,
+            longitude__gte=longitude - longitude_bound,
+            longitude__lte=longitude + longitude_bound,
+        )
+        if queryset.count() > 20:
+            queryset = queryset[:20]
+        return Response(data=self.get_serializer(queryset, many=True).data, status=status.HTTP_200_OK)
+
     # @swagger_auto_schema(
     #     operation_id='카페 검색 정보',
     #     operation_description='검색 했을 때 카페 리스트 정보를 받음',

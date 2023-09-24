@@ -1,7 +1,7 @@
 
 from enum import Enum
 
-from django.db import models
+from django.contrib.gis.db import models
 
 from utils import CATIScore
 
@@ -147,6 +147,7 @@ class Cafe(models.Model):
     address = models.CharField(max_length=63)
     latitude = models.FloatField()
     longitude = models.FloatField()
+    point = models.PointField(blank=True, null=True, default=True)
     google_place_id = models.CharField(max_length=255, default=None, null=True, blank=True)
     district = models.ForeignKey(
         'District',
