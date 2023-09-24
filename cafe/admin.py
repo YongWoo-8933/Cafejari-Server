@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib.gis import admin
 from django.utils.html import format_html
 
 from cafe.models import Cafe, Brand, District, OpeningHour, CafeFloor, CafeImage, OccupancyRatePrediction, \
@@ -86,7 +86,7 @@ class CafeImageInline(admin.TabularInline):
 
 
 @admin.register(Cafe)
-class CafeAdmin(admin.ModelAdmin):
+class CafeAdmin(admin.GeoModelAdmin):
     list_display = ("id", "name", "floor_count", "district_city", "brand_name", "congestion_area", "address", "is_visible", "is_closed",)
     list_filter = ("is_visible", "is_closed", "brand__name", "district__city", "congestion_area__name")
     search_fields = ("name", "address",)
@@ -103,6 +103,9 @@ class CafeAdmin(admin.ModelAdmin):
     def congestion_area(self, cafe): return cafe.congestion_area.name if cafe.congestion_area else None
 
     def brand_name(self, cafe): return cafe.brand.name if cafe.brand else None
+    
+    def save_model(self, request, obj, form, change):
+        super(CafeAdmin, self).save_model(request, obj, form, change)
 
     floor_count.short_description = "층수"
     district_city.short_description = "구역"

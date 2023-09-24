@@ -148,7 +148,7 @@ class Cafe(models.Model):
     address = models.CharField(max_length=63)
     latitude = models.FloatField()
     longitude = models.FloatField()
-    point = models.PointField(blank=True, null=True, default=Point(0, 0))
+    point = models.PointField(blank=True, null=True, default=Point(0, 0, srid=4326), srid=4326)
     google_place_id = models.CharField(max_length=255, default=None, null=True, blank=True)
     district = models.ForeignKey(
         'District',
