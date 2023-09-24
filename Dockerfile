@@ -23,6 +23,7 @@ ENV DB_PASSWORD: ${DB_PASSWORD}
 #    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
 #    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11
 #    apt-get install --reinstall python3-apt
+#    apt-get install binutils libproj-dev gdal-bin
 
 # amazonlinux 설정 과정
 #RUN yum update -y && yum upgrade -y && \
