@@ -156,6 +156,9 @@ class CafeViewSet(
             distance=Distance("point", GEOSGeometry(user_location, srid=4326))
         ).order_by("distance")
 
+        # 뺄 카페 거르기
+        cafes = cafes.filter(is_visible=True, is_closed=False)
+
         # 20개 넘어가면 20개 컷
         if cafes.count() > 20:
             cafes = cafes[:20]
