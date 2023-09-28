@@ -289,8 +289,8 @@ class CafeDataUpdateAdmin(CsvFileManageAdmin):
                     if response.status_code == 200:
                         addresses = response.json()['addresses']
                         if addresses:
-                            latitude = addresses[0]['y']
-                            longitude = addresses[0]['x']
+                            latitude = float(addresses[0]['y'])
+                            longitude = float(addresses[0]['x'])
                         else:
                             continue
                     else:
@@ -454,7 +454,7 @@ class CafeDataUpdateAdmin(CsvFileManageAdmin):
 
 
 @admin.register(CafePointUpdate)
-class NicknameNounDataUpdateAdmin(admin.ModelAdmin):
+class CafePointUpdateAdmin(admin.ModelAdmin):
     list_display = ("id", "last_update",)
     date_hierarchy = "last_update"
     ordering = ("-last_update",)
