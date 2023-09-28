@@ -1,5 +1,6 @@
 import asyncio
 import csv
+import logging
 import os
 import time
 import urllib.parse
@@ -258,154 +259,41 @@ class CafeDataUpdateAdmin(CsvFileManageAdmin):
         Thread(target=self.save_cafe_data, args=(obj,)).start()
 
     def save_cafe_data(self, obj):
-        csv_file = self.get_opened_csv_file(file=obj.cafe_csv_file)
-        reader = csv.reader(csv_file)
-
-        # district 체크
         try:
-            district_object = District.objects.get(gu=obj.gu, dong=obj.dong)
-        except District.DoesNotExist:
-            district_object = None
+            csv_file = self.get_opened_csv_file(file=obj.cafe_csv_file)
+            reader = csv.reader(csv_file)
 
-        for row in reader:
-            cafe_name = row[1]
-            opening_hour_raw_data = row[3] if row[3] else None
-            road_address = row[4]
-            total_floor = int(row[7])
-            bottom_floor = int(row[8])
-            no_seat_floor_list = row[9].split() if row[9] else []
-            google_place_id = row[11] if row[11] else None
-
-            # 좌표 얻어오기(못구하면 카페 패스)
-            url = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode"
-            params = {
-                "query": road_address,
-                "X-NCP-APIGW-API-KEY-ID": NAVER_GEO_KEY_ID,
-                "X-NCP-APIGW-API-KEY": NAVER_GEO_KEY
-            }
+            # district 체크
             try:
-                response = requests.get(url=url, params=params)
-                if response.status_code == 200:
-                    addresses = response.json()['addresses']
-                    if addresses:
-                        latitude = addresses[0]['y']
-                        longitude = addresses[0]['x']
-                    else:
-                        continue
-                else:
-                    continue
-            except requests.Timeout:
-                continue
-            except requests.RequestException:
-                continue
+                district_object = District.objects.get(gu=obj.gu, dong=obj.dong)
+            except District.DoesNotExist:
+                district_object = None
 
-            # congestion area 체크
-            congestion_areas = CongestionArea.objects.filter(
-                south_west_latitude__lt=latitude,
-                south_west_longitude__lt=longitude,
-                north_east_latitude__gt=latitude,
-                north_east_longitude__gt=longitude
-            )
-            congestion_area_id_list = [congestion_area.id for congestion_area in congestion_areas]
+            for row in reader:
+                cafe_name = row[1]
+                opening_hour_raw_data = row[3] if row[3] else None
+                road_address = row[4]
+                total_floor = int(row[7])
+                bottom_floor = int(row[8])
+                no_seat_floor_list = row[9].split() if row[9] else []
+                google_place_id = row[11] if row[11] else None
 
-            # brand 체크
-            brand_object = None
-            for brand in Brand.objects.all():
-                if brand.name in cafe_name:
-                    brand_object = brand
-                    break
-
-            # 카페 data 생성
-            cafe_data = {
-                "is_visible": True,
-                "name": cafe_name,
-                "address": road_address,
-                "latitude": latitude,
-                "longitude": longitude,
-                "point": Point(longitude, latitude, srid=4326),
-                "congestion_area": congestion_area_id_list,
-                "google_place_id": google_place_id,
-                "brand": brand_object.id if brand_object else None,
-                "district": district_object.id if district_object else None
-            }
-
-            # 중복되는 카페가 있는지 확인후 serializer 생성
-            try:
-                Cafe.objects.get(name=cafe_name, address=road_address)
-                continue
-            except Cafe.DoesNotExist:
-                cafe_serializer = CafeSerializer(data=cafe_data)
-
-            # 카페 object 저장
-            cafe_serializer.is_valid(raise_exception=True)
-            new_cafe_object = cafe_serializer.save()
-
-            # cafe floor 생성
-            current_floor = bottom_floor
-            for floor in range(total_floor):
-                if current_floor == 0: current_floor += 1
-                cafe_floor_serializer = CafeFloorSerializer(data={
-                    "floor": current_floor,
-                    "cafe": new_cafe_object.id,
-                    "has_seat": str(current_floor) not in no_seat_floor_list
-                })
-                cafe_floor_serializer.is_valid(raise_exception=True)
-                cafe_floor_serializer.save()
-                current_floor += 1
-
-            # opening hour 설정
-            if opening_hour_raw_data:
-                opening_hour_line_list = opening_hour_raw_data.splitlines()
-                opening_hour_dict = {"월": "", "화": "", "수": "", "목": "", "금": "", "토": "", "일": ""}
-                for opening_hour_line in opening_hour_line_list:
-                    # 시간에 해당하는 내용을 찾음
-                    last_colon_index = opening_hour_line.rfind(": ")
-                    if last_colon_index != -1:
-                        time_string = opening_hour_line[last_colon_index + 2:]
-                    else:
-                        continue
-
-                    # 요일 정보를 찾음
-                    first_str = opening_hour_line[0]
-                    if first_str == "매":
-                        for key in opening_hour_dict: opening_hour_dict[key] = time_string
-                    elif first_str in opening_hour_dict:
-                        opening_hour_dict[first_str] = time_string
-
-                # openning hour dict의 유효성 확인
-                has_data = True
-                for key in opening_hour_dict:
-                    if not opening_hour_dict[key]:
-                        has_data = False
-                        break
-
-                # 데이터 정리 및 저장
-                if has_data:
-                    opening_hour_serializer = OpeningHourSerializer(data={
-                        "mon": opening_hour_dict["월"],
-                        "tue": opening_hour_dict["화"],
-                        "wed": opening_hour_dict["수"],
-                        "thu": opening_hour_dict["목"],
-                        "fri": opening_hour_dict["금"],
-                        "sat": opening_hour_dict["토"],
-                        "sun": opening_hour_dict["일"],
-                        "cafe": new_cafe_object.id
-                    })
-                    opening_hour_serializer.is_valid(raise_exception=True)
-                    opening_hour_serializer.save()
-
-            # cafe image 설정
-            if google_place_id:
-                url = "https://maps.googleapis.com/maps/api/place/details/json"
-                params = {"place_id": google_place_id, "key": GOOGLE_PLACE_API_KEY}
-                references = []
+                # 좌표 얻어오기(못구하면 카페 패스)
+                url = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode"
+                params = {
+                    "query": road_address,
+                    "X-NCP-APIGW-API-KEY-ID": NAVER_GEO_KEY_ID,
+                    "X-NCP-APIGW-API-KEY": NAVER_GEO_KEY
+                }
                 try:
                     response = requests.get(url=url, params=params)
                     if response.status_code == 200:
-                        result_json = response.json()
-                        if 'result' in result_json and 'photos' in result_json['result']:
-                            photo_raw_json_list = result_json['result']['photos']
-                            references = [e['photo_reference'] for e in photo_raw_json_list]
+                        addresses = response.json()['addresses']
+                        if addresses:
+                            latitude = addresses[0]['y']
+                            longitude = addresses[0]['x']
+                        else:
+                            continue
                     else:
                         continue
                 except requests.Timeout:
@@ -413,39 +301,157 @@ class CafeDataUpdateAdmin(CsvFileManageAdmin):
                 except requests.RequestException:
                     continue
 
-                url = "https://maps.googleapis.com/maps/api/place/photo"
-                for reference in references:
-                    params = {
-                        "key": GOOGLE_PLACE_API_KEY,
-                        "photo_reference": reference,
-                        "maxwidth": 1200,
-                        "maxheight": 1200
-                    }
+                # congestion area 체크
+                congestion_areas = CongestionArea.objects.filter(
+                    south_west_latitude__lt=latitude,
+                    south_west_longitude__lt=longitude,
+                    north_east_latitude__gt=latitude,
+                    north_east_longitude__gt=longitude
+                )
+                congestion_area_id_list = [congestion_area.id for congestion_area in congestion_areas]
+
+                # brand 체크
+                brand_object = None
+                for brand in Brand.objects.all():
+                    if brand.name in cafe_name:
+                        brand_object = brand
+                        break
+
+                # 카페 data 생성
+                cafe_data = {
+                    "is_visible": True,
+                    "name": cafe_name,
+                    "address": road_address,
+                    "latitude": latitude,
+                    "longitude": longitude,
+                    "point": Point(longitude, latitude, srid=4326),
+                    "congestion_area": congestion_area_id_list,
+                    "google_place_id": google_place_id,
+                    "brand": brand_object.id if brand_object else None,
+                    "district": district_object.id if district_object else None
+                }
+
+                # 중복되는 카페가 있는지 확인후 serializer 생성
+                try:
+                    Cafe.objects.get(name=cafe_name, address=road_address)
+                    continue
+                except Cafe.DoesNotExist:
+                    cafe_serializer = CafeSerializer(data=cafe_data)
+
+                # 카페 object 저장
+                cafe_serializer.is_valid(raise_exception=True)
+                new_cafe_object = cafe_serializer.save()
+
+                # cafe floor 생성
+                current_floor = bottom_floor
+                for floor in range(total_floor):
+                    if current_floor == 0: current_floor += 1
+                    cafe_floor_serializer = CafeFloorSerializer(data={
+                        "floor": current_floor,
+                        "cafe": new_cafe_object.id,
+                        "has_seat": str(current_floor) not in no_seat_floor_list
+                    })
+                    cafe_floor_serializer.is_valid(raise_exception=True)
+                    cafe_floor_serializer.save()
+                    current_floor += 1
+
+                # opening hour 설정
+                if opening_hour_raw_data:
+                    opening_hour_line_list = opening_hour_raw_data.splitlines()
+                    opening_hour_dict = {"월": "", "화": "", "수": "", "목": "", "금": "", "토": "", "일": ""}
+                    for opening_hour_line in opening_hour_line_list:
+                        # 시간에 해당하는 내용을 찾음
+                        last_colon_index = opening_hour_line.rfind(": ")
+                        if last_colon_index != -1:
+                            time_string = opening_hour_line[last_colon_index + 2:]
+                        else:
+                            continue
+
+                        # 요일 정보를 찾음
+                        first_str = opening_hour_line[0]
+                        if first_str == "매":
+                            for key in opening_hour_dict: opening_hour_dict[key] = time_string
+                        elif first_str in opening_hour_dict:
+                            opening_hour_dict[first_str] = time_string
+
+                    # openning hour dict의 유효성 확인
+                    has_data = True
+                    for key in opening_hour_dict:
+                        if not opening_hour_dict[key]:
+                            has_data = False
+                            break
+
+                    # 데이터 정리 및 저장
+                    if has_data:
+                        opening_hour_serializer = OpeningHourSerializer(data={
+                            "mon": opening_hour_dict["월"],
+                            "tue": opening_hour_dict["화"],
+                            "wed": opening_hour_dict["수"],
+                            "thu": opening_hour_dict["목"],
+                            "fri": opening_hour_dict["금"],
+                            "sat": opening_hour_dict["토"],
+                            "sun": opening_hour_dict["일"],
+                            "cafe": new_cafe_object.id
+                        })
+                        opening_hour_serializer.is_valid(raise_exception=True)
+                        opening_hour_serializer.save()
+
+                # cafe image 설정
+                if google_place_id:
+                    url = "https://maps.googleapis.com/maps/api/place/details/json"
+                    params = {"place_id": google_place_id, "key": GOOGLE_PLACE_API_KEY}
+                    references = []
                     try:
                         response = requests.get(url=url, params=params)
                         if response.status_code == 200:
-
-                            temp_file_name = f"temp_{str(uuid.uuid1())}.jpeg"
-                            with open(temp_file_name, 'wb') as file:
-                                for chunk in response.iter_content(1024):
-                                    file.write(chunk)
-                            time.sleep(0.4)
-                            with open(temp_file_name, 'rb') as f:
-                                image = ContentFile(f.read(), name=temp_file_name)
-
-                            cafe_image_serializer = CafeImageSerializer(data={
-                                "cafe": new_cafe_object.id,
-                                "image": image
-                            })
-                            cafe_image_serializer.is_valid(raise_exception=True)
-                            cafe_image_serializer.save()
-                            os.remove(temp_file_name)
+                            result_json = response.json()
+                            if 'result' in result_json and 'photos' in result_json['result']:
+                                photo_raw_json_list = result_json['result']['photos']
+                                references = [e['photo_reference'] for e in photo_raw_json_list]
                         else:
                             continue
                     except requests.Timeout:
                         continue
                     except requests.RequestException:
                         continue
+
+                    url = "https://maps.googleapis.com/maps/api/place/photo"
+                    for reference in references:
+                        params = {
+                            "key": GOOGLE_PLACE_API_KEY,
+                            "photo_reference": reference,
+                            "maxwidth": 1200,
+                            "maxheight": 1200
+                        }
+                        try:
+                            response = requests.get(url=url, params=params)
+                            if response.status_code == 200:
+
+                                temp_file_name = f"temp_{str(uuid.uuid1())}.jpeg"
+                                with open(temp_file_name, 'wb') as file:
+                                    for chunk in response.iter_content(1024):
+                                        file.write(chunk)
+                                time.sleep(0.4)
+                                with open(temp_file_name, 'rb') as f:
+                                    image = ContentFile(f.read(), name=temp_file_name)
+
+                                cafe_image_serializer = CafeImageSerializer(data={
+                                    "cafe": new_cafe_object.id,
+                                    "image": image
+                                })
+                                cafe_image_serializer.is_valid(raise_exception=True)
+                                cafe_image_serializer.save()
+                                os.remove(temp_file_name)
+                            else:
+                                continue
+                        except requests.Timeout:
+                            continue
+                        except requests.RequestException:
+                            continue
+        except Exception as e:
+            logger = logging.getLogger('my')
+            logger.error(e)
+
 
 
 @admin.register(CafePointUpdate)
