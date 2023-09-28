@@ -1,4 +1,3 @@
-import asyncio
 import csv
 import logging
 import os
@@ -32,12 +31,12 @@ class CsvFileManageAdmin(admin.ModelAdmin):
     def get_opened_csv_file(file):
         if LOCAL:
             decoded_file_path = urllib.parse.unquote("/cafejari" + file.url)
-            return open(decoded_file_path, "r", encoding="utf-8-sig")
+            return open(decoded_file_path, "r", encoding="CP949")
         else:
             temp_file_path = f"{MEDIA_ROOT}/temp.csv"
             S3Manager.download_file(path=str(file), filename=temp_file_path)
             time.sleep(1)
-            return open(temp_file_path, "r", encoding="utf-8-sig")
+            return open(temp_file_path, "r", encoding="CP949")
 
 
 @admin.register(DistrictDataUpdate)
