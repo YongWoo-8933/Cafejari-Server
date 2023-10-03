@@ -1,6 +1,13 @@
-from django.contrib import admin
+import os
+import time
+import uuid
 
-from cafe.serializers import CafeSerializer
+import requests
+from django.contrib import admin
+from django.core.files.base import ContentFile
+
+from cafe.serializers import CafeSerializer, CafeImageSerializer
+from cafejari.settings import GOOGLE_PLACE_API_KEY
 from notification.firebase_message import FirebaseMessage
 from notification.models import PushNotificationType
 from request.models import CafeAdditionRequest, CafeInformationSuggestion, WithdrawalRequest, UserMigrationRequest
@@ -26,9 +33,61 @@ class CafeAdditionRequestAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.save()
-        cafe_serializer = CafeSerializer(obj.cafe, data={"is_visible": obj.is_approved}, partial=True)
-        cafe_serializer.is_valid(raise_exception=True)
-        cafe_serializer.save()
+        if obj.is_approved:
+            # 카페 정보 저장
+            cafe_serializer = CafeSerializer(obj.cafe, data={"is_visible": True}, partial=True)
+            cafe_serializer.is_valid(raise_exception=True)
+            cafe_serializer.save()
+
+            # cafe image 설정
+            if obj.google_place_id:
+                url = "https://maps.googleapis.com/maps/api/place/details/json"
+                params = {"place_id": obj.google_place_id, "key": GOOGLE_PLACE_API_KEY}
+                references = []
+                try:
+                    response = requests.get(url=url, params=params)
+                    if response.status_code == 200:
+                        result_json = response.json()
+                        if 'result' in result_json and 'photos' in result_json['result']:
+                            photo_raw_json_list = result_json['result']['photos']
+                            references = [e['photo_reference'] for e in photo_raw_json_list]
+                except Exception:
+                    pass
+
+                url = "https://maps.googleapis.com/maps/api/place/photo"
+                for reference in references:
+                    params = {
+                        "key": GOOGLE_PLACE_API_KEY,
+                        "photo_reference": reference,
+                        "maxwidth": 1200,
+                        "maxheight": 1200
+                    }
+                    try:
+                        response = requests.get(url=url, params=params)
+                        if response.status_code == 200:
+
+                            temp_file_name = f"temp_{str(uuid.uuid1())}.jpeg"
+                            with open(temp_file_name, 'wb') as file:
+                                for chunk in response.iter_content(1024):
+                                    file.write(chunk)
+                            time.sleep(0.4)
+                            with open(temp_file_name, 'rb') as f:
+                                image = ContentFile(f.read(), name=temp_file_name)
+
+                            cafe_image_serializer = CafeImageSerializer(data={
+                                "cafe": obj.id,
+                                "image": image
+                            })
+                            cafe_image_serializer.is_valid(raise_exception=True)
+                            cafe_image_serializer.save()
+                            os.remove(temp_file_name)
+                        else:
+                            continue
+                    except requests.Timeout:
+                        continue
+                    except requests.RequestException:
+                        continue
+
         if obj.is_notified:
             approve_title = "승인" if obj.is_approved else "거절"
             if obj.is_approved:
