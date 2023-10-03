@@ -40,9 +40,9 @@ class CafeAdditionRequestAdmin(admin.ModelAdmin):
             cafe_serializer.save()
 
             # cafe image 설정
-            if obj.google_place_id:
+            if obj.cafe.google_place_id:
                 url = "https://maps.googleapis.com/maps/api/place/details/json"
-                params = {"place_id": obj.google_place_id, "key": GOOGLE_PLACE_API_KEY}
+                params = {"place_id": obj.cafe.google_place_id, "key": GOOGLE_PLACE_API_KEY}
                 references = []
                 try:
                     response = requests.get(url=url, params=params)
@@ -75,7 +75,7 @@ class CafeAdditionRequestAdmin(admin.ModelAdmin):
                                 image = ContentFile(f.read(), name=temp_file_name)
 
                             cafe_image_serializer = CafeImageSerializer(data={
-                                "cafe": obj.id,
+                                "cafe": obj.cafe.id,
                                 "image": image
                             })
                             cafe_image_serializer.is_valid(raise_exception=True)
