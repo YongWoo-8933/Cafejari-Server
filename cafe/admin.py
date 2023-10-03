@@ -88,7 +88,7 @@ class CafeImageInline(admin.TabularInline):
 
 @admin.register(Cafe)
 class CafeAdmin(admin.GeoModelAdmin):
-    list_display = ("id", "name", "floor_count", "district_city", "brand_name", "congestion_area", "address", "is_visible", "is_closed",)
+    list_display = ("id", "name", "floor_count", "district_city", "brand_name", "congestion_area_name", "address", "is_visible", "is_closed",)
     list_filter = ("is_visible", "is_closed", "brand__name", "district__city", "congestion_area__name")
     search_fields = ("name", "address",)
     ordering = ("is_visible", "-is_closed", "name",)
@@ -101,7 +101,7 @@ class CafeAdmin(admin.GeoModelAdmin):
 
     def district_city(self, cafe): return cafe.district.city if cafe.district else None
 
-    def congestion_area(self, cafe): return cafe.congestion_area.name if cafe.congestion_area else None
+    def congestion_area_name(self, cafe): return cafe.congestion_area.name if cafe.congestion_area else None
 
     def brand_name(self, cafe): return cafe.brand.name if cafe.brand else None
     
@@ -111,7 +111,7 @@ class CafeAdmin(admin.GeoModelAdmin):
 
     floor_count.short_description = "층수"
     district_city.short_description = "구역"
-    congestion_area.short_description = "혼잡도 지역"
+    congestion_area_name.short_description = "혼잡도 지역"
     brand_name.short_description = "브랜드"
 
 
