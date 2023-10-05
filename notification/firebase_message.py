@@ -6,17 +6,18 @@ from notification.serializers import PushNotificationSerializer
 class FirebaseMessage:
 
     @staticmethod
-    def push_message(title, body, push_type, user_object):
+    def push_message(title, body, push_type, user_object, save_model):
         try:
             token = user_object.profile.fcm_token
-            serializer = PushNotificationSerializer(data={
-                "title": title,
-                "body": body,
-                "type": push_type,
-                "user": user_object.id
-            })
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+            if save_model:
+                serializer = PushNotificationSerializer(data={
+                    "title": title,
+                    "body": body,
+                    "type": push_type,
+                    "user": user_object.id
+                })
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
             if token:
                 message = messaging.Message(
                     notification=messaging.Notification(
@@ -30,19 +31,20 @@ class FirebaseMessage:
             pass
 
     @staticmethod
-    def push_messages(title, body, push_type, user_object_list):
+    def push_messages(title, body, push_type, user_object_list, save_model):
         message_list = []
         user_id_list = []
         for user_object in user_object_list:
             user_id_list.append(user_object.id)
-            serializer = PushNotificationSerializer(data={
-                "title": title,
-                "body": body,
-                "type": push_type,
-                "user": user_object.id
-            })
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+            if save_model:
+                serializer = PushNotificationSerializer(data={
+                    "title": title,
+                    "body": body,
+                    "type": push_type,
+                    "user": user_object.id
+                })
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
             try:
                 token = user_object.profile.fcm_token
                 if token:

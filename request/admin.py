@@ -98,7 +98,8 @@ class CafeAdditionRequestAdmin(admin.ModelAdmin):
                 title=f"카페 등록요청 {approve_title} 알림",
                 body=approve_body,
                 push_type=PushNotificationType.Etc.value,
-                user_object=obj.user
+                user_object=obj.user,
+                save_model=True
             )
 
 

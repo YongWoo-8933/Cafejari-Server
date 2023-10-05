@@ -23,7 +23,8 @@ class PushNotificationAdmin(admin.ModelAdmin):
             title=obj.title,
             body=obj.body,
             push_type=obj.type,
-            user_object=obj.user
+            user_object=obj.user,
+            save_model=False
         )
 
     def user_name(self, notification): return notification.user.profile.nickname if notification.user.profile else None
