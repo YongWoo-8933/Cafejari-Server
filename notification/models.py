@@ -16,8 +16,10 @@ class PushNotification(models.Model):
     body = models.TextField()
     pushed_at = models.DateTimeField(auto_now_add=True)
     type = models.CharField(choices=((push_type.value, push_type.value) for push_type in PushNotificationType))
-    user = models.ManyToManyField(
+    is_read = models.BooleanField(default=False)
+    user = models.ForeignKey(
         'user.User',
+        on_delete=models.CASCADE,
         related_name="push_notification",
         db_column="user"
     )

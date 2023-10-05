@@ -1,12 +1,11 @@
 from drf_yasg.utils import swagger_auto_schema, no_body
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from error import ServiceError
 from notification.models import PushNotification
 from notification.serializers import PushNotificationSerializer
-from user.models import User
 from utils import UserListDestroyViewSet, AUTHORIZATION_MANUAL_PARAMETER
 
 
@@ -33,22 +32,19 @@ class PushNotificationViewSet(UserListDestroyViewSet):
         manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
     )
     def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
+        return super(PushNotificationViewSet, self).destroy(request, *args, **kwargs)
 
-        # 요청 주인 여부 검사
-        try:
-            instance.user.get(id=request.user.id)
-        except User.DoesNotExist:
-            return ServiceError.unauthorized_user_response()
-
-        # user list에서 제외
-        user_object_list = instance.user.exclude(id=request.user.id)
-        if not user_object_list:
-            self.perform_destroy(instance)
-        else:
-            user_id_list = [obj.id for obj in user_object_list]
-            serializer = self.get_serializer(instance, data={"user": user_id_list}, partial=True)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    @swagger_auto_schema(
+        operation_id='알림 확인',
+        operation_description='알림 확인 업데이트',
+        request_body=no_body,
+        responses={201: PushNotificationSerializer()},
+        manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
+    )
+    @action(methods=['update'], detail=True)
+    def read(self, request):
+        notification_object = self.get_object()
+        serializer = self.get_serializer(notification_object, data={"is_read": True}, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED)
