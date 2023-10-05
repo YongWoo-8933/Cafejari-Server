@@ -27,6 +27,7 @@ def location_image_upload_path(instance, filename): return f"cafe/location/{inst
 class Location(models.Model):
     name = models.CharField(max_length=31)
     image = models.ImageField(upload_to=location_image_upload_path)
+    is_visible = models.BooleanField(default=True)
     latitude = models.FloatField()
     longitude = models.FloatField()
 

@@ -358,7 +358,7 @@ class LocationViewSet(
         responses={200: LocationResponseSerializer(many=True)}
     )
     def list(self, request, *args, **kwargs):
-        return Response(data=self.get_serializer(self.queryset, many=True).data, status=status.HTTP_200_OK)
+        return Response(data=self.get_serializer(self.queryset.filter(is_visible=True), many=True).data, status=status.HTTP_200_OK)
 
 
 class CATIViewSet(

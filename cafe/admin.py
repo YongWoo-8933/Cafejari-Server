@@ -19,8 +19,9 @@ class DistrictAdmin(admin.ModelAdmin):
 
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "image_tag", "latitude", "longitude")
+    list_display = ("id", "name", "image_tag", "is_visible", "latitude", "longitude")
     search_fields = ("name",)
+    list_filter = ("is_visible",)
     ordering = ("name",)
     save_as = True
     preserve_filters = True
