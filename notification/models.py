@@ -21,7 +21,10 @@ class PushNotification(models.Model):
         'user.User',
         on_delete=models.CASCADE,
         related_name="push_notification",
-        db_column="user"
+        db_column="user",
+        null=True,
+        blank=True,
+        default=None
     )
 
     class Meta:
