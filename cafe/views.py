@@ -1,6 +1,5 @@
 import datetime
 
-from django.contrib.gis.db.models import PointField
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point, GEOSGeometry
 from django.db.models import Q, F
@@ -20,8 +19,7 @@ from cafe.serializers import CafeResponseSerializer, \
 from cafe.swagger_serializers import SwaggerOccupancyRegistrationRequestSerializer, SwaggerCafeResponseSerializer, \
     SwaggerCATIRequestSerializer
 from cafe.utils import PointCalculator
-from cafejari.settings import UPDATE_COOLTIME, OCCUPANCY_INSUFFICIENT_THRESHOLD, OCCUPANCY_ENOUGH_THRESHOLD, \
-    ENOUGH_DATA_POINT, INSUFFICIENT_DATA_POINT, NO_DATA_POINT
+from cafejari.settings import UPDATE_COOLTIME
 from error import ServiceError
 from user.serializers import ProfileSerializer
 from utils import AUTHORIZATION_MANUAL_PARAMETER
@@ -72,10 +70,10 @@ class CafeViewSet(
     def list(self, request, *args, **kwargs):
         latitude = float(self.request.query_params.get('latitude') or 37.55649747287372)
         longitude = float(self.request.query_params.get('longitude') or 126.93710302643744)
-        zoom_level = int(self.request.query_params.get('zoom_level') or 3)
+        zoom_level = int(self.request.query_params.get('zoom_level') or 1)
 
-        latitude_bound = 0.01 * zoom_level
-        longitude_bound = 0.012 * zoom_level
+        latitude_bound = 0.01 * 0.75 * zoom_level
+        longitude_bound = 0.012 * 0.75 * zoom_level
 
         queryset = self.queryset.filter(
             is_visible=True,
