@@ -35,6 +35,7 @@ class PushNotificationViewSet(UserListDestroyViewSet):
         return super(PushNotificationViewSet, self).destroy(request, *args, **kwargs)
 
     @swagger_auto_schema(
+        method="UPDATE",
         operation_id='알림 확인',
         operation_description='알림 확인 업데이트',
         request_body=no_body,
