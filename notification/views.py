@@ -43,7 +43,7 @@ class PushNotificationViewSet(UserListDestroyViewSet):
         manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
     )
     @action(methods=['put'], detail=True)
-    def read(self, request):
+    def read(self, request, pk):
         notification_object = self.get_object()
         serializer = self.get_serializer(notification_object, data={"is_read": True}, partial=True)
         serializer.is_valid(raise_exception=True)
