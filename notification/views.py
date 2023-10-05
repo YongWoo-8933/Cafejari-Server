@@ -35,14 +35,14 @@ class PushNotificationViewSet(UserListDestroyViewSet):
         return super(PushNotificationViewSet, self).destroy(request, *args, **kwargs)
 
     @swagger_auto_schema(
-        method="UPDATE",
+        method="PUT",
         operation_id='알림 확인',
         operation_description='알림 확인 업데이트',
         request_body=no_body,
         responses={201: PushNotificationSerializer()},
         manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
     )
-    @action(methods=['update'], detail=True)
+    @action(methods=['put'], detail=True)
     def read(self, request):
         notification_object = self.get_object()
         serializer = self.get_serializer(notification_object, data={"is_read": True}, partial=True)
