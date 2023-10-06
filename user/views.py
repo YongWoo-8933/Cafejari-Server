@@ -136,7 +136,7 @@ class UserViewSet(GenericViewSet):
                 if gender:
                     profile_data["gender"] = 0 if gender == "male" else 1
                 if phone_number:
-                    profile_data["phone_number"] = phone_number.replace("-", "").replace("+82 ", "")
+                    profile_data["phone_number"] = phone_number.replace("-", "")[-8:]
 
             profile_serializer = ProfileSerializer(data=profile_data)
             profile_serializer.is_valid(raise_exception=True)
