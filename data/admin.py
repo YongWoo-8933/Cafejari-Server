@@ -178,7 +178,8 @@ class CongestionUpdateAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.save()
-        update_congestion_area()
+        time.sleep(0.4)
+        Thread(target=update_congestion_area).start()
 
 
 @admin.register(NicknameAdjectiveDataUpdate)
@@ -463,6 +464,7 @@ class CafePointUpdateAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.save()
+        time.sleep(0.4)
         Thread(target=self.save_cafe_point).start()
 
     def save_cafe_point(self):
