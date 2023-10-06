@@ -191,9 +191,10 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # cronjab 설정
 CRONJOBS = [
-    ('*/30 * * * *', 'cron.congestion.update_congestion_area_cron'), # 매일 30분마다 업데이트
-    # ('40 7 * * *', 'cron.item.update_item_list_cron'), # 매일 새벽 4시 업데이트
-    ('40 7 * * *', 'cron.item.update_item_list_cron'),
+    # ('*/30 0-14 * * *', 'cron.congestion.update_congestion_area_cron'), # 매일 30분마다 업데이트
+    # ('0 19 * * *', 'cron.item.update_item_list_cron'), # 매일 새벽 4시 업데이트
+    ('*/10 0-14 * * *', 'cron.congestion.update_congestion_area_cron'), # 매일 30분마다 업데이트
+    ('48 7 * * *', 'cron.item.update_item_list_cron'), # 매일 새벽 4시 업데이트
 ]
 
 # s3
