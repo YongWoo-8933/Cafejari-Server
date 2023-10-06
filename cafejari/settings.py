@@ -191,7 +191,8 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # cronjab 설정
 CRONJOBS = [
-    ('25 7 * * *', 'cron.congestion.update_congestion_area'),
+    ('25 7 * * *', 'cron.congestion.update_congestion_area_cron'),
+    ('30 7 * * *', 'cron.item.update_item_list_cron'),
 ]
 
 # s3

@@ -1,4 +1,5 @@
 import time
+from threading import Thread
 
 import requests
 
@@ -6,6 +7,8 @@ from cafe.models import CongestionArea
 from cafe.serializers import CongestionAreaSerializer
 from cafejari.settings import SEOUL_CITY_DATA_API_KEY
 
+def update_congestion_area_cron():
+    Thread(target=update_congestion_area).start()
 
 def update_congestion_area():
     congestion_area_list = CongestionArea.objects.all()

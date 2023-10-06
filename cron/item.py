@@ -1,5 +1,6 @@
 import os
 import time
+from threading import Thread
 
 import requests
 from django.core.files.base import ContentFile
@@ -10,6 +11,8 @@ from shop.giftishow_biz import GiftishowBiz
 from shop.models import Item
 from shop.serializers import ItemSerializer
 
+def update_item_list_cron():
+    Thread(target=update_item_list).start()
 
 def update_item_list():
     response = GiftishowBiz.get_items()
