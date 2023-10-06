@@ -193,8 +193,8 @@ SOCIALACCOUNT_PROVIDERS = {
 CRONJOBS = [
     # ('*/30 0-14 * * *', 'cron.congestion.update_congestion_area_cron'), # 매일 30분마다 업데이트
     # ('0 19 * * *', 'cron.item.update_item_list_cron'), # 매일 새벽 4시 업데이트
-    ('*/10 0-14 * * *', 'cron.congestion.update_congestion_area_cron'), # 매일 30분마다 업데이트
-    ('59 7 * * *', 'cron.item.update_item_list_cron'), # 매일 새벽 4시 업데이트
+    ('*/10 0-14 * * *', 'cron.congestion.update_congestion_area'), # 매일 30분마다 업데이트
+    ('8 8 * * *', 'cron.item.update_item_list'), # 매일 새벽 4시 업데이트
     ('5 15 * * *', 'cron.daily_activity_stack.clear_daily_activity_stack'), # 매일 자정 5분에 업데이트
 ]
 
