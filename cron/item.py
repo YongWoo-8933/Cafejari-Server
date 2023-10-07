@@ -1,7 +1,6 @@
 import logging
 import os
 import time
-from threading import Thread
 
 import requests
 from django.core.files.base import ContentFile

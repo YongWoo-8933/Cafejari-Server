@@ -20,7 +20,7 @@ def update_cafe_vip():
                 vip_dict[cafe_id][user_id] = 1
         # dict에 해당 카페가 추가되어 있지 않음
         else:
-            vip_dict[cafe_id] = {user_id: 0}
+            vip_dict[cafe_id] = {user_id: 1}
     for cafe_id, user_dict in vip_dict.items():
         for user_id, count in user_dict.items():
             try:

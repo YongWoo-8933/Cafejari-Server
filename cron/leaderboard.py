@@ -46,7 +46,7 @@ def update_leaders():
         for log in this_week_occupancy_rate_update_log_queryset:
             week_ranker_dict[log.user.id] += 1
         # 랭커 serializer 저장
-        for user_id, count in total_ranker_dict:
+        for user_id, count in total_ranker_dict.items():
             try:
                 user = TotalSharingRanker.objects.get(user__id=user_id)
                 serializer = TotalSharingRankerSerializer(user, data={"sharing_count": count}, partial=True)
@@ -54,11 +54,11 @@ def update_leaders():
                 serializer = TotalSharingRankerSerializer(data={"user": user_id, "sharing_count": count})
             serializer.is_valid(raise_exception=True)
             serializer.save()
-        for user_id, count in month_ranker_dict:
+        for user_id, count in month_ranker_dict.items():
             serializer = MonthSharingRankerSerializer(data={"user": user_id, "sharing_count": count})
             serializer.is_valid(raise_exception=True)
             serializer.save()
-        for user_id, count in week_ranker_dict:
+        for user_id, count in week_ranker_dict.items():
             serializer = WeekSharingRankerSerializer(data={"user": user_id, "sharing_count": count})
             serializer.is_valid(raise_exception=True)
             serializer.save()
