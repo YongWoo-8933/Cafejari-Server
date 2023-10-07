@@ -195,7 +195,7 @@ CRONJOBS = [
     ('0 19 * * *', 'cron.item.update_item_list'), # 매일 새벽 4시 업데이트
     ('5 15 * * *', 'cron.daily_activity_stack.clear_daily_activity_stack'), # 매일 자정 5분에 업데이트
     # ('30 15 * * *', 'cron.cafe_vip.update_cafe_vip'), # 매일 자정 30분에 업데이트
-    ('20 9 * * *', 'cron.cafe_vip.update_cafe_vip'), # 매일 자정 30분에 업데이트
+    ('24 9 * * *', 'cron.cafe_vip.update_cafe_vip'), # 매일 자정 30분에 업데이트
 ]
 
 # s3
