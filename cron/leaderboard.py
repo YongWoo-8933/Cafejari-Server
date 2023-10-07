@@ -1,32 +1,62 @@
+import datetime
+from collections import defaultdict
+
+from pytz import timezone
 
 from cafe.models import OccupancyRateUpdateLog
+from leaderboard.models import WeekSharingRanker, MonthSharingRanker, TotalSharingRanker
+from leaderboard.serializers import TotalSharingRankerSerializer, MonthSharingRankerSerializer, \
+    WeekSharingRankerSerializer
 
 
-# def update_cafe_vip():
-#     occupancy_rate_update_log_queryset = OccupancyRateUpdateLog.objects.all()
-#     vip_dict = {}
-#     for occupancy_rate_update_log in occupancy_rate_update_log_queryset:
-#         if occupancy_rate_update_log.cafe_floor is None: continue
-#         if occupancy_rate_update_log.cafe_floor.user is None: continue
-#         cafe_id = occupancy_rate_update_log.cafe_floor.cafe.id
-#         user_id = occupancy_rate_update_log.cafe_floor.user.id
-#         # dict에 해당 카페가 추가되어 있음
-#         if cafe_id in vip_dict:
-#             # 유저의 해당 카페에서의 활동이 존재하면 카운트 +1
-#             if user_id in vip_dict[cafe_id]:
-#                 vip_dict[cafe_id][user_id] = vip_dict[cafe_id][user_id] + 1
-#             # 유저의 해당 카페에서의 활동이 없으면 새로 만듦
-#             else:
-#                 vip_dict[cafe_id][user_id] = 0
-#         # dict에 해당 카페가 추가되어 있지 않음
-#         else:
-#             vip_dict[cafe_id] = {user_id: 0}
-#     for cafe_id, user_dict in vip_dict.items():
-#         for user_id, count in user_dict.items():
-#             try:
-#                 cafe_vip_object = CafeVIP.objects.get(cafe__id=cafe_id, user__id=user_id)
-#                 serializer = CafeVIPSerializer(cafe_vip_object, data={"update_count": count}, partial=True)
-#             except CafeVIP.DoesNotExist:
-#                 serializer = CafeVIPSerializer(data={"cafe": cafe_id, "user": user_id, "update_count": count})
-#             serializer.is_valid(raise_exception=True)
-#             serializer.save()
+def update_leaders():
+    # ranker clear
+    WeekSharingRanker.objects.all().delete()
+    MonthSharingRanker.objects.all().delete()
+    # datetime 세팅
+    now = datetime.datetime.now(timezone('Asia/Seoul'))
+    first_datetime_midnight_of_this_month = datetime.datetime(
+        year=now.year, month=now.month, day=1, hour=0, minute=0, second=1, tzinfo=timezone('Asia/Seoul')
+    )
+    first_datetime_of_this_week = now - datetime.timedelta(days=now.weekday())
+    first_datetime_midnight_of_this_week = datetime.datetime(
+        year=first_datetime_of_this_week.year, month=first_datetime_of_this_week.month,
+        day=first_datetime_of_this_week.day, hour=0, minute=0, second=1, tzinfo=timezone('Asia/Seoul')
+    )
+    # total, month, week queryset 세팅
+    occupancy_rate_update_log_queryset = OccupancyRateUpdateLog.objects.filter(
+        user__isnull=False, cafe_floor__isnull=False
+    )
+    this_month_occupancy_rate_update_log_queryset = occupancy_rate_update_log_queryset.filter(
+        update__gt=first_datetime_midnight_of_this_month
+    )
+    this_week_occupancy_rate_update_log_queryset = this_month_occupancy_rate_update_log_queryset.filter(
+        update__gt=first_datetime_midnight_of_this_week
+    )
+    # 랭커 dict 정리
+    total_ranker_dict = defaultdict(int)
+    month_ranker_dict = defaultdict(int)
+    week_ranker_dict = defaultdict(int)
+    for log in occupancy_rate_update_log_queryset:
+        total_ranker_dict[log.user.id] += 1
+    for log in this_month_occupancy_rate_update_log_queryset:
+        month_ranker_dict[log.user.id] += 1
+    for log in this_week_occupancy_rate_update_log_queryset:
+        week_ranker_dict[log.user.id] += 1
+    # 랭커 serializer 저장
+    for user_id, count in total_ranker_dict:
+        try:
+            user = TotalSharingRanker.objects.get(user__id=user_id)
+            serializer = TotalSharingRankerSerializer(user, data={"sharing_count": count}, partial=True)
+        except TotalSharingRanker.DoesNotExist:
+            serializer = TotalSharingRankerSerializer(data={"user": user_id, "sharing_count": count})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+    for user_id, count in month_ranker_dict:
+        serializer = MonthSharingRankerSerializer(data={"user": user_id, "sharing_count": count})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+    for user_id, count in week_ranker_dict:
+        serializer = WeekSharingRankerSerializer(data={"user": user_id, "sharing_count": count})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()

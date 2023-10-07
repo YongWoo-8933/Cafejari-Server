@@ -10,9 +10,9 @@ def update_cafe_vip():
         vip_dict = {}
         for occupancy_rate_update_log in occupancy_rate_update_log_queryset:
             if occupancy_rate_update_log.cafe_floor is None: continue
-            if occupancy_rate_update_log.cafe_floor.user is None: continue
+            if occupancy_rate_update_log.user is None: continue
             cafe_id = occupancy_rate_update_log.cafe_floor.cafe.id
-            user_id = occupancy_rate_update_log.cafe_floor.user.id
+            user_id = occupancy_rate_update_log.user.id
             # dict에 해당 카페가 추가되어 있음
             if cafe_id in vip_dict:
                 # 유저의 해당 카페에서의 활동이 존재하면 카운트 +1
