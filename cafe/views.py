@@ -73,7 +73,7 @@ class CafeViewSet(
         zoom_level = int(self.request.query_params.get('zoom_level') or 1)
 
         latitude_bound = 0.01 * 0.3 * zoom_level
-        longitude_bound = 0.012 * 0.65 * zoom_level
+        longitude_bound = 0.012 * 0.75 * zoom_level
 
         queryset = self.queryset.filter(
             is_visible=True,
