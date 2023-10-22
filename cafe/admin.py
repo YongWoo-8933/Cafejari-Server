@@ -204,3 +204,15 @@ class DailyActivityStackAdmin(admin.ModelAdmin):
 
     nickname.short_description = "닉네임"
     cafe_name_floor.short_description = "카페/층"
+
+@admin.register(OpeningHour)
+class OpeningHourAdmin(admin.ModelAdmin):
+    list_display = ("id", "cafe_name", "mon", "tue", "wed", "thu", "fri", "sat", "sun")
+    search_fields = ("cafe__name",)
+    ordering = ("mon",)
+    save_as = True
+    preserve_filters = True
+
+    def cafe_name(self, obj): return obj.cafe.name if obj.cafe else None
+
+    cafe_name.short_description = "카페"
