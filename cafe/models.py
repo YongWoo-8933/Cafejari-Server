@@ -217,6 +217,23 @@ class OpeningHour(models.Model):
     fri = models.CharField(max_length=31)
     sat = models.CharField(max_length=31)
     sun = models.CharField(max_length=31)
+
+    mon_opening_time = models.TimeField(default=None, null=True, blank=True)
+    tue_opening_time = models.TimeField(default=None, null=True, blank=True)
+    wed_opening_time = models.TimeField(default=None, null=True, blank=True)
+    thu_opening_time = models.TimeField(default=None, null=True, blank=True)
+    fri_opening_time = models.TimeField(default=None, null=True, blank=True)
+    sat_opening_time = models.TimeField(default=None, null=True, blank=True)
+    sun_opening_time = models.TimeField(default=None, null=True, blank=True)
+
+    mon_closing_time = models.TimeField(default=None, null=True, blank=True)
+    tue_closing_time = models.TimeField(default=None, null=True, blank=True)
+    wed_closing_time = models.TimeField(default=None, null=True, blank=True)
+    thu_closing_time = models.TimeField(default=None, null=True, blank=True)
+    fri_closing_time = models.TimeField(default=None, null=True, blank=True)
+    sat_closing_time = models.TimeField(default=None, null=True, blank=True)
+    sun_closing_time = models.TimeField(default=None, null=True, blank=True)
+
     cafe = models.OneToOneField(
         'Cafe',
         on_delete=models.CASCADE,
