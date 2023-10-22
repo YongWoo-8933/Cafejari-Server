@@ -211,6 +211,7 @@ class OpeningHourAdmin(admin.ModelAdmin):
     search_fields = ("cafe__name",)
     ordering = ("mon",)
     save_as = True
+    save_on_top = True
     preserve_filters = True
 
     def cafe_name(self, obj): return obj.cafe.name if obj.cafe else None
