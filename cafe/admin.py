@@ -91,7 +91,7 @@ class CafeImageInline(admin.TabularInline):
 @admin.register(Cafe)
 class CafeAdmin(admin.GeoModelAdmin):
     list_display = ("id", "name", "floor_count", "is_opened", "district_city", "brand_name", "congestion_area_name", "address", "is_visible", "is_closed",)
-    list_filter = ("is_visible", "is_closed", "brand__name", "district__city", "district__gu", "district__dong", "congestion_area__name")
+    list_filter = ("is_visible", "is_opened", "is_closed", "brand__name", "district__city", "district__gu", "district__dong", "congestion_area__name")
     search_fields = ("name", "address",)
     ordering = ("is_visible", "-is_closed", "name",)
     inlines = (OpeningHourInline, CafeFloorInline, CafeImageInline,)
