@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+import datetime
 
 from django.db.models import Avg
 from rest_framework import serializers
@@ -192,8 +192,13 @@ class CafeFloorCafeRepresentationSerializer(CafeFloorSerializer):
 
     @staticmethod
     def get_recent_updated_log(obj):
+        # 카페 영업시간이 끝났으면 혼잡도 표시를 하지 않음
+        if obj.cafe.is_opened:
+            timedelta = datetime.timedelta(hours=RECENT_HOUR)
+        else:
+            timedelta = datetime.timedelta(milliseconds=1)
         filtered_logs = obj.occupancy_rate_update_log.filter(
-            update__gte=(datetime.now() - timedelta(hours=RECENT_HOUR))
+            update__gte=(datetime.datetime.now() - timedelta)
         ).order_by("-update")
         serializer = OccupancyRateUpdateLogCafeFloorRepresentationSerializer(filtered_logs, many=True, read_only=True)
         return serializer.data

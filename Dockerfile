@@ -1,5 +1,5 @@
 # ubuntu 환경 설정(ssh 연결 필요할때)
-FROM ubuntu/python3114/ssh:latest
+FROM ubuntu/python3115/ssh/gdal:latest
 
 # amazonlinux 환경 설정(실제)
 #FROM amazonlinux

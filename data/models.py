@@ -117,3 +117,33 @@ class CafePointUpdate(models.Model):
         db_table_comment = '각 카페의 좌표에 따라 point값 지정'
         app_label = 'data'
         ordering = ['-last_update']
+
+
+class OpeningHoursUpdate(models.Model):
+    last_update = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'data_opening_hours_update'
+        db_table_comment = '카페 영업시간 정보의 string으로부터 time을 추출해 저장'
+        app_label = 'data'
+        ordering = ['-last_update']
+
+
+class CafeOpeningUpdate(models.Model):
+    last_update = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'data_cafe_opening_update'
+        db_table_comment = '카페 영업시간 정보에 따라 영업중인지 여부 업데이트'
+        app_label = 'data'
+        ordering = ['-last_update']
+
+
+class OccupancyPredictionUpdate(models.Model):
+    last_update = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'data_occupancy_prediction_update'
+        db_table_comment = '카페 예상 혼잡도 저장'
+        app_label = 'data'
+        ordering = ['-last_update']

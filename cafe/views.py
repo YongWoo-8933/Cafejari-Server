@@ -2,7 +2,7 @@ import datetime
 
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point, GEOSGeometry
-from django.db.models import Q, F
+from django.db.models import Q
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema, no_body
 from rest_framework import mixins, status
@@ -20,6 +20,7 @@ from cafe.swagger_serializers import SwaggerOccupancyRegistrationRequestSerializ
     SwaggerCATIRequestSerializer
 from cafe.utils import PointCalculator
 from cafejari.settings import UPDATE_COOLTIME
+from cron.occupancy_prediction import is_occupancy_update_possible
 from error import ServiceError
 from user.serializers import ProfileSerializer
 from utils import AUTHORIZATION_MANUAL_PARAMETER
@@ -238,6 +239,14 @@ class OccupancyRateUpdateLogViewSet(
         except CafeFloor.DoesNotExist:
             return ServiceError.no_cafe_floor_response()
 
+        # 혼잡도 업데이트 금지시간 확인
+        if not is_occupancy_update_possible():
+            return ServiceError.update_forbidden_time_response()
+
+        # 카페 오픈 유무 확인
+        if not cafe_floor_object.cafe.is_opened:
+            return ServiceError.update_forbidden_time_response()
+
         # occupancy_rate_update_log 작성
         saved_object = self.save_log(occupancy_rate=occupancy_rate, cafe_floor_id=cafe_floor_id, user_id=None, point=0)
 
@@ -262,6 +271,14 @@ class OccupancyRateUpdateLogViewSet(
                 return ServiceError.no_cafe_seat_response()
         except CafeFloor.DoesNotExist:
             return ServiceError.no_cafe_floor_response()
+
+        # 혼잡도 업데이트 금지시간 확인
+        if not is_occupancy_update_possible():
+            return ServiceError.update_forbidden_time_response()
+
+        # 카페 오픈 유무 확인
+        if not cafe_floor_object.cafe.is_opened:
+            return ServiceError.cafe_closed_response()
 
         # 포인트 상세 로직
         now = datetime.datetime.now()

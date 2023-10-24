@@ -55,7 +55,7 @@ services:
     command: >
       sh -c "
           python3 manage.py collectstatic &&
-          python3 manage.py makemigrations && 
+          python3 manage.py makemigrations &&
           python3 manage.py migrate &&
           python3 manage.py crontab add &&
           tail -f /dev/null"
@@ -71,7 +71,7 @@ services:
       - ./media/:/cafejari/media
 
   db:
-    image: postgres
+    image: postgis/postgis
     container_name: postgresql
     restart: always
     environment:

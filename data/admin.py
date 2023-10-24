@@ -1,25 +1,30 @@
 import csv
+import datetime
 import logging
 import os
 import time
 import urllib.parse
 import uuid
-from threading import Thread
-
+import pytz
 import requests
+
+from threading import Thread
 from django.contrib import admin
 from django.contrib.gis.geos import Point
 
 from django.core.files.base import ContentFile
 
-from cafe.models import District, Brand, CongestionArea, Cafe
+from cafe.models import District, Brand, CongestionArea, Cafe, OpeningHour
 from cafe.serializers import DistrictSerializer, BrandSerializer, CongestionAreaSerializer, CafeSerializer, \
     CafeFloorSerializer, OpeningHourSerializer, CafeImageSerializer
-from cafejari.settings import LOCAL, MEDIA_ROOT, NAVER_GEO_KEY_ID, NAVER_GEO_KEY, GOOGLE_PLACE_API_KEY
+from cafejari.settings import LOCAL, MEDIA_ROOT, NAVER_GEO_KEY_ID, NAVER_GEO_KEY, GOOGLE_PLACE_API_KEY, TIME_ZONE
+from cron.cafe_opening import update_cafe_opening
 from cron.congestion import update_congestion_area
 from cron.item import update_item_list
+from cron.occupancy_prediction import predict_occupancy
 from data.models import DistrictDataUpdate, ItemDataUpdate, CongestionDataUpdate, BrandDataUpdate, \
-    CongestionAreaDataUpdate, NicknameAdjectiveDataUpdate, NicknameNounDataUpdate, CafeDataUpdate, CafePointUpdate
+    CongestionAreaDataUpdate, NicknameAdjectiveDataUpdate, NicknameNounDataUpdate, CafeDataUpdate, CafePointUpdate, \
+    OpeningHoursUpdate, OccupancyPredictionUpdate, CafeOpeningUpdate
 from user.models import NicknameAdjective, NicknameNoun
 from user.serializers import NicknameAdjectiveSerializer, NicknameNounSerializer
 from utils import S3Manager
@@ -28,15 +33,15 @@ from utils import S3Manager
 class CsvFileManageAdmin(admin.ModelAdmin):
 
     @staticmethod
-    def get_opened_csv_file(file):
+    def get_opened_csv_file(file, encoding_type="UTF8"):
         if LOCAL:
             decoded_file_path = urllib.parse.unquote("/cafejari" + file.url)
-            return open(decoded_file_path, "r", encoding="CP949")
+            return open(decoded_file_path, "r", encoding=encoding_type)
         else:
             temp_file_path = f"{MEDIA_ROOT}/temp.csv"
             S3Manager.download_file(path=str(file), filename=temp_file_path)
             time.sleep(1)
-            return open(temp_file_path, "r", encoding="CP949")
+            return open(temp_file_path, "r", encoding=encoding_type)
 
 
 @admin.register(DistrictDataUpdate)
@@ -260,7 +265,7 @@ class CafeDataUpdateAdmin(CsvFileManageAdmin):
 
     def save_cafe_data(self, obj):
         try:
-            csv_file = self.get_opened_csv_file(file=obj.cafe_csv_file)
+            csv_file = self.get_opened_csv_file(file=obj.cafe_csv_file, encoding_type="CP949")
             reader = csv.reader(csv_file)
 
             # district 체크
@@ -477,3 +482,93 @@ class CafePointUpdateAdmin(admin.ModelAdmin):
             )
             serializer.is_valid(raise_exception=True)
             serializer.save()
+
+
+
+@admin.register(OpeningHoursUpdate)
+class OpeningHoursUpdateAdmin(admin.ModelAdmin):
+    list_display = ("id", "last_update",)
+    date_hierarchy = "last_update"
+    ordering = ("-last_update",)
+    save_as = True
+    preserve_filters = True
+
+    def save_model(self, request, obj, form, change):
+        obj.save()
+        time.sleep(0.4)
+        Thread(target=self.save_opening_hours).start()
+
+    @staticmethod
+    def parse_hours(opening_hour_text):
+        if "정보없음" in opening_hour_text:
+            return None, None
+        elif "휴무" in opening_hour_text:
+            return datetime.time(2, 0, 0), datetime.time(2, 0, 10)
+        else:
+            try:
+                opening_hour = int(opening_hour_text[:2])
+                opening_minute = int(opening_hour_text[3:5])
+                closing_hour = int(opening_hour_text[8:10])
+                closing_minute = int(opening_hour_text[11:13])
+                if closing_hour == 24:
+                    closing_hour = 23
+                    closing_minute = 59
+                tz = pytz.timezone(TIME_ZONE)
+                return datetime.time(opening_hour, opening_minute, 0, tzinfo=tz), datetime.time(closing_hour, closing_minute, 0, tzinfo=tz)
+            except IndexError:
+                logger = logging.getLogger('my')
+                logger.error(f"IndexError: 문자열의 범위를 벗어났습니다. {opening_hour_text}")
+                return None, None
+
+    def save_opening_hours(self):
+        opening_hour_queryset = OpeningHour.objects.all()
+        for opening_hour_object in opening_hour_queryset:
+            data = {}
+            if opening_hour_object.mon:
+                data["mon_opening_time"], data["mon_closing_time"] = self.parse_hours(opening_hour_object.mon)
+            if opening_hour_object.tue:
+                data["tue_opening_time"], data["tue_closing_time"] = self.parse_hours(opening_hour_object.tue)
+            if opening_hour_object.wed:
+                data["wed_opening_time"], data["wed_closing_time"] = self.parse_hours(opening_hour_object.wed)
+            if opening_hour_object.thu:
+                data["thu_opening_time"], data["thu_closing_time"] = self.parse_hours(opening_hour_object.thu)
+            if opening_hour_object.fri:
+                data["fri_opening_time"], data["fri_closing_time"] = self.parse_hours(opening_hour_object.fri)
+            if opening_hour_object.sat:
+                data["sat_opening_time"], data["sat_closing_time"] = self.parse_hours(opening_hour_object.sat)
+            if opening_hour_object.sun:
+                data["sun_opening_time"], data["sun_closing_time"] = self.parse_hours(opening_hour_object.sun)
+
+            serializer = OpeningHourSerializer(opening_hour_object, data=data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+
+
+@admin.register(CafeOpeningUpdate)
+class CafeOpeningUpdateAdmin(admin.ModelAdmin):
+    list_display = ("id", "last_update",)
+    date_hierarchy = "last_update"
+    ordering = ("-last_update",)
+    save_as = True
+    preserve_filters = True
+
+    def save_model(self, request, obj, form, change):
+        obj.save()
+        time.sleep(0.4)
+        Thread(target=update_cafe_opening).start()
+
+
+
+@admin.register(OccupancyPredictionUpdate)
+class OccupancyPredictionUpdateAdmin(admin.ModelAdmin):
+    list_display = ("id", "last_update",)
+    date_hierarchy = "last_update"
+    ordering = ("-last_update",)
+    save_as = True
+    preserve_filters = True
+
+    def save_model(self, request, obj, form, change):
+        obj.save()
+        time.sleep(0.4)
+        Thread(target=predict_occupancy).start()

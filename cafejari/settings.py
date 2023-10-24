@@ -128,8 +128,12 @@ MIDDLEWARE = [
 # Cafejari 앱 설정
 RECENT_HOUR = 2  # 몇시간 전 업데이트 로그까지 가져올건지
 UPDATE_COOLTIME = 10  # 혼잡도 업데이트 쿨타입(분)
+UPDATE_POSSIBLE_TIME_FROM = 7  # 혼잡도 업데이트 가능 시작시간
+UPDATE_POSSIBLE_TIME_TO = 22  # 혼잡도 업데이트 가능 종료시간
+
 OCCUPANCY_INSUFFICIENT_THRESHOLD = 6  # 혼잡도 데이터 몇개 째부터 포인트 낮출지
 OCCUPANCY_ENOUGH_THRESHOLD = 16  # 혼잡도 데이터 몇개 째부터 포인트 더 낮출지
+
 NO_DATA_POINT = 50  # 데이터가 없는카페 포인트
 INSUFFICIENT_DATA_POINT = 20  # 데이터가 부족한 카페 포인트
 ENOUGH_DATA_POINT = 10  # 데이터가 많은 카페 포인트
@@ -191,12 +195,14 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # cronjab 설정
 CRONJOBS = [
-    ('*/30 0-14 * * *', 'cron.congestion.update_congestion_area'), # 매일 9-23시동안 30분마다 업데이트
+    ('*/30 * * * *', 'cron.congestion.update_congestion_area'), # 매일 20분마다 업데이트
     ('0 19 * * *', 'cron.item.update_item_list'), # 매일 새벽 4시 업데이트
     ('5 15 * * *', 'cron.daily_activity_stack.clear_daily_activity_stack'), # 매일 자정 5분에 업데이트
     ('30 15 * * *', 'cron.cafe_vip.update_cafe_vip'), # 매일 자정 30분에 업데이트
     ('50 15 * * *', 'cron.leaderboard.update_leaders'), # 매일 자정 50분에 업데이트
-    ('*/10 1-12 * * *', 'cron.occupancy_sharing.check_sharing_activity'), # 매일 10-21시동안 10분마다 업데이트
+    ('*/10 0-12 * * *', 'cron.occupancy_sharing.check_sharing_activity'), # 매일 9-21시동안 10분마다 업데이트
+    ('*/20 * * * *', 'cron.cafe_opening.update_cafe_opening'), # 매일 20분마다 업데이트
+    ('*/10 * * * *', 'cron.occupancy_prediction.predict_occupancy'), # 매일 10분마다 업데이트
 ]
 
 # s3

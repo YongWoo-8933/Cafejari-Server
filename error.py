@@ -1,7 +1,8 @@
 from rest_framework import status
 from rest_framework.response import Response
 
-from cafejari.settings import UPDATE_COOLTIME
+from cafejari.settings import UPDATE_COOLTIME, UPDATE_POSSIBLE_TIME_FROM, \
+    UPDATE_POSSIBLE_TIME_TO
 
 
 class ServiceError:
@@ -92,6 +93,16 @@ class ServiceError:
     def cati_cafe_id_missing_response(cls):
         return Response(cls._error_dict(
             error_code=803, error_message=f"카페 id를 선택해주세요"), status=status.HTTP_409_CONFLICT)
+
+    @classmethod
+    def cafe_closed_response(cls):
+        return Response(cls._error_dict(
+            error_code=804, error_message=f"영업시간이 아닙니다"), status=status.HTTP_409_CONFLICT)
+
+    @classmethod
+    def update_forbidden_time_response(cls):
+        return Response(cls._error_dict(
+            error_code=805, error_message=f"혼잡도 등록은 {UPDATE_POSSIBLE_TIME_FROM}시 ~ {UPDATE_POSSIBLE_TIME_TO}시에만 가능합니다"), status=status.HTTP_409_CONFLICT)
 
 
     # 900번대 request

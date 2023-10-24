@@ -3,6 +3,7 @@ from enum import Enum
 
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point
+from django.utils import timezone
 
 from utils import CATIScore
 
@@ -145,6 +146,7 @@ class CATI(models.Model):
 class Cafe(models.Model):
     is_visible = models.BooleanField(default=True)
     is_closed = models.BooleanField(default=False)
+    is_opened = models.BooleanField(default=True)
     name = models.CharField(max_length=63)
     address = models.CharField(max_length=63)
     latitude = models.FloatField()
@@ -308,7 +310,7 @@ class OccupancyRatePrediction(models.Model):
 
 class OccupancyRateUpdateLog(models.Model):
     occupancy_rate = models.DecimalField(max_digits=3, decimal_places=2)
-    update = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(default=timezone.now, editable=True)
     point = models.IntegerField(default=0)
     is_notified = models.BooleanField(default=False)
     cafe_floor = models.ForeignKey(

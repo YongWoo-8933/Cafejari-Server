@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib.gis import admin
 from django.contrib.gis.geos import Point
 from django.utils.html import format_html
@@ -89,7 +90,7 @@ class CafeImageInline(admin.TabularInline):
 
 @admin.register(Cafe)
 class CafeAdmin(admin.GeoModelAdmin):
-    list_display = ("id", "name", "floor_count", "district_city", "brand_name", "congestion_area_name", "address", "is_visible", "is_closed",)
+    list_display = ("id", "name", "floor_count", "is_opened", "district_city", "brand_name", "congestion_area_name", "address", "is_visible", "is_closed",)
     list_filter = ("is_visible", "is_closed", "brand__name", "district__city", "district__gu", "district__dong", "congestion_area__name")
     search_fields = ("name", "address",)
     ordering = ("is_visible", "-is_closed", "name",)
@@ -102,7 +103,13 @@ class CafeAdmin(admin.GeoModelAdmin):
 
     def district_city(self, cafe): return cafe.district.city if cafe.district else None
 
-    def congestion_area_name(self, cafe): return cafe.congestion_area.name if cafe.congestion_area else None
+    def congestion_area_name(self, cafe):
+        if cafe.congestion_area:
+            areas = ""
+            for area in cafe.congestion_area.all(): areas += f"{area.name}, "
+            return areas
+        else:
+            return None
 
     def brand_name(self, cafe): return cafe.brand.name if cafe.brand else None
     
