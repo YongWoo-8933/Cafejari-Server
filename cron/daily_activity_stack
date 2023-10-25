@@ -4,6 +4,8 @@ from cafe.models import DailyActivityStack
 
 
 def clear_daily_activity_stack():
-    DailyActivityStack.objects.all().delete()
+    stacks = DailyActivityStack.objects.all()
+    for stack in stacks:
+        stack.delete()
     logger = logging.getLogger('my')
-    logger.error("실행은 돼요")
+    logger.error("ok")
