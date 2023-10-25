@@ -1,5 +1,9 @@
+import logging
+
 from cafe.models import DailyActivityStack
 
 
 def clear_daily_activity_stack():
     DailyActivityStack.objects.all().delete()
+    logger = logging.getLogger('my')
+    logger.error("실행은 돼요")
