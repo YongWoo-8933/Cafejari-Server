@@ -1,4 +1,3 @@
-from django import forms
 from django.contrib.gis import admin
 from django.contrib.gis.geos import Point
 from django.utils.html import format_html
