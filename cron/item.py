@@ -67,6 +67,8 @@ def update_item_list():
                             item_serializer = ItemSerializer(data=data)
                         item_serializer.is_valid(raise_exception=True)
                         item_serializer.save()
+                logger = logging.getLogger('my')
+                logger.info("item updated")
     except Exception as e:
         logger = logging.getLogger('my')
         logger.error(e)
