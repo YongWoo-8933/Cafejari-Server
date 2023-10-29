@@ -245,7 +245,7 @@ class OccupancyRateUpdateLogViewSet(
 
         # 카페 오픈 유무 확인
         if not cafe_floor_object.cafe.is_opened:
-            return ServiceError.update_forbidden_time_response()
+            return ServiceError.cafe_closed_response()
 
         # occupancy_rate_update_log 작성
         saved_object = self.save_log(occupancy_rate=occupancy_rate, cafe_floor_id=cafe_floor_id, user_id=None, point=0)
