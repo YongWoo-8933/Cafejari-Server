@@ -2,11 +2,12 @@ import datetime
 import logging
 import random
 
+import pytz
 from django.db.models import Q, Count, ExpressionWrapper, F, Avg, TimeField
 
 from cafe.models import OccupancyRateUpdateLog, CafeFloor, OccupancyRatePrediction, Congestion
 from cafe.serializers import OccupancyRatePredictionSerializer
-from cafejari.settings import UPDATE_POSSIBLE_TIME_FROM, UPDATE_POSSIBLE_TIME_TO
+from cafejari.settings import UPDATE_POSSIBLE_TIME_FROM, UPDATE_POSSIBLE_TIME_TO, TIME_ZONE
 
 
 def delete_occupancy_prediction(cafe_floor_id):
@@ -18,7 +19,7 @@ def delete_occupancy_prediction(cafe_floor_id):
 
 
 def is_occupancy_update_possible():
-    now = datetime.datetime.now()
+    now = datetime.datetime.now(tz=pytz.timezone(TIME_ZONE))
     update_possible_time_from = datetime.time(UPDATE_POSSIBLE_TIME_FROM, 0, 0)
     update_possible_time_to = datetime.time(UPDATE_POSSIBLE_TIME_TO, 0, 0)
     return update_possible_time_from < now.time() < update_possible_time_to

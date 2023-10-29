@@ -22,7 +22,7 @@ def check_sharing_activity():
         for log in between_10_20_logs:
             FirebaseMessage.push_message(
                 title=f"아직 {log.cafe_floor.cafe.name}에 계신가요?",
-                body=f"지금 혼잡도를 등록하면 {PointCalculator.calculate_reward_based_on_data(log.cafe_floor.id)}P 획득 가능!",
+                body=f"지금 {log.cafe_floor.cafe.name} {log.cafe_floor.floor}층에서 혼잡도를 등록하면 {PointCalculator.calculate_reward_based_on_data(log.cafe_floor.id)}P 획득 가능!",
                 push_type=PushNotificationType.Activity.value,
                 user_object=log.user,
                 save_model=True
