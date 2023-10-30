@@ -57,8 +57,9 @@ def predict_occupancy():
             # 평일/주말에 해당하는 전후 한시간 내 로그 선별 및 근접 시간순 정렬
             between_logs = OccupancyRateUpdateLog.objects.filter(
                 Q(update__time__range=(start_time, end_time)),
-                update__week_day__in=weekday_range,
                 cafe_floor__id=cafe_floor_object.id
+            ).filter(
+                update__week_day__in=weekday_range
             ).annotate(
                 time_difference=ExpressionWrapper(
                     F('update__time') - now.time(),
