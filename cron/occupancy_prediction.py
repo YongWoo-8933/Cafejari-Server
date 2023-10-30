@@ -53,7 +53,14 @@ def predict_occupancy():
                 weekday_range = [0, 1, 2, 3, 4]
             else:
                 weekday_range = [5, 6]
-            # 전후 한시간 내 로그 선별 및 근접 시간순 정렬
+            logger = logging.getLogger('my')
+            logger.error(now)
+            logger.error(start_datetime)
+            logger.error(end_datetime)
+            logger.error(start_time)
+            logger.error(end_time)
+            logger.error(weekday_range)
+            # 평일/주말에 해당하는 전후 한시간 내 로그 선별 및 근접 시간순 정렬
             between_logs = OccupancyRateUpdateLog.objects.filter(
                 Q(update__time__range=(start_time, end_time)),
                 update__week_day__in=weekday_range,
