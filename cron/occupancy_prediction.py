@@ -31,22 +31,32 @@ def predict_occupancy():
         if not is_occupancy_update_possible():
             OccupancyRatePrediction.objects.all().delete()
             return
-        # 혼잡도 로그가 하나라도 있는 cafe floor만 불러옴
-        filtered_cafe_floors = CafeFloor.objects.annotate(num_occupancy_updates=Count('occupancy_rate_update_log')).filter(num_occupancy_updates__gte=1)
+        # 혼잡도 로그가 하나라도 있는 + 해당 층에 자리가 있는 cafe floor만 불러옴
+        filtered_cafe_floors = CafeFloor.objects.annotate(
+            num_occupancy_updates=Count('occupancy_rate_update_log')
+        ).filter(
+            num_occupancy_updates__gte=1,
+            has_seat=True
+        )
         for cafe_floor_object in filtered_cafe_floors:
             # 카페가 열려 있는지 확인 하고, 닫혀 있다면 기존 예상 혼잡도 제거
             if not cafe_floor_object.cafe.is_opened:
                 delete_occupancy_prediction(cafe_floor_object.id)
                 continue
-            # 현재 시각, 전후 한 시간씩 설정
-            now = datetime.datetime.now()
+            # 현재 시각, 전후 한 시간씩 설정, 평일 / 주말 구분
+            now = datetime.datetime.now(tz=pytz.timezone(TIME_ZONE))
             start_datetime = now - datetime.timedelta(hours=1)
             end_datetime = now + datetime.timedelta(hours=1)
             start_time = datetime.time(start_datetime.hour, start_datetime.minute, 0)
             end_time = datetime.time(end_datetime.hour, end_datetime.minute, 0)
+            if now.weekday() < 5:
+                weekday_range = [0, 1, 2, 3, 4]
+            else:
+                weekday_range = [5, 6]
             # 전후 한시간 내 로그 선별 및 근접 시간순 정렬
             between_logs = OccupancyRateUpdateLog.objects.filter(
                 Q(update__time__range=(start_time, end_time)),
+                update__week_day__in=weekday_range,
                 cafe_floor__id=cafe_floor_object.id
             ).annotate(
                 time_difference=ExpressionWrapper(

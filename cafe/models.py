@@ -313,6 +313,7 @@ class OccupancyRateUpdateLog(models.Model):
     update = models.DateTimeField(default=timezone.now, editable=True)
     point = models.IntegerField(default=0)
     is_notified = models.BooleanField(default=False)
+    is_google_map_prediction = models.BooleanField(default=False)
     cafe_floor = models.ForeignKey(
         'CafeFloor',
         on_delete=models.SET_NULL,
