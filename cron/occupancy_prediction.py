@@ -49,33 +49,30 @@ def predict_occupancy():
             end_datetime = now + datetime.timedelta(hours=1)
             start_time = datetime.time(start_datetime.hour, start_datetime.minute, 0)
             end_time = datetime.time(end_datetime.hour, end_datetime.minute, 0)
-            # 평일/주말에 해당하는 전후 한시간 내 로그 선별
             if now.weekday() < 5:
-                between_logs = OccupancyRateUpdateLog.objects.filter(
-                    Q(update__time__range=(start_time, end_time)),
-                    update__week_day=F('update__week_day'),
-                    cafe_floor__id=cafe_floor_object.id
-                )
+                weekday_range = [2, 3, 4, 5, 6]
             else:
-                between_logs = OccupancyRateUpdateLog.objects.filter(
-                    Q(update__time__range=(start_time, end_time)),
-                    cafe_floor__id=cafe_floor_object.id
-                ).exclude(
-                    update__week_day=F('update__week_day')
-                )
-            # 근접 시간순 정렬
-            between_logs = between_logs.annotate(
+                weekday_range = [1, 7]
+            logger = logging.getLogger('my')
+            # 평일/주말에 해당하는 전후 한시간 내 로그 선별 및 근접 시간순 정렬
+            between_logs = OccupancyRateUpdateLog.objects.filter(
+                Q(update__time__range=(start_time, end_time)),
+                update__week_day__in=weekday_range,
+                cafe_floor__id=cafe_floor_object.id
+            ).annotate(
                 time_difference=ExpressionWrapper(
                     F('update__time') - now.time(),
                     output_field=TimeField()
                 )
             ).order_by('-time_difference')[:3]
+            logger.error(between_logs)
             # 로그가 있다면 혼잡도 산출
             if between_logs.exists():
                 # 가까운 세개 로그 평균
                 average_occupancy_rate = float(between_logs.aggregate(
                     average_occupancy_rate=Avg('occupancy_rate')
                 )['average_occupancy_rate'])
+                logger.error(between_logs.first().update.weekday())
                 # 지역 혼잡도 factor 적용
                 if cafe_floor_object.cafe.congestion_area:
                     lookup_congestion_areas = cafe_floor_object.cafe.congestion_area.all()
