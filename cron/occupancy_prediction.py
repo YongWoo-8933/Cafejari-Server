@@ -54,12 +54,6 @@ def predict_occupancy():
             else:
                 weekday_range = [5, 6]
             logger = logging.getLogger('my')
-            logger.error(now)
-            logger.error(start_datetime)
-            logger.error(end_datetime)
-            logger.error(start_time)
-            logger.error(end_time)
-            logger.error(weekday_range)
             # 평일/주말에 해당하는 전후 한시간 내 로그 선별 및 근접 시간순 정렬
             between_logs = OccupancyRateUpdateLog.objects.filter(
                 Q(update__time__range=(start_time, end_time)),
@@ -71,12 +65,14 @@ def predict_occupancy():
                     output_field=TimeField()
                 )
             ).order_by('-time_difference')[:3]
+            logger.error(between_logs)
             # 로그가 있다면 혼잡도 산출
             if between_logs.exists():
                 # 가까운 세개 로그 평균
                 average_occupancy_rate = float(between_logs.aggregate(
                     average_occupancy_rate=Avg('occupancy_rate')
                 )['average_occupancy_rate'])
+                logger.error(between_logs.first().update.weekday())
                 # 지역 혼잡도 factor 적용
                 if cafe_floor_object.cafe.congestion_area:
                     lookup_congestion_areas = cafe_floor_object.cafe.congestion_area.all()
