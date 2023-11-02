@@ -177,8 +177,9 @@ class OccupancyRatePredictionAdmin(admin.ModelAdmin):
 
 @admin.register(OccupancyRateUpdateLog)
 class OccupancyRateUpdateLogAdmin(admin.ModelAdmin):
-    list_display = ("id", "cafe_name_floor", "nickname", "occupancy_rate", "update", "is_google_map_prediction", "point", "is_notified")
+    list_display = ("id", "cafe_name_floor", "nickname", "occupancy_rate", "update", "is_google_map_prediction", "point", "congestion", "is_notified")
     list_filter = ("user__profile__nickname", "is_google_map_prediction")
+    list_editable = ('congestion', )
     date_hierarchy = "update"
     search_fields = ("user__profile__nickname", "cafe_floor__cafe__name")
     ordering = ("-update",)
