@@ -217,7 +217,8 @@ class OccupancyRateUpdateLogViewSet(
         serializer.is_valid(raise_exception=True)
         return serializer.save()
 
-    def get_congestion(self, cafe_floor_object):
+    @staticmethod
+    def get_congestion(cafe_floor_object):
         if cafe_floor_object.cafe.congestion_area.all():
             current_congestion_index = 0
             for lookup_congestion_area in cafe_floor_object.cafe.congestion_area.all():

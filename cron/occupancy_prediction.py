@@ -80,7 +80,7 @@ def predict_occupancy():
                         if current_congestion_index < temp_congestion_index:
                             current_congestion_index = temp_congestion_index
                     # 현재 지역 혼잡도와 로그 지역 혼잡도 차이만큼 가감
-                    log_congestion_index = list(Congestion).index(between_logs.first().congestion)
+                    log_congestion_index = list(Congestion).index(Congestion(between_logs.first().congestion))
                     congestion_index_diff = current_congestion_index - log_congestion_index
                     average_occupancy_rate += 0.05 * congestion_index_diff
                 # 랜덤 5% 적용
