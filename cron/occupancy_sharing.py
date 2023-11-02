@@ -20,9 +20,13 @@ def check_sharing_activity():
             update__range=(before_20_minute, before_10_minute)
         )
         for log in between_10_20_logs:
+            if log.cafe_floor.floor < 0:
+                floor_text = f"B{abs(log.cafe_floor.floor)}"
+            else:
+                floor_text = str(log.cafe_floor.floor)
             FirebaseMessage.push_message(
                 title=f"아직 {log.cafe_floor.cafe.name}에 계신가요?",
-                body=f"지금 {log.cafe_floor.cafe.name} {log.cafe_floor.floor}층에서 혼잡도를 등록하면 {PointCalculator.calculate_reward_based_on_data(log.cafe_floor.id)}P 획득 가능!",
+                body=f"지금 {log.cafe_floor.cafe.name} {floor_text}층에서 혼잡도를 등록하면 {PointCalculator.calculate_reward_based_on_data(log.cafe_floor.id)}P 획득 가능!",
                 push_type=PushNotificationType.Activity.value,
                 user_object=log.user,
                 save_model=True
