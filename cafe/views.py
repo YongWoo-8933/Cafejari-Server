@@ -12,7 +12,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from cafe.models import Cafe, CafeFloor, OccupancyRateUpdateLog, DailyActivityStack, Location, CATI
+from cafe.models import Cafe, CafeFloor, OccupancyRateUpdateLog, DailyActivityStack, Location, CATI, Congestion
 from cafe.serializers import CafeResponseSerializer, \
     OccupancyRateUpdateLogResponseSerializer, OccupancyRateUpdateLogSerializer, DailyActivityStackSerializer, \
     CafeSearchResponseSerializer, LocationResponseSerializer, CATISerializer
@@ -156,11 +156,7 @@ class CafeViewSet(
         ).order_by("distance")
 
         # 뺄 카페 거르기
-        cafes = cafes.filter(is_visible=True, is_closed=False)
-
-        # 20개 넘어가면 20개 컷
-        if cafes.count() > 20:
-            cafes = cafes[:20]
+        cafes = cafes.filter(is_visible=True, is_closed=False, is_opened=True)[:20]
 
         return Response(data=self.get_serializer(cafes, many=True).data, status=status.HTTP_200_OK)
 
@@ -209,16 +205,28 @@ class OccupancyRateUpdateLogViewSet(
     permission_classes = [IsAuthenticated]
 
     @staticmethod
-    def save_log(occupancy_rate, cafe_floor_id, user_id, point):
+    def save_log(occupancy_rate, cafe_floor_id, user_id, point, congestion):
         occupancy_rate_update_log_data = {
             "occupancy_rate": occupancy_rate,
             "cafe_floor": cafe_floor_id,
             "user": user_id,
-            "point": point
+            "point": point,
+            "congestion": congestion
         }
         serializer = OccupancyRateUpdateLogSerializer(data=occupancy_rate_update_log_data)
         serializer.is_valid(raise_exception=True)
         return serializer.save()
+
+    def get_congestion(self, cafe_floor_object):
+        if cafe_floor_object.cafe.congestion_area.all():
+            current_congestion_index = 0
+            for lookup_congestion_area in cafe_floor_object.cafe.congestion_area.all():
+                temp_congestion_index = list(Congestion).index(Congestion(lookup_congestion_area.current_congestion))
+                if current_congestion_index < temp_congestion_index:
+                    current_congestion_index = temp_congestion_index
+            return list(Congestion)[current_congestion_index].value
+        else:
+            return None
 
     @swagger_auto_schema(
         operation_id='게스트 유저 혼잡도 등록',
@@ -247,8 +255,17 @@ class OccupancyRateUpdateLogViewSet(
         if not cafe_floor_object.cafe.is_opened:
             return ServiceError.cafe_closed_response()
 
+        # 지역 혼잡도 가져오기
+        congestion = self.get_congestion(cafe_floor_object)
+
         # occupancy_rate_update_log 작성
-        saved_object = self.save_log(occupancy_rate=occupancy_rate, cafe_floor_id=cafe_floor_id, user_id=None, point=0)
+        saved_object = self.save_log(
+            occupancy_rate=occupancy_rate,
+            cafe_floor_id=cafe_floor_id,
+            user_id=None,
+            point=0,
+            congestion=congestion
+        )
 
         return Response(self.get_serializer(saved_object, read_only=True).data, status=status.HTTP_201_CREATED)
 
@@ -324,9 +341,12 @@ class OccupancyRateUpdateLogViewSet(
         # 데이터 많고 적음에 따라 포인트 다르게 책정
         point = PointCalculator.calculate_reward_based_on_data(cafe_floor_id)
 
+        # 지역 혼잡도 가져오기
+        congestion = self.get_congestion(cafe_floor_object)
+
         # occupancy_rate_update_log 작성
         saved_object = self.save_log(occupancy_rate=occupancy_rate, cafe_floor_id=cafe_floor_id,
-                                     user_id=request.user.id, point=point)
+                                     user_id=request.user.id, point=point, congestion=congestion)
 
         # 얻은 포인트 부여
         serializer = ProfileSerializer(request.user.profile, data={"point": request.user.profile.point + point}, partial=True)

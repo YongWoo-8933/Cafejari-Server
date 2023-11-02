@@ -314,6 +314,12 @@ class OccupancyRateUpdateLog(models.Model):
     point = models.IntegerField(default=0)
     is_notified = models.BooleanField(default=False)
     is_google_map_prediction = models.BooleanField(default=False)
+    congestion = models.CharField(
+        default=None,
+        null=True,
+        blank=True,
+        choices=((congestion.value, congestion.value) for congestion in Congestion)
+    )
     cafe_floor = models.ForeignKey(
         'CafeFloor',
         on_delete=models.SET_NULL,

@@ -201,7 +201,7 @@ CRONJOBS = [
     ('30 15 * * *', 'cron.cafe_vip.update_cafe_vip'), # 매일 자정 30분에 업데이트
     ('50 15 * * *', 'cron.leaderboard.update_leaders'), # 매일 자정 50분에 업데이트
     ('*/10 0-12 * * *', 'cron.occupancy_sharing.check_sharing_activity'), # 매일 9-21시동안 10분마다 업데이트
-    ('*/20 * * * *', 'cron.cafe_opening.update_cafe_opening'), # 매일 20분마다 업데이트
+    ('*/10 * * * *', 'cron.cafe_opening.update_cafe_opening'), # 매일 20분마다 업데이트
     ('*/10 * * * *', 'cron.occupancy_prediction.predict_occupancy'), # 매일 10분마다 업데이트
 ]
 

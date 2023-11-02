@@ -53,7 +53,6 @@ def predict_occupancy():
                 weekday_range = [2, 3, 4, 5, 6]
             else:
                 weekday_range = [1, 7]
-            logger = logging.getLogger('my')
             # 평일/주말에 해당하는 전후 한시간 내 로그 선별 및 근접 시간순 정렬
             between_logs = OccupancyRateUpdateLog.objects.filter(
                 Q(update__time__range=(start_time, end_time)),
@@ -65,34 +64,32 @@ def predict_occupancy():
                     output_field=TimeField()
                 )
             ).order_by('-time_difference')[:3]
-            logger.error(between_logs)
             # 로그가 있다면 혼잡도 산출
             if between_logs.exists():
                 # 가까운 세개 로그 평균
                 average_occupancy_rate = float(between_logs.aggregate(
                     average_occupancy_rate=Avg('occupancy_rate')
                 )['average_occupancy_rate'])
-                logger.error(between_logs.first().update.weekday())
                 # 지역 혼잡도 factor 적용
-                if cafe_floor_object.cafe.congestion_area:
+                if cafe_floor_object.cafe.congestion_area and between_logs.first().congestion is not None:
                     lookup_congestion_areas = cafe_floor_object.cafe.congestion_area.all()
-                    congestion_index = 0
+                    # 현재 해당 지역 혼잡도 index 설정
+                    current_congestion_index = 0
                     for lookup_congestion_area in lookup_congestion_areas:
                         temp_congestion_index = list(Congestion).index(Congestion(lookup_congestion_area.current_congestion))
-                        if congestion_index < temp_congestion_index:
-                            congestion_index = temp_congestion_index
-                    if average_occupancy_rate < 0.25:
-                        occupancy_index = 0
-                    elif average_occupancy_rate < 0.5:
-                        occupancy_index = 1
-                    elif average_occupancy_rate < 0.75:
-                        occupancy_index = 2
-                    else:
-                        occupancy_index = 3
-                    congestion_index_diff = congestion_index - occupancy_index
+                        if current_congestion_index < temp_congestion_index:
+                            current_congestion_index = temp_congestion_index
+                    # 현재 지역 혼잡도와 로그 지역 혼잡도 차이만큼 가감
+                    log_congestion_index = list(Congestion).index(between_logs.first().congestion)
+                    congestion_index_diff = current_congestion_index - log_congestion_index
                     average_occupancy_rate += 0.05 * congestion_index_diff
                 # 랜덤 5% 적용
                 average_occupancy_rate += random.uniform(-0.05, 0.05)
+                # 음수 혼잡도, 1 이상 혼잡도 조정
+                if average_occupancy_rate < 0:
+                    average_occupancy_rate = 0.0
+                elif average_occupancy_rate > 1.0:
+                    average_occupancy_rate = 1.0
                 # 예상 혼잡도 저장
                 final_occupancy_rate = round(average_occupancy_rate, 2)
                 try:
