@@ -43,17 +43,17 @@ def predict_occupancy():
             if not cafe_floor_object.cafe.is_opened:
                 delete_occupancy_prediction(cafe_floor_object.id)
                 continue
-            # 현재 시각, 전후 한 시간씩 설정, 평일 / 주말 구분
+            # 현재 시각, 전후 80분 씩 설정, 평일 / 주말 구분
             now = datetime.datetime.now(tz=pytz.timezone(TIME_ZONE))
-            start_datetime = now - datetime.timedelta(hours=1)
-            end_datetime = now + datetime.timedelta(hours=1)
+            start_datetime = now - datetime.timedelta(minutes=80)
+            end_datetime = now + datetime.timedelta(minutes=80)
             start_time = datetime.time(start_datetime.hour, start_datetime.minute, 0)
             end_time = datetime.time(end_datetime.hour, end_datetime.minute, 0)
             if now.weekday() < 5:
                 weekday_range = [2, 3, 4, 5, 6]
             else:
                 weekday_range = [1, 7]
-            # 평일/주말에 해당하는 전후 한시간 내 로그 선별 및 근접 시간순 정렬
+            # 평일/주말에 해당하는 전후 80분 내 로그 선별 및 근접 시간순 정렬
             between_logs = OccupancyRateUpdateLog.objects.filter(
                 Q(update__time__range=(start_time, end_time)),
                 update__week_day__in=weekday_range,
