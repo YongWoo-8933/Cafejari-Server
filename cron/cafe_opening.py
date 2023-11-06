@@ -11,7 +11,12 @@ from cafejari.settings import TIME_ZONE
 def get_is_cafe_opened(open_at, close_at):
     now = datetime.datetime.now(tz=pytz.timezone(TIME_ZONE))
     if open_at is not None and close_at is not None:
-        return open_at <= now.time() <= close_at
+        if open_at < close_at:
+            return open_at <= now.time() <= close_at
+        else:
+            midnight_before = datetime.time(hour=23, minute=59, second=59)
+            midnight_after = datetime.time(hour=0, minute=0, second=1)
+            return open_at <= now.time() <= midnight_before or midnight_after <= now.time() <= close_at
     else:
         return True
 
