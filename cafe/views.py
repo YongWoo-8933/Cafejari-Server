@@ -304,6 +304,9 @@ class OccupancyRateUpdateLogViewSet(
         today_this_cafe_update_logs = OccupancyRateUpdateLog.objects.filter(
             update__gte=midnight, cafe_floor__id=cafe_floor_id, user__id=request.user.id)
 
+        # 지역 혼잡도 가져오기
+        congestion = self.get_congestion(cafe_floor_object)
+
         if today_this_cafe_update_logs:
             # 오늘 이 카페에서 활동 이력 있음
             # 쿨타임 확인, 아직 안지났으면 에러
@@ -315,13 +318,13 @@ class OccupancyRateUpdateLogViewSet(
             count_restriction = request.user.profile.grade.sharing_restriction_per_cafe
             if today_this_cafe_update_logs.count() >= count_restriction:
                 saved_object = self.save_log(occupancy_rate=occupancy_rate, cafe_floor_id=cafe_floor_id,
-                                             user_id=request.user.id, point=0)
+                                             user_id=request.user.id, point=0, congestion=congestion)
                 return Response(self.get_serializer(saved_object, read_only=True).data, status=status.HTTP_201_CREATED)
 
             # 오늘 이 카페에서 한 업데이트가 stack 초과한 업데이트인지 확인
             if not DailyActivityStack.objects.filter(update__gte=midnight, cafe_floor__id=cafe_floor_id).exists():
                 saved_object = self.save_log(occupancy_rate=occupancy_rate, cafe_floor_id=cafe_floor_id,
-                                             user_id=request.user.id, point=0)
+                                             user_id=request.user.id, point=0, congestion=congestion)
                 return Response(self.get_serializer(saved_object, read_only=True).data, status=status.HTTP_201_CREATED)
         else:
             # 오늘 이 카페에서 활동 이력 없음
@@ -330,7 +333,7 @@ class OccupancyRateUpdateLogViewSet(
             if today_other_cafe_stacks.count() >= stack_restriction:
                 # stack 초과(포인트 지급 불가)
                 saved_object = self.save_log(occupancy_rate=occupancy_rate, cafe_floor_id=cafe_floor_id,
-                                             user_id=request.user.id, point=0)
+                                             user_id=request.user.id, point=0, congestion=congestion)
                 return Response(self.get_serializer(saved_object, read_only=True).data, status=status.HTTP_201_CREATED)
             else:
                 # stack 하나 쌓기
@@ -341,9 +344,6 @@ class OccupancyRateUpdateLogViewSet(
 
         # 데이터 많고 적음에 따라 포인트 다르게 책정
         point = PointCalculator.calculate_reward_based_on_data(cafe_floor_id)
-
-        # 지역 혼잡도 가져오기
-        congestion = self.get_congestion(cafe_floor_object)
 
         # occupancy_rate_update_log 작성
         saved_object = self.save_log(occupancy_rate=occupancy_rate, cafe_floor_id=cafe_floor_id,
