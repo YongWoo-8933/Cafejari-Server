@@ -15,6 +15,7 @@ def update_leaders():
         # ranker clear
         WeekSharingRanker.objects.all().delete()
         MonthSharingRanker.objects.all().delete()
+        TotalSharingRanker.objects.all().delete()
         # datetime 세팅
         now = datetime.datetime.now(timezone('Asia/Seoul'))
         first_datetime_midnight_of_this_month = datetime.datetime(
@@ -36,9 +37,9 @@ def update_leaders():
             update__gt=first_datetime_midnight_of_this_week
         )
         # 랭커 dict 정리
-        total_ranker_dict = defaultdict(lambda: 1)
-        month_ranker_dict = defaultdict(lambda: 1)
-        week_ranker_dict = defaultdict(lambda: 1)
+        total_ranker_dict = defaultdict(lambda: 0)
+        month_ranker_dict = defaultdict(lambda: 0)
+        week_ranker_dict = defaultdict(lambda: 0)
         for log in occupancy_rate_update_log_queryset:
             total_ranker_dict[log.user.id] += 1
         for log in this_month_occupancy_rate_update_log_queryset:
