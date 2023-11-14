@@ -147,3 +147,13 @@ class OccupancyPredictionUpdate(models.Model):
         db_table_comment = '카페 예상 혼잡도 저장'
         app_label = 'data'
         ordering = ['-last_update']
+
+
+class LeaderUpdate(models.Model):
+    last_update = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'data_leader_update'
+        db_table_comment = '랭킹정보 업데이트'
+        app_label = 'data'
+        ordering = ['-last_update']

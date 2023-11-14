@@ -21,10 +21,11 @@ from cafejari.settings import LOCAL, MEDIA_ROOT, NAVER_GEO_KEY_ID, NAVER_GEO_KEY
 from cron.cafe_opening import update_cafe_opening
 from cron.congestion import update_congestion_area
 from cron.item import update_item_list
+from cron.leaderboard import update_leaders
 from cron.occupancy_prediction import predict_occupancy
 from data.models import DistrictDataUpdate, ItemDataUpdate, CongestionDataUpdate, BrandDataUpdate, \
     CongestionAreaDataUpdate, NicknameAdjectiveDataUpdate, NicknameNounDataUpdate, CafeDataUpdate, CafePointUpdate, \
-    OpeningHoursUpdate, OccupancyPredictionUpdate, CafeOpeningUpdate
+    OpeningHoursUpdate, OccupancyPredictionUpdate, CafeOpeningUpdate, LeaderUpdate
 from user.models import NicknameAdjective, NicknameNoun
 from user.serializers import NicknameAdjectiveSerializer, NicknameNounSerializer
 from utils import S3Manager
@@ -572,3 +573,18 @@ class OccupancyPredictionUpdateAdmin(admin.ModelAdmin):
         obj.save()
         time.sleep(0.4)
         Thread(target=predict_occupancy).start()
+
+
+
+@admin.register(LeaderUpdate)
+class LeaderUpdateAdmin(admin.ModelAdmin):
+    list_display = ("id", "last_update",)
+    date_hierarchy = "last_update"
+    ordering = ("-last_update",)
+    save_as = True
+    preserve_filters = True
+
+    def save_model(self, request, obj, form, change):
+        obj.save()
+        time.sleep(0.4)
+        Thread(target=update_leaders).start()
