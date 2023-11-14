@@ -322,7 +322,8 @@ class OccupancyRateUpdateLogViewSet(
                 return Response(self.get_serializer(saved_object, read_only=True).data, status=status.HTTP_201_CREATED)
 
             # 오늘 이 카페에서 한 업데이트가 stack 초과한 업데이트인지 확인
-            if not DailyActivityStack.objects.filter(update__gte=midnight, cafe_floor__id=cafe_floor_id).exists():
+            if not DailyActivityStack.objects.filter(update__gte=midnight, cafe_floor__id=cafe_floor_id,
+                                                     user__id=request.user.id).exists():
                 saved_object = self.save_log(occupancy_rate=occupancy_rate, cafe_floor_id=cafe_floor_id,
                                              user_id=request.user.id, point=0, congestion=congestion)
                 return Response(self.get_serializer(saved_object, read_only=True).data, status=status.HTTP_201_CREATED)
