@@ -85,4 +85,5 @@ class ChallengerViewSet(
         manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER],
     )
     def list(self, request, *args, **kwargs):
-        return super(ChallengerViewSet, self).list(request, *args, **kwargs)
+        queryset = self.queryset.filter(user__id=request.user.id)
+        return Response(data=self.get_serializer(queryset, many=True).data, status=status.HTTP_200_OK)
