@@ -330,7 +330,7 @@ class OccupancyRateUpdateLogViewSet(
         else:
             # 오늘 이 카페에서 활동 이력 없음
             stack_restriction = request.user.profile.grade.activity_stack_restriction_per_day
-            today_other_cafe_stacks = DailyActivityStack.objects.filter(update__gte=midnight)
+            today_other_cafe_stacks = DailyActivityStack.objects.filter(update__gte=midnight, user__id=request.user.id)
             if today_other_cafe_stacks.count() >= stack_restriction:
                 # stack 초과(포인트 지급 불가)
                 saved_object = self.save_log(occupancy_rate=occupancy_rate, cafe_floor_id=cafe_floor_id,
