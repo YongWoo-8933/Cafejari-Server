@@ -6,12 +6,12 @@ import requests
 from django.core.files.base import ContentFile
 from drf_yasg.utils import swagger_auto_schema, no_body
 from rest_framework import mixins, status
-from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from cafe.models import Brand
+from cafejari.settings import BASE_DOMAIN
 from error import ServiceError
 from notification.naver_sms import send_sms_to_admin
 from shop.giftishow_biz import GiftishowBiz
@@ -20,7 +20,7 @@ from cafe.serializers import BrandSerializer
 from shop.serializers import ItemSerializer, GifticonSerializer, CouponSerializer, UserCouponResponseSerializer, \
     GifticonResponseSerializer, CouponResponseSerializer
 from shop.swagger_serializers import SwaggerGifticonRequestSerializer, SwaggerGifticonUpdateRequestSerializer
-from user.serializers import ProfileResponseSerializer, ProfileSerializer
+from user.serializers import ProfileSerializer
 from utils import UserListDestroyViewSet, AUTHORIZATION_MANUAL_PARAMETER
 
 
@@ -139,6 +139,10 @@ class GifticonViewSet(
                                                partial=True)
         profile_serializer.is_valid(raise_exception=True)
         profile_serializer.save()
+
+        # 관리자에게 상품구매 알림
+        send_sms_to_admin(
+            content=f"상품 구매 by {request.user.profile.nickname}\nhttps://{BASE_DOMAIN}/admin/shop/")
 
         # 발송 성공 후 비즈머니 체크 로직
         balance = GiftishowBiz.get_biz_money_balance()
