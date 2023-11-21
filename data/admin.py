@@ -23,9 +23,10 @@ from cron.congestion import update_congestion_area
 from cron.item import update_item_list
 from cron.leaderboard import update_leaders
 from cron.occupancy_prediction import predict_occupancy
+from cron.occupancy_registration_challenge import check_occupancy_registration_challengers
 from data.models import DistrictDataUpdate, ItemDataUpdate, CongestionDataUpdate, BrandDataUpdate, \
     CongestionAreaDataUpdate, NicknameAdjectiveDataUpdate, NicknameNounDataUpdate, CafeDataUpdate, CafePointUpdate, \
-    OpeningHoursUpdate, OccupancyPredictionUpdate, CafeOpeningUpdate, LeaderUpdate
+    OpeningHoursUpdate, OccupancyPredictionUpdate, CafeOpeningUpdate, LeaderUpdate, OccupancyRegistrationChallengeUpdate
 from user.models import NicknameAdjective, NicknameNoun
 from user.serializers import NicknameAdjectiveSerializer, NicknameNounSerializer
 from utils import S3Manager
@@ -588,3 +589,18 @@ class LeaderUpdateAdmin(admin.ModelAdmin):
         obj.save()
         time.sleep(0.4)
         Thread(target=update_leaders).start()
+
+
+
+@admin.register(OccupancyRegistrationChallengeUpdate)
+class OccupancyRegistrationChallengeUpdateAdmin(admin.ModelAdmin):
+    list_display = ("id", "last_update",)
+    date_hierarchy = "last_update"
+    ordering = ("-last_update",)
+    save_as = True
+    preserve_filters = True
+
+    def save_model(self, request, obj, form, change):
+        obj.save()
+        time.sleep(0.4)
+        Thread(target=check_occupancy_registration_challengers).start()

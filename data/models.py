@@ -149,6 +149,16 @@ class OccupancyPredictionUpdate(models.Model):
         ordering = ['-last_update']
 
 
+class OccupancyRegistrationChallengeUpdate(models.Model):
+    last_update = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'data_occupancy_registration_challenge_update'
+        db_table_comment = '혼잡도 등록 챌린지 정산'
+        app_label = 'data'
+        ordering = ['-last_update']
+
+
 class LeaderUpdate(models.Model):
     last_update = models.DateTimeField(auto_now_add=True)
 
