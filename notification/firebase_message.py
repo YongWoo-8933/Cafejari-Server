@@ -1,5 +1,9 @@
+import logging
+
 from django.core.exceptions import ObjectDoesNotExist
 from firebase_admin import messaging
+from firebase_admin.messaging import UnregisteredError
+
 from notification.serializers import PushNotificationSerializer
 
 
@@ -26,7 +30,10 @@ class FirebaseMessage:
                     ),
                     token=user_object.profile.fcm_token,
                 )
-                messaging.send(message)
+                try:
+                    messaging.send(message)
+                except UnregisteredError:
+                    pass
         except ObjectDoesNotExist:
             pass
 
@@ -60,4 +67,7 @@ class FirebaseMessage:
             except ObjectDoesNotExist:
                 continue
         if message_list:
-            messaging.send_each(message_list)
+            try:
+                messaging.send_each(message_list)
+            except UnregisteredError:
+                pass
