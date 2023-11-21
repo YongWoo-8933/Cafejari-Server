@@ -27,8 +27,7 @@ def check_occupancy_registration_challengers():
             serializer.is_valid(raise_exception=True)
             serializer.save()
             for milestone in milestones:
-                if milestone.count == 0: pass
-                if update_count < milestone.count: continue
+                if milestone.count == 0 or update_count < milestone.count: continue
                 if challenger_points.filter(point=milestone.point).exists(): continue
                 serializer = ChallengePointSerializer(data={
                     "point": milestone.point, "challenger": challenger.id, "description": f"혼잡도 등록 {milestone.count}회 달성"
