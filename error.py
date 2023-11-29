@@ -1,7 +1,8 @@
 from rest_framework import status
 from rest_framework.response import Response
 
-from cafejari.settings import UPDATE_COOLTIME
+from cafejari.settings import UPDATE_COOLTIME, UPDATE_POSSIBLE_TIME_FROM, \
+    UPDATE_POSSIBLE_TIME_TO
 
 
 class ServiceError:
@@ -66,6 +67,11 @@ class ServiceError:
         return Response(cls._error_dict(
             error_code=706, error_message="소셜 계정으로 가입되지 않은 사용자입니다"), status=status.HTTP_409_CONFLICT)
 
+    @classmethod
+    def favorite_cafe_count_restriction_response(cls):
+        return Response(cls._error_dict(
+            error_code=707, error_message="내 카페는 최대 10개까지만 등록할 수 있습니다"), status=status.HTTP_409_CONFLICT)
+
 
     # 800번대 - cafe
     @classmethod
@@ -83,12 +89,37 @@ class ServiceError:
         return Response(cls._error_dict(
             error_code=802, error_message=f"마지막 업데이트로부터 {UPDATE_COOLTIME}분 후 업데이트 가능합니다"), status=status.HTTP_409_CONFLICT)
 
+    @classmethod
+    def cati_cafe_id_missing_response(cls):
+        return Response(cls._error_dict(
+            error_code=803, error_message=f"카페 id를 선택해주세요"), status=status.HTTP_409_CONFLICT)
+
+    @classmethod
+    def cafe_closed_response(cls):
+        return Response(cls._error_dict(
+            error_code=804, error_message=f"영업시간이 아닙니다"), status=status.HTTP_409_CONFLICT)
+
+    @classmethod
+    def update_forbidden_time_response(cls):
+        return Response(cls._error_dict(
+            error_code=805, error_message=f"혼잡도 등록은 {UPDATE_POSSIBLE_TIME_FROM}시 ~ {UPDATE_POSSIBLE_TIME_TO}시에만 가능합니다"), status=status.HTTP_409_CONFLICT)
+
 
     # 900번대 request
     @classmethod
     def duplicated_cafe_response(cls):
         return Response(cls._error_dict(
             error_code=900, error_message="이미 존재하는 카페이거나, 등록 요청이 거절된 카페입니다"), status=status.HTTP_409_CONFLICT)
+
+    @classmethod
+    def duplicated_user_migration_response(cls):
+        return Response(cls._error_dict(
+            error_code=901, error_message="사용자 정보 이전이 진행중인 계정입니다"), status=status.HTTP_409_CONFLICT)
+
+    @classmethod
+    def already_completed_user_migration_response(cls):
+        return Response(cls._error_dict(
+            error_code=902, error_message="사용자 정보 이전이 완료된 계정입니다"), status=status.HTTP_409_CONFLICT)
 
 
     # 1000번대 shop
@@ -148,5 +179,32 @@ class ServiceError:
     def already_report_response(cls):
         return Response(cls._error_dict(
             error_code=1107, error_message="해당 글을 이미 신고하셨습니다. 확인 후 조치하겠습니다"), status=status.HTTP_409_CONFLICT)
+
+
+    # 1200번대 challenge
+    @classmethod
+    def no_challenge_response(cls):
+        return Response(cls._error_dict(
+            error_code=1200, error_message="존재하지 않는 챌린지입니다"), status=status.HTTP_409_CONFLICT)
+
+    @classmethod
+    def already_participate_response(cls):
+        return Response(cls._error_dict(
+            error_code=1201, error_message="이미 참여중인 챌린지입니다"), status=status.HTTP_409_CONFLICT)
+
+    @classmethod
+    def participant_limit_exceed_response(cls):
+        return Response(cls._error_dict(
+            error_code=1202, error_message="참여 정원이 제한되어 더이상 참여할 수 없습니다"), status=status.HTTP_409_CONFLICT)
+
+    @classmethod
+    def unavailable_challenge_response(cls):
+        return Response(cls._error_dict(
+            error_code=1203, error_message="현재는 참여가 불가능한 챌린지입니다"), status=status.HTTP_409_CONFLICT)
+
+    @classmethod
+    def expired_challenge_response(cls):
+        return Response(cls._error_dict(
+            error_code=1204, error_message="참여 가능 날짜가 아닙니다"), status=status.HTTP_409_CONFLICT)
 
 

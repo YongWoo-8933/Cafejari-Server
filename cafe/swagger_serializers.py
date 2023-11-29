@@ -10,19 +10,32 @@ class SwaggerOccupancyRegistrationRequestSerializer(SwaggerSerializer):
     occupancy_rate = serializers.DecimalField(max_digits=3, decimal_places=2)
     cafe_floor_id = serializers.IntegerField()
 
+class SwaggerCATIRequestSerializer(SwaggerSerializer):
+    cafe_id = serializers.IntegerField()
+    openness = serializers.IntegerField()
+    coffee = serializers.IntegerField()
+    workspace = serializers.IntegerField()
+    acidity = serializers.IntegerField()
+
 
 # Response
 class SwaggerCafeFloorCafeRepresentationSerializer(CafeFloorCafeRepresentationSerializer):
-    recent_user_updated_log = OccupancyRateUpdateLogCafeFloorRepresentationSerializer(many=True, read_only=True)
-    recent_guest_updated_log = OccupancyRateUpdateLogCafeFloorRepresentationSerializer(many=True, read_only=True)
+    recent_updated_log = OccupancyRateUpdateLogCafeFloorRepresentationSerializer(many=True, read_only=True)
+    point_prediction = serializers.IntegerField()
 
+class SwaggerCATIRepSerializer(SwaggerSerializer):
+    openness = serializers.FloatField()
+    coffee = serializers.FloatField()
+    workspace = serializers.FloatField()
+    acidity = serializers.FloatField()
 
 class SwaggerCafeResponseSerializer(CafeResponseSerializer):
-    cafe_floor = SwaggerCafeFloorCafeRepresentationSerializer(read_only=True)
+    cafe_floor = SwaggerCafeFloorCafeRepresentationSerializer(many=True, read_only=True)
+    cati = SwaggerCATIRepSerializer(read_only=True)
 
 
-class SwaggerCafeSearchResponseSerializer(SwaggerSerializer):
-    count = serializers.IntegerField()
-    next = serializers.CharField()
-    previous = serializers.CharField()
-    results = SwaggerCafeResponseSerializer(many=True)
+# class SwaggerCafeSearchResponseSerializer(SwaggerSerializer):
+#     count = serializers.IntegerField()
+#     next = serializers.CharField()
+#     previous = serializers.CharField()
+#     results = SwaggerCafeResponseSerializer(many=True)

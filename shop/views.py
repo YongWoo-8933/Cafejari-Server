@@ -6,20 +6,21 @@ import requests
 from django.core.files.base import ContentFile
 from drf_yasg.utils import swagger_auto_schema, no_body
 from rest_framework import mixins, status
-from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from cafe.models import Brand
+from cafejari.settings import BASE_DOMAIN
 from error import ServiceError
 from notification.naver_sms import send_sms_to_admin
 from shop.giftishow_biz import GiftishowBiz
 from shop.models import Item, Gifticon, Coupon, UserCoupon
 from cafe.serializers import BrandSerializer
-from shop.serializers import ItemSerializer, GifticonSerializer, CouponSerializer, UserCouponResponseSerializer
-from shop.swagger_serializers import SwaggerGifticonRequestSerializer
-from user.serializers import ProfileResponseSerializer
+from shop.serializers import ItemSerializer, GifticonSerializer, CouponSerializer, UserCouponResponseSerializer, \
+    GifticonResponseSerializer, CouponResponseSerializer
+from shop.swagger_serializers import SwaggerGifticonRequestSerializer, SwaggerGifticonUpdateRequestSerializer
+from user.serializers import ProfileSerializer
 from utils import UserListDestroyViewSet, AUTHORIZATION_MANUAL_PARAMETER
 
 
@@ -64,17 +65,18 @@ class ItemViewSet(
 
 class GifticonViewSet(
     mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
     UserListDestroyViewSet
 ):
     queryset = Gifticon.objects.all()
-    serializer_class = GifticonSerializer
+    serializer_class = GifticonResponseSerializer
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
         operation_id='기프티콘 리스트',
         operation_description='유저가 구매한 기프티콘 리스트(사용 완료 포함)',
         request_body=no_body,
-        responses={200: GifticonSerializer(many=True)},
+        responses={200: GifticonResponseSerializer(many=True)},
         manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
     )
     def list(self, request, *args, **kwargs):
@@ -119,7 +121,7 @@ class GifticonViewSet(
         time.sleep(0.4)
         with open(temp_file_name, 'rb') as f:
             image = ContentFile(f.read(), name=temp_file_name)
-        serializer = self.get_serializer(data={
+        serializer = GifticonSerializer(data={
             "image": image,
             "expiration_period": datetime.datetime.now() + datetime.timedelta(days=30),
             "is_used": False,
@@ -132,11 +134,15 @@ class GifticonViewSet(
         os.remove(temp_file_name)
 
         # 포인트 정산
-        profile_serializer = ProfileResponseSerializer(request.user.profile,
-                                                       data={"point": request.user.profile.point - item_object.price},
-                                                       partial=True)
+        profile_serializer = ProfileSerializer(request.user.profile,
+                                               data={"point": request.user.profile.point - item_object.price},
+                                               partial=True)
         profile_serializer.is_valid(raise_exception=True)
         profile_serializer.save()
+
+        # 관리자에게 상품구매 알림
+        send_sms_to_admin(
+            content=f"상품 구매 by {request.user.profile.nickname}\nhttps://{BASE_DOMAIN}/admin/shop/")
 
         # 발송 성공 후 비즈머니 체크 로직
         balance = GiftishowBiz.get_biz_money_balance()
@@ -161,22 +167,22 @@ class GifticonViewSet(
         return super(GifticonViewSet, self).destroy(request, *args, **kwargs)
 
     @swagger_auto_schema(
-        method='put',
-        operation_id='기프티콘 사용처리',
-        operation_description='기프티콘 사용 완료 처리',
-        request_body=no_body,
-        responses={201: GifticonSerializer()},
+        operation_id='기프티콘 정보수정',
+        operation_description='사용여부 등 기프티콘의 내용 수정',
+        request_body=SwaggerGifticonUpdateRequestSerializer,
+        responses={201: GifticonResponseSerializer()},
         manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
     )
-    @action(methods=['put'], detail=True, )
-    def use(self, request, *args, **kwargs):
-        gifticon_object = self.get_object()
-        if gifticon_object.user.id != request.user.id:
-            return ServiceError.unauthorized_user_response()
-        serializer = self.get_serializer(gifticon_object, data={"is_used": True}, partial=True)
+    def update(self, request, *args, **kwargs):
+        is_used = request.data.get("is_used")
+        data = {}
+        if is_used is not None:
+            data["is_used"] = str(is_used)
+        gifticon_obj = self.get_object()
+        serializer = GifticonSerializer(gifticon_obj, data=data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+        return Response(self.get_serializer(gifticon_obj, read_only=True).data, status=status.HTTP_201_CREATED)
 
 
 class CouponViewSet(
@@ -184,7 +190,7 @@ class CouponViewSet(
     GenericViewSet
 ):
     queryset = Coupon.objects.all()
-    serializer_class = CouponSerializer
+    serializer_class = CouponResponseSerializer
     permission_classes = [AllowAny]
 
     @swagger_auto_schema(
@@ -206,7 +212,7 @@ class UserCouponViewSet(UserListDestroyViewSet):
         operation_id='유저 쿠폰 리스트',
         operation_description='자신이 가지고 있는 모든 쿠폰 리스트',
         request_body=no_body,
-        responses={200: CouponSerializer(many=True)},
+        responses={200: UserCouponResponseSerializer(many=True)},
         manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
     )
     def list(self, request, *args, **kwargs):

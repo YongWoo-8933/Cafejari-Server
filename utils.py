@@ -1,3 +1,6 @@
+import os
+import urllib.parse
+from enum import Enum
 
 import boto3
 from django.contrib import admin
@@ -6,7 +9,7 @@ from rest_framework import mixins, status, serializers
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from cafejari.settings import AWS_STORAGE_BUCKET_NAME
+from cafejari.settings import AWS_STORAGE_BUCKET_NAME, AWS_S3_DOMAIN, BASE_IMAGE_DOMAIN, LOCAL
 from error import ServiceError
 
 # 유저가 자신의 모델만 받아오고, 삭제할 수 있는 viewset
@@ -52,30 +55,62 @@ AUTHORIZATION_MANUAL_PARAMETER = openapi.Parameter(
 
 
 # s3 이미지 업로드 관련
-class S3ImageManager:
-    _client = None
+class S3Manager:
 
-    def __new__(cls):
-        if cls._client is None:
-            cls._client = boto3.client('s3')
-        return cls._client
+    @classmethod
+    def upload_file(cls, file, path):
+        boto3.client('s3').upload_fileobj(file, AWS_STORAGE_BUCKET_NAME, str(path))
 
-    def upload_image(self, file, path):
-        self._client.upload_fileobj(file, AWS_STORAGE_BUCKET_NAME, path)
+    @classmethod
+    def delete_file(cls, path):
+        boto3.client('s3').delete_object(Bucket=AWS_STORAGE_BUCKET_NAME, Key=str(path))
 
-    def delete_image(self, path):
-        self._client.delete_object(Bucket=AWS_STORAGE_BUCKET_NAME, Key=path)
+    @classmethod
+    def download_file(cls, path, filename):
+        boto3.client('s3').download_file(Bucket=AWS_STORAGE_BUCKET_NAME, Key=path, Filename=filename)
 
 
 # 이미지 파일을 가지고 있는 모델의 admin
 class ImageModelAdmin(admin.ModelAdmin):
-    s3_manager = S3ImageManager()
 
     def delete_model(self, request, obj):
-        self.s3_manager.delete_image(path=obj.image)
+        if obj.image:
+            if LOCAL:
+                decoded_file_path = urllib.parse.unquote("/cafejari" + obj.image.url)
+                os.remove(decoded_file_path)
+            else:
+                S3Manager.delete_file(path=obj.image)
         obj.delete()
 
     def delete_queryset(self, request, queryset):
         for obj in queryset:
-            self.s3_manager.delete_image(path=obj.image)
-            obj.delete()
+            if obj.image:
+                if LOCAL:
+                    decoded_file_path = urllib.parse.unquote("/cafejari" + obj.image.url)
+                    os.remove(decoded_file_path)
+                else:
+                    S3Manager.delete_file(path=obj.image)
+                obj.delete()
+
+
+# 이미지 파일을 가지고 있는 모델의 serializer
+class ImageModelSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_image(obj):
+        return replace_image_domain(url=obj.image.url)
+
+
+# s3 도메인을 image 도메인으로 교체
+def replace_image_domain(url):
+    return str(url).replace(AWS_S3_DOMAIN, BASE_IMAGE_DOMAIN) if not LOCAL else url
+
+
+# CATI 점수 enum
+class CATIScore(Enum):
+    never = -2
+    rarely = -1
+    neutral = 0
+    somtimes = 1
+    always = 2

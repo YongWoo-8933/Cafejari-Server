@@ -61,6 +61,7 @@ class WeekSharingRankerResponseSerializer(WeekSharingRankerSerializer):
 
 
 class MonthlyHotCafeLogResponseSerializer(MonthlyHotCafeLogSerializer):
+    cafe_log = CafeLogResponseSerializer(read_only=True)
 
     def to_representation(self, instance):
         self.fields['cafe_log'] = CafeLogResponseSerializer(read_only=True)

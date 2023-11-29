@@ -1,7 +1,11 @@
 
 from enum import Enum
 
-from django.db import models
+from django.contrib.gis.db import models
+from django.contrib.gis.geos import Point
+from django.utils import timezone
+
+from utils import CATIScore
 
 
 class District(models.Model):
@@ -16,6 +20,23 @@ class District(models.Model):
         db_table_comment = '지역 구분 모델, oo시 oo구 까지'
         app_label = 'cafe'
         ordering = ['city', 'gu', 'dong']
+
+
+def location_image_upload_path(instance, filename): return f"cafe/location/{instance.name}_지역사진_{filename}"
+
+
+class Location(models.Model):
+    name = models.CharField(max_length=31)
+    image = models.ImageField(upload_to=location_image_upload_path)
+    is_visible = models.BooleanField(default=True)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+
+    class Meta:
+        db_table = 'cafe_location'
+        db_table_comment = '깃발 지역'
+        app_label = 'cafe'
+        ordering = ['name']
 
 
 class Congestion(Enum):
@@ -69,14 +90,40 @@ def tag_image_upload_path(instance, filename):
     return f"cafe/tag/{instance.name}_태그_{filename}"
 
 
-class CafeTypeTag(models.Model):
-    has_openness = models.BooleanField()
-    is_coffee_focused = models.BooleanField()
-    is_work_friendly = models.BooleanField()
+
+class CATI(models.Model):
+    openness = models.IntegerField(choices=(
+        (CATIScore.never.value, "매우 아늑함"),
+        (CATIScore.rarely.value, "아늑함"),
+        (CATIScore.neutral.value, "보통"),
+        (CATIScore.somtimes.value, "개방적임"),
+        (CATIScore.always.value, "매우 개방적임"),
+    ))
+    coffee = models.IntegerField(choices=(
+        (CATIScore.never.value, "음료가 매우 맛있음"),
+        (CATIScore.rarely.value, "음료가 맛있음"),
+        (CATIScore.neutral.value, "보통"),
+        (CATIScore.somtimes.value, "커피가 맛있음"),
+        (CATIScore.always.value, "커피가 매우 맛있음"),
+    ))
+    workspace = models.IntegerField(choices=(
+        (CATIScore.never.value, "매우 감성적임"),
+        (CATIScore.rarely.value, "감성적임"),
+        (CATIScore.neutral.value, "보통"),
+        (CATIScore.somtimes.value, "업무하기 좋음"),
+        (CATIScore.always.value, "매우 업무하기 좋음"),
+    ))
+    acidity = models.IntegerField(choices=(
+        (CATIScore.never.value, "매우 씁쓸함"),
+        (CATIScore.rarely.value, "씁쓸함"),
+        (CATIScore.neutral.value, "보통"),
+        (CATIScore.somtimes.value, "산미가 있음"),
+        (CATIScore.always.value, "산미가 강함"),
+    ))
     user = models.ForeignKey(
         'user.User',
         on_delete=models.SET_NULL,
-        related_name="cafe_type_tag",
+        related_name="cati",
         db_column="user",
         default=None,
         blank=True,
@@ -85,12 +132,12 @@ class CafeTypeTag(models.Model):
     cafe = models.ForeignKey(
         'Cafe',
         on_delete=models.CASCADE,
-        related_name="cafe_type_tag",
+        related_name="cati",
         db_column="cafe"
     )
 
     class Meta:
-        db_table = 'cafe_cafe_type_tag'
+        db_table = 'cafe_cati'
         db_table_comment = 'CATI 구분을 위한 type tag 모델'
         app_label = 'cafe'
         ordering = ['cafe__name']
@@ -99,10 +146,13 @@ class CafeTypeTag(models.Model):
 class Cafe(models.Model):
     is_visible = models.BooleanField(default=True)
     is_closed = models.BooleanField(default=False)
+    is_opened = models.BooleanField(default=True)
     name = models.CharField(max_length=63)
     address = models.CharField(max_length=63)
     latitude = models.FloatField()
     longitude = models.FloatField()
+    point = models.PointField(blank=True, null=True, default=Point(0, 0, srid=4326), srid=4326)
+    google_place_id = models.CharField(max_length=255, default=None, null=True, blank=True)
     district = models.ForeignKey(
         'District',
         on_delete=models.SET_NULL,
@@ -168,7 +218,24 @@ class OpeningHour(models.Model):
     thu = models.CharField(max_length=31)
     fri = models.CharField(max_length=31)
     sat = models.CharField(max_length=31)
-    son = models.CharField(max_length=31)
+    sun = models.CharField(max_length=31)
+
+    mon_opening_time = models.TimeField(default=None, null=True, blank=True)
+    tue_opening_time = models.TimeField(default=None, null=True, blank=True)
+    wed_opening_time = models.TimeField(default=None, null=True, blank=True)
+    thu_opening_time = models.TimeField(default=None, null=True, blank=True)
+    fri_opening_time = models.TimeField(default=None, null=True, blank=True)
+    sat_opening_time = models.TimeField(default=None, null=True, blank=True)
+    sun_opening_time = models.TimeField(default=None, null=True, blank=True)
+
+    mon_closing_time = models.TimeField(default=None, null=True, blank=True)
+    tue_closing_time = models.TimeField(default=None, null=True, blank=True)
+    wed_closing_time = models.TimeField(default=None, null=True, blank=True)
+    thu_closing_time = models.TimeField(default=None, null=True, blank=True)
+    fri_closing_time = models.TimeField(default=None, null=True, blank=True)
+    sat_closing_time = models.TimeField(default=None, null=True, blank=True)
+    sun_closing_time = models.TimeField(default=None, null=True, blank=True)
+
     cafe = models.OneToOneField(
         'Cafe',
         on_delete=models.CASCADE,
@@ -243,9 +310,16 @@ class OccupancyRatePrediction(models.Model):
 
 class OccupancyRateUpdateLog(models.Model):
     occupancy_rate = models.DecimalField(max_digits=3, decimal_places=2)
-    update = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(default=timezone.now, editable=True)
     point = models.IntegerField(default=0)
     is_notified = models.BooleanField(default=False)
+    is_google_map_prediction = models.BooleanField(default=False)
+    congestion = models.CharField(
+        default=None,
+        null=True,
+        blank=True,
+        choices=((congestion.value, congestion.value) for congestion in Congestion)
+    )
     cafe_floor = models.ForeignKey(
         'CafeFloor',
         on_delete=models.SET_NULL,

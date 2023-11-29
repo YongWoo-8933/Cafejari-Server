@@ -1,5 +1,5 @@
 # ubuntu 환경 설정(ssh 연결 필요할때)
-FROM ubuntu/python3114/ssh:latest
+FROM ubuntu/python3115/ssh/gdal:latest
 
 # amazonlinux 환경 설정(실제)
 #FROM amazonlinux
@@ -23,6 +23,7 @@ ENV DB_PASSWORD: ${DB_PASSWORD}
 #    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
 #    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11
 #    apt-get install --reinstall python3-apt
+#    apt-get install binutils libproj-dev gdal-bin
 
 # amazonlinux 설정 과정
 #RUN yum update -y && yum upgrade -y && \
@@ -42,6 +43,7 @@ WORKDIR /cafejari
 # 필요한 라이브러리 설치
 ADD . /cafejari/
 RUN pip3 install --upgrade pip && pip3 install -r requirements.txt
+RUN pip3 install boto3
 
 # 컨테이너에서 실행될 명령어
 #ENTRYPOINT python3 manage.py makemigrations && python3 manage.py migrate && gunicorn cafejari.wsgi -b 0.0.0.0:8000:application

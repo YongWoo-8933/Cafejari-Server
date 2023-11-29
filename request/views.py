@@ -1,14 +1,21 @@
+from django.contrib.gis.geos import Point
 from drf_yasg.utils import swagger_auto_schema, no_body
 from rest_framework import mixins, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
+
 from cafe.models import Cafe, District, CongestionArea, Brand
-from cafe.serializers import CafeSerializer, CafeFloorSerializer
+from cafe.serializers import CafeSerializer, CafeFloorSerializer, OpeningHourSerializer
+from cafejari.settings import BASE_DOMAIN
 from error import ServiceError
 from notification.naver_sms import send_sms_to_admin
-from request.models import CafeAdditionRequest
-from request.serializers import CafeAdditionRequestResponseSerializer, CafeAdditionRequestSerializer
-from request.swagger_serializers import SwaggerCafeAdditionRequestSerializer
+from request.models import CafeAdditionRequest, WithdrawalRequest, UserMigrationRequest
+from request.serializers import CafeAdditionRequestResponseSerializer, CafeAdditionRequestSerializer, \
+    WithdrawalRequestSerializer, UserMigrationRequestSerializer
+from request.swagger_serializers import SwaggerCafeAdditionRequestSerializer, SwaggerWithdrawalRequestSerializer, \
+    SwaggerUserMigrationRequestSerializer
+from user.serializers import UserSerializer
 from utils import UserListDestroyViewSet, AUTHORIZATION_MANUAL_PARAMETER
 
 
@@ -43,9 +50,11 @@ class CafeAdditionRequestViewSet(
         road_address = request.data.get("road_address")
         latitude = float(request.data.get("latitude"))
         longitude = float(request.data.get("longitude"))
-        total_floor = int(request.data.get("total_floor"))
-        first_floor = int(request.data.get("first_floor"))
-        no_seat_floor_list = request.data.get("no_seat_floor_list")
+        top_floor = int(request.data.get("top_floor"))
+        bottom_floor = int(request.data.get("bottom_floor"))
+        wall_socket_rate_list = request.data.get("wall_socket_rate_list")
+        opening_hour_list = request.data.get("opening_hour_list")
+        etc = request.data.get("etc")
 
         try:
             Cafe.objects.get(name=cafe_name, address=road_address)
@@ -53,7 +62,8 @@ class CafeAdditionRequestViewSet(
         except Cafe.DoesNotExist:
             # district 체크
             dong_address_list = dong_address.split()
-            districts = District.objects.filter(city__in=dong_address_list, gu__in=dong_address_list, dong__in=dong_address_list)
+            road_address_list = road_address.split()
+            districts = District.objects.filter(gu__in=road_address_list, dong__in=dong_address_list)
 
             # congestion area 체크
             congestion_areas = CongestionArea.objects.filter(
@@ -77,6 +87,7 @@ class CafeAdditionRequestViewSet(
                 "address": road_address,
                 "latitude": latitude,
                 "longitude": longitude,
+                "point": Point(longitude, latitude, srid=4326),
                 "congestion_area": congestion_area_id_list,
             }
             if districts: cafe_data["district"] = districts[0].id
@@ -87,26 +98,45 @@ class CafeAdditionRequestViewSet(
             new_cafe_object = cafe_serializer.save()
 
             # cafe floor 생성
-            for floor in range(first_floor, first_floor + total_floor):
-                floor += 1 if first_floor < 0 <= floor else 0
+            index = 0
+            for floor in range(bottom_floor, top_floor+1):
+                if floor == 0: continue
                 cafe_floor_serializer = CafeFloorSerializer(data={
                     "floor": floor,
-                    "has_seat": str(floor) not in no_seat_floor_list,
+                    "wall_socket_rate": float(wall_socket_rate_list[index]) if wall_socket_rate_list else None,
                     "cafe": new_cafe_object.id
                 })
                 cafe_floor_serializer.is_valid(raise_exception=True)
                 cafe_floor_serializer.save()
+                index += 1
+
+            # opening hour 설정
+            if opening_hour_list:
+                opening_hour_serializer = OpeningHourSerializer(data={
+                    "mon": opening_hour_list[0],
+                    "tue": opening_hour_list[1],
+                    "wed": opening_hour_list[2],
+                    "thu": opening_hour_list[3],
+                    "fri": opening_hour_list[4],
+                    "sat": opening_hour_list[5],
+                    "sun": opening_hour_list[6],
+                    "cafe": new_cafe_object.id
+                })
+                opening_hour_serializer.is_valid(raise_exception=True)
+                opening_hour_serializer.save()
 
             # request 작성
             cafe_addition_request_serializer = CafeAdditionRequestSerializer(data={
-                "user": request.user.id, "cafe": new_cafe_object.id
+                "user": request.user.id,
+                "cafe": new_cafe_object.id,
+                "etc": etc if etc else None
             })
             cafe_addition_request_serializer.is_valid(raise_exception=True)
             obj = cafe_addition_request_serializer.save()
 
             # 관리자에게 요청 알림
             send_sms_to_admin(
-                content=f"카페 등록 요청 by {obj.user.profile.nickname}\n{obj.cafe.name}\nhttp://localhost/admin/request/")
+                content=f"카페 등록 요청 by {obj.user.profile.nickname}\n{obj.cafe.name}\nhttps://{BASE_DOMAIN}/admin/request/")
 
             return Response(data=self.get_serializer(obj, read_only=True).data, status=status.HTTP_201_CREATED)
 
@@ -143,3 +173,65 @@ class CafeInformationSuggestionViewSet(
 
 
         # return Response(data=cafe_addition_request_serializer.data, status=status.HTTP_201_CREATED)
+
+
+class WithdrawalRequestViewSet(
+    mixins.CreateModelMixin,
+    GenericViewSet
+):
+    queryset = WithdrawalRequest.objects.all()
+    serializer_class = WithdrawalRequestSerializer
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_id='회원탈퇴 요청',
+        operation_description='회원 탈퇴 요청, 탈퇴 사유 받고 유저 비활성화',
+        request_body=SwaggerWithdrawalRequestSerializer,
+        responses={204: ""},
+        manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
+    )
+    def create(self, request, *args, **kwargs):
+        request_serializer = self.get_serializer(data={"reason": request.data.get("reason"), "user": request.user.id})
+        request_serializer.is_valid(raise_exception=True)
+        request_serializer.save()
+        user_serializer = UserSerializer(request.user, data={"is_active": False}, partial=True)
+        user_serializer.is_valid(raise_exception=True)
+        user_serializer.save()
+        # 관리자에게 요청 알림
+        send_sms_to_admin(
+            content=f"회원 탈퇴 요청 by {request.user.profile.nickname}\nhttps://{BASE_DOMAIN}/admin/request/")
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class UserMigrationRequestViewSet(
+    mixins.CreateModelMixin,
+    GenericViewSet
+):
+    queryset = UserMigrationRequest.objects.all()
+    serializer_class = UserMigrationRequestSerializer
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_id='사용자 정보 이전 요청',
+        operation_description='이전 버전 유저의 사용자 정보 이전요청',
+        request_body=SwaggerUserMigrationRequestSerializer,
+        responses={201: UserMigrationRequestSerializer()},
+        manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
+    )
+    def create(self, request, *args, **kwargs):
+        phone_number = request.data.get("phone_number")
+        try:
+            request_object = self.queryset.get(phone_number=phone_number, user=request.user.id)
+            if request_object.is_completed:
+                return ServiceError.already_completed_user_migration_response()
+            else:
+                return ServiceError.duplicated_user_migration_response()
+        except UserMigrationRequest.DoesNotExist:
+            request_serializer = self.get_serializer(data={"phone_number": phone_number, "user": request.user.id})
+            request_serializer.is_valid(raise_exception=True)
+            request_serializer.save()
+
+            # 관리자에게 요청 알림
+            send_sms_to_admin(
+                content=f"사용자 정보 이전 요청 by {request.user.profile.nickname}\n번호: {phone_number}\nhttps://{BASE_DOMAIN}/admin/request/")
+            return Response(data=request_serializer.data,status=status.HTTP_201_CREATED)

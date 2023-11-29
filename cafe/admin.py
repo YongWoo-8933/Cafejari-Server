@@ -1,9 +1,10 @@
-from django.contrib import admin
+from django.contrib.gis import admin
+from django.contrib.gis.geos import Point
 from django.utils.html import format_html
 
 from cafe.models import Cafe, Brand, District, OpeningHour, CafeFloor, CafeImage, OccupancyRatePrediction, \
-    OccupancyRateUpdateLog, CongestionArea, CafeVIP, CafeTypeTag, DailyActivityStack
-from utils import ImageModelAdmin
+    OccupancyRateUpdateLog, CongestionArea, CafeVIP, DailyActivityStack, Location, CATI
+from utils import ImageModelAdmin, replace_image_domain
 
 
 @admin.register(District)
@@ -14,6 +15,21 @@ class DistrictAdmin(admin.ModelAdmin):
     ordering = ("city", "gu", "dong")
     save_as = True
     preserve_filters = True
+
+
+@admin.register(Location)
+class LocationAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "image_tag", "is_visible", "latitude", "longitude")
+    search_fields = ("name",)
+    list_filter = ("is_visible",)
+    ordering = ("name",)
+    save_as = True
+    preserve_filters = True
+
+    def image_tag(self, location):
+        return format_html('<img src="{}" width="85" height="85" />', replace_image_domain(location.image.url)) if location.image else None
+
+    image_tag.short_description = "이미지"
 
 
 @admin.register(CongestionArea)
@@ -36,36 +52,27 @@ class BrandAdmin(ImageModelAdmin):
     preserve_filters = True
 
     def image_tag(self, brand):
-        return format_html('<img src="{}" width="85" height="85" />', brand.image.url) if brand.image else None
+        return format_html('<img src="{}" width="85" height="85" />', replace_image_domain(brand.image.url)) if brand.image else None
 
     image_tag.short_description = "이미지"
 
 
-@admin.register(CafeTypeTag)
-class CafeTypeTagAdmin(admin.ModelAdmin):
-    list_display = ("id", "cafe_name", "nickname", "custom_has_openness", "custom_is_coffee_focused", "custom_is_work_friendly",)
-    list_filter = ("cafe__brand__name", "has_openness", "is_coffee_focused", "is_work_friendly",)
+@admin.register(CATI)
+class CATIAdmin(admin.ModelAdmin):
+    list_display = ("id", "cafe_name", "nickname", "openness", "coffee", "workspace", "acidity",)
+    list_filter = ("cafe__brand__name", "openness", "coffee", "workspace", "acidity",)
     search_fields = ("cafe__name", "user__profile__nickname",)
     ordering = ("cafe__name",)
     list_select_related = ["cafe", "user"]
     save_as = True
     preserve_filters = True
 
-    def cafe_name(self, tag): return tag.cafe.name
+    def cafe_name(self, cati): return cati.cafe.name
 
-    def nickname(self, tag): return tag.user.profile.nickname if tag.user else None
-
-    def custom_has_openness(self, tag): return "개방감" if tag.has_openness else "아늑함"
-
-    def custom_is_coffee_focused(self, tag): return "커피주력" if tag.is_coffee_focused else "디저트주력"
-
-    def custom_is_work_friendly(self, tag): return "공부/업무" if tag.is_work_friendly else "감성/사진"
+    def nickname(self, cati): return cati.user.profile.nickname if cati.user else None
 
     cafe_name.short_description = "카페"
     nickname.short_description = "닉네임"
-    custom_has_openness.short_description = "개방/아늑"
-    custom_is_coffee_focused.short_description = "커피/디저트"
-    custom_is_work_friendly.short_description = "공부/감성성"
 
 
 class OpeningHourInline(admin.TabularInline):
@@ -81,9 +88,9 @@ class CafeImageInline(admin.TabularInline):
 
 
 @admin.register(Cafe)
-class CafeAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "floor_count", "district_city", "brand_name", "congestion_area", "address", "is_visible", "is_closed",)
-    list_filter = ("is_visible", "is_closed", "brand__name", "district__city", "congestion_area__name")
+class CafeAdmin(admin.GeoModelAdmin):
+    list_display = ("id", "name", "floor_count", "is_opened", "district_city", "brand_name", "congestion_area_name", "address", "is_visible", "is_closed",)
+    list_filter = ("is_visible", "is_opened", "is_closed", "brand__name", "district__city", "district__gu", "district__dong", "congestion_area__name")
     search_fields = ("name", "address",)
     ordering = ("is_visible", "-is_closed", "name",)
     inlines = (OpeningHourInline, CafeFloorInline, CafeImageInline,)
@@ -95,13 +102,23 @@ class CafeAdmin(admin.ModelAdmin):
 
     def district_city(self, cafe): return cafe.district.city if cafe.district else None
 
-    def congestion_area(self, cafe): return cafe.congestion_area.name if cafe.congestion_area else None
+    def congestion_area_name(self, cafe):
+        if cafe.congestion_area:
+            areas = ""
+            for area in cafe.congestion_area.all(): areas += f"{area.name}, "
+            return areas
+        else:
+            return None
 
     def brand_name(self, cafe): return cafe.brand.name if cafe.brand else None
+    
+    def save_model(self, request, obj, form, change):
+        obj.point = Point(obj.longitude, obj.latitude, srid=4326)
+        obj.save()
 
     floor_count.short_description = "층수"
     district_city.short_description = "구역"
-    congestion_area.short_description = "혼잡도 지역"
+    congestion_area_name.short_description = "혼잡도 지역"
     brand_name.short_description = "브랜드"
 
 
@@ -116,7 +133,7 @@ class CafeImageAdmin(ImageModelAdmin):
     preserve_filters = True
 
     def image_tag(self, cafe_image):
-        return format_html('<img src="{}" width="85" height="85" />', cafe_image.image.url) if cafe_image.image else None
+        return format_html('<img src="{}" width="85" height="85" />', replace_image_domain(cafe_image.image.url)) if cafe_image.image else None
 
     def cafe_name(self, cafe_image): return cafe_image.cafe.name
 
@@ -160,8 +177,8 @@ class OccupancyRatePredictionAdmin(admin.ModelAdmin):
 
 @admin.register(OccupancyRateUpdateLog)
 class OccupancyRateUpdateLogAdmin(admin.ModelAdmin):
-    list_display = ("id", "cafe_name_floor", "nickname", "occupancy_rate", "update", "point", "is_notified")
-    list_filter = ("cafe_floor__cafe__name", "user__profile__nickname")
+    list_display = ("id", "cafe_name_floor", "nickname", "occupancy_rate", "update", "is_google_map_prediction", "point", "congestion", "is_notified")
+    list_filter = ("user__profile__nickname", "is_google_map_prediction")
     date_hierarchy = "update"
     search_fields = ("user__profile__nickname", "cafe_floor__cafe__name")
     ordering = ("-update",)
@@ -193,3 +210,16 @@ class DailyActivityStackAdmin(admin.ModelAdmin):
 
     nickname.short_description = "닉네임"
     cafe_name_floor.short_description = "카페/층"
+
+@admin.register(OpeningHour)
+class OpeningHourAdmin(admin.ModelAdmin):
+    list_display = ("id", "cafe_name", "mon", "tue", "wed", "thu", "fri", "sat", "sun")
+    list_editable = ('mon', 'tue', "wed", "thu", "fri", "sat", "sun")
+    search_fields = ("cafe__name",)
+    ordering = ("mon",)
+    save_as = True
+    preserve_filters = True
+
+    def cafe_name(self, obj): return obj.cafe.name if obj.cafe else None
+
+    cafe_name.short_description = "카페"

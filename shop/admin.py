@@ -3,7 +3,7 @@ from django.utils.html import format_html
 
 from cafe.models import Brand
 from shop.models import Item, Gifticon, Coupon, UserCoupon
-from utils import ImageModelAdmin
+from utils import ImageModelAdmin, replace_image_domain
 
 
 class BrandInline(admin.TabularInline):
@@ -35,14 +35,14 @@ class GifticonAdmin(ImageModelAdmin):
     list_display = ("id", "item_name", "user_nickname", 'image_tag', "expiration_period", "is_used",)
     list_filter = ("user__profile__nickname", "item__name", "is_used")
     search_fields = ("user__profile__nickname", "item__name",)
-    ordering = ("expiration_period", "is_used",)
+    ordering = ("-expiration_period", "is_used",)
     date_hierarchy = "expiration_period"
     list_select_related = ["item", "user"]
     save_as = True
     preserve_filters = True
 
     def image_tag(self, gifticon):
-        return format_html('<img src="{}" width="85" height="85" />', gifticon.image.url) if gifticon.image else None
+        return format_html('<img src="{}" width="85" height="85" />', replace_image_domain(gifticon.image.url)) if gifticon.image else None
 
     def item_name(self, gifticon):
         return gifticon.item.name if gifticon.item else None
@@ -64,7 +64,7 @@ class CouponAdmin(ImageModelAdmin):
     preserve_filters = True
 
     def image_tag(self, coupon):
-        return format_html('<img src="{}" width="85" height="85" />', coupon.image.url) if coupon.image else None
+        return format_html('<img src="{}" width="85" height="85" />', replace_image_domain(coupon.image.url)) if coupon.image else None
 
     image_tag.short_description = "이미지"
 
