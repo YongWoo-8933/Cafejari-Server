@@ -39,12 +39,24 @@ services:
       NAVER_API_SECRET: ${NAVER_API_SECRET}
       NAVER_SMS_CALLING_NUMBER: ${NAVER_SMS_CALLING_NUMBER}
       ADMIN_PHONE_NUMBER_1: ${ADMIN_PHONE_NUMBER_1}
+      ADMIN_PHONE_NUMBER_2: ${ADMIN_PHONE_NUMBER_2}
       AWS_S3_REGION_NAME: ${AWS_S3_REGION_NAME}
       AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME}
+      APPLE_REDIRECT_URL: ${APPLE_REDIRECT_URL}
+      APPLE_CLIENT_ID: ${APPLE_CLIENT_ID}
+      APPLE_KEY_ID: ${APPLE_KEY_ID}
+      APPLE_APP_ID_PREFIX: ${APPLE_APP_ID_PREFIX}
+      APPLE_CERTIFICATE_KEY_1st_line: ${APPLE_CERTIFICATE_KEY_1st_line}
+      APPLE_CERTIFICATE_KEY_2nd_line: ${APPLE_CERTIFICATE_KEY_2nd_line}
+      APPLE_CERTIFICATE_KEY_3rd_line: ${APPLE_CERTIFICATE_KEY_3rd_line}
+      APPLE_CERTIFICATE_KEY_4th_line: ${APPLE_CERTIFICATE_KEY_4th_line}
+      GOOGLE_PLACE_API_KEY: ${GOOGLE_PLACE_API_KEY}
+      NAVER_GEO_KEY_ID: ${NAVER_GEO_KEY_ID}
+      NAVER_GEO_KEY: ${NAVER_GEO_KEY}
     command: >
       sh -c "
           python3 manage.py collectstatic &&
-          python3 manage.py makemigrations && 
+          python3 manage.py makemigrations &&
           python3 manage.py migrate &&
           python3 manage.py crontab add &&
           tail -f /dev/null"
@@ -60,7 +72,7 @@ services:
       - ./media/:/cafejari/media
 
   db:
-    image: postgres
+    image: postgis/postgis
     container_name: postgresql
     restart: always
     environment:

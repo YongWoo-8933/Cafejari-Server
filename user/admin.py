@@ -2,8 +2,8 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from user.models import User, Profile, Grade, ProfileImage
-from utils import ImageModelAdmin
+from user.models import User, Profile, Grade, ProfileImage, NicknameAdjective, NicknameNoun
+from utils import ImageModelAdmin, replace_image_domain
 
 
 @admin.register(Grade)
@@ -16,7 +16,7 @@ class GradeAdmin(ImageModelAdmin):
     preserve_filters = True
 
     def image_tag(self, grade):
-        return format_html('<img src="{}" width="85" height="85" />', grade.image.url) if grade.image else None
+        return format_html('<img src="{}" width="85" height="85" />', replace_image_domain(grade.image.url)) if grade.image else None
 
     image_tag.short_description = "이미지"
 
@@ -40,7 +40,7 @@ class UserAdmin(admin.ModelAdmin):
     def nickname(self, user): return user.profile.nickname if user.profile else None
 
     def image_tag(self, user):
-        return format_html('<img src="{}" width="85" height="85" />', user.profile.profile_image.image.url) if user.profile.profile_image else None
+        return format_html('<img src="{}" width="85" height="85" />', replace_image_domain(user.profile.profile_image.image.url)) if user.profile.profile_image else None
 
     def grade(self, user): return user.profile.grade.name if user.profile.grade else None
 
@@ -63,6 +63,26 @@ class ProfileImageAdmin(ImageModelAdmin):
     preserve_filters = True
 
     def image_tag(self, profile_image):
-        return format_html('<img src="{}" width="85" height="85" />', profile_image.image.url)
+        return format_html('<img src="{}" width="85" height="85" />', replace_image_domain(profile_image.image.url))
 
     image_tag.short_description = "이미지"
+
+
+@admin.register(NicknameAdjective)
+class NicknameAdjectiveAdmin(admin.ModelAdmin):
+    list_display = ("id", "length", "value", "update")
+    list_filter = ("length",)
+    search_fields = ("value",)
+    ordering = ("length", "value")
+    save_as = True
+    preserve_filters = True
+
+
+@admin.register(NicknameNoun)
+class NicknameNounAdmin(admin.ModelAdmin):
+    list_display = ("id", "type", "value", "update")
+    list_filter = ("type",)
+    search_fields = ("value",)
+    ordering = ("type", "value")
+    save_as = True
+    preserve_filters = True

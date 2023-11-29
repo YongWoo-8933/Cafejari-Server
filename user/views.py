@@ -1,9 +1,12 @@
-
+import random
 import re
 import time
 
+import jwt
 import requests
 from allauth.socialaccount.models import SocialAccount
+from allauth.socialaccount.providers.apple.client import AppleOAuth2Client
+from allauth.socialaccount.providers.apple.views import AppleOAuth2Adapter
 from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.jwt_auth import unset_jwt_cookies
@@ -19,18 +22,38 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from cafejari import settings
-from cafejari.settings import KAKAO_REST_API_KEY, KAKAO_REDIRECT_URL, DEBUG
+from cafejari.settings import KAKAO_REST_API_KEY, KAKAO_REDIRECT_URL, DEBUG, APPLE_REDIRECT_URL
 from error import ServiceError
-from user.models import User, Profile, Grade
+from notification.naver_sms import send_sms_to_admin
+from user.models import User, Profile, Grade, NicknameAdjective, NicknameNoun, ProfileImage
 from user.swagger_serializers import SwaggerMakeNewProfileRequestSerializer, \
     SwaggerProfileUpdateRequestSerializer, SwaggerKakaoCallbackResponseSerializer, \
-    SwaggerKakaoLoginFinishResponseSerializer, SwaggerTokenRequestSerializer, \
-    SwaggerValidateNicknameResponseSerializer, SwaggerKakaoLoginRequestSerializer, SwaggerRefreshTokenResponseSerializer
-from user.serializers import ProfileResponseSerializer, UserResponseSerializer, ProfileSerializer, ProfileImageSerializer
+    SwaggerSocialLoginFinishResponseSerializer, SwaggerTokenRequestSerializer, \
+    SwaggerValidateNicknameResponseSerializer, SwaggerKakaoLoginRequestSerializer, \
+    SwaggerRefreshTokenResponseSerializer, SwaggerAppleLoginRequestSerializer, SwaggerAppleCallbackResponseSerializer
+from user.serializers import ProfileResponseSerializer, UserResponseSerializer, ProfileSerializer, \
+    ProfileImageSerializer, GradeResponseSerializer, ProfileImageResponseSerializer
 from drf_yasg.utils import swagger_auto_schema, no_body
 
 from utils import AUTHORIZATION_MANUAL_PARAMETER
 from rest_framework_simplejwt.tokens import RefreshToken
+
+
+class GradeViewSet(
+    mixins.ListModelMixin,
+    GenericViewSet
+):
+    queryset = Grade.objects.all()
+    serializer_class = GradeResponseSerializer
+    permission_classes = [AllowAny]
+
+    @swagger_auto_schema(
+        operation_id='grade 종류 받아오기',
+        operation_description='존배하는 모든 grade 종류 반환',
+        responses={200: GradeResponseSerializer(many=True)}
+    )
+    def list(self, request, *args, **kwargs):
+        return super(GradeViewSet, self).list(request, *args, **kwargs)
 
 
 class UserViewSet(GenericViewSet):
@@ -83,6 +106,7 @@ class UserViewSet(GenericViewSet):
         user_object = self.request.user
         nickname = self.request.data.get('nickname')
         fcm_token = self.request.data.get('fcm_token')
+        marketing_push_enabled = self.request.data.get('marketing_push_enabled')
         profile_image_id = self.request.data.get('profile_image_id')
         try:
             _ = user_object.profile
@@ -96,7 +120,9 @@ class UserViewSet(GenericViewSet):
             if fcm_token:
                 profile_data["fcm_token"] = fcm_token
             if profile_image_id:
-                profile_data["profile_image_id"] = int(profile_image_id)
+                profile_data["profile_image"] = int(profile_image_id)
+            if marketing_push_enabled:
+                profile_data["marketing_push_enabled"] = bool(marketing_push_enabled)
             if social_account_object.provider == "kakao":
                 extra_json_data = social_account_object.extra_data.get("kakao_account")
                 age_range = extra_json_data.get("age_range")
@@ -110,7 +136,7 @@ class UserViewSet(GenericViewSet):
                 if gender:
                     profile_data["gender"] = 0 if gender == "male" else 1
                 if phone_number:
-                    profile_data["phone_number"] = phone_number.replace("-", "").replace("+82 ", "")
+                    profile_data["phone_number"] = phone_number.replace("-", "")[-8:]
 
             profile_serializer = ProfileSerializer(data=profile_data)
             profile_serializer.is_valid(raise_exception=True)
@@ -118,7 +144,8 @@ class UserViewSet(GenericViewSet):
 
             time.sleep(0.1)
 
-            return Response(data=self.get_serializer(self.request.user, read_only=True).data, status=status.HTTP_201_CREATED)
+            user_obj = User.objects.get(id=self.request.user.id)
+            return Response(data=self.get_serializer(user_obj, read_only=True).data, status=status.HTTP_201_CREATED)
 
 
 class ProfileViewSet(
@@ -161,6 +188,38 @@ class ProfileViewSet(
                 return Response({'nickname': nickname}, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
+        method='get',
+        operation_id='닉네임 자동 생성',
+        operation_description='자동으로 생성된 닉네임 반환',
+        request_body=no_body,
+        responses={200: SwaggerValidateNicknameResponseSerializer()}
+    )
+    @action(methods=['get'], detail=False)
+    def auto_generate_nickname(self, queryset):
+        adjectives = [obj.value for obj in NicknameAdjective.objects.all()]
+        nouns = [obj.value for obj in NicknameNoun.objects.all()]
+        stack = 0
+        if adjectives and nouns:
+            while True:
+                stack += 1
+                nickname = random.choice(adjectives) + random.choice(nouns)
+                try:
+                    _ = Profile.objects.get(nickname=nickname)
+                    if stack > 50:
+                        break
+                    else:
+                        continue
+                except Profile.DoesNotExist:
+                    break
+            if stack > 50:
+                send_sms_to_admin(content="닉네임 자동 생성 스택이 50회가 넘었습니다. 경우의 수를 늘려주세요")
+                return Response(data={"nickname": ""}, status=status.HTTP_200_OK)
+            else:
+                return Response(data={"nickname": nickname}, status=status.HTTP_200_OK)
+        send_sms_to_admin(content="형용사나 명사가 없어 닉네임 자동생성에 실패했습니다")
+        return Response(data={"nickname": ""}, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
         operation_id='프로필 업데이트',
         operation_description='프로필 정보를 받아 수정하기, new_profile_image에는 이미지 파일',
         request_body=SwaggerProfileUpdateRequestSerializer,
@@ -178,11 +237,16 @@ class ProfileViewSet(
         age_range = request.data.get("age_range")
         date_of_birth = request.data.get("date_of_birth")
         phone_number = request.data.get("phone_number")
+        fcm_token = request.data.get("fcm_token")
         marketing_push_enabled = request.data.get("marketing_push_enabled")
         occupancy_push_enabled = request.data.get("occupancy_push_enabled")
         log_push_enabled = request.data.get("log_push_enabled")
         profile_image_id = request.data.get("profile_image_id")
         favorite_cafe_id_list = request.data.get("favorite_cafe_id_list")
+        cati_openness = request.data.get("cati_openness")
+        cati_coffee = request.data.get("cati_coffee")
+        cati_workspace = request.data.get("cati_workspace")
+        cati_acidity = request.data.get("cati_acidity")
         new_profile_image = request.FILES["new_profile_image"] if "new_profile_image" in request.FILES else None
 
         data = {}
@@ -197,6 +261,8 @@ class ProfileViewSet(
             data["date_of_birth"] = str(date_of_birth)
         if phone_number is not None:
             data["phone_number"] = str(phone_number)
+        if fcm_token is not None:
+            data["fcm_token"] = str(fcm_token)
         if marketing_push_enabled is not None:
             data["marketing_push_enabled"] = marketing_push_enabled
         if occupancy_push_enabled is not None:
@@ -205,9 +271,19 @@ class ProfileViewSet(
             data["log_push_enabled"] = log_push_enabled
         if profile_image_id is not None:
             data["profile_image"] = int(profile_image_id)
-        if favorite_cafe_id_list:
+        if favorite_cafe_id_list is not None:
             favorite_cafe_data = [int(cafe_id) for cafe_id in favorite_cafe_id_list]
+            if len(favorite_cafe_data) > 10:
+                return ServiceError.favorite_cafe_count_restriction_response()
             data["favorite_cafe"] = favorite_cafe_data
+        if cati_openness is not None:
+            data["cati_openness"] = int(cati_openness)
+        if cati_coffee is not None:
+            data["cati_coffee"] = int(cati_coffee)
+        if cati_workspace is not None:
+            data["cati_workspace"] = int(cati_workspace)
+        if cati_acidity is not None:
+            data["cati_acidity"] = int(cati_acidity)
         if new_profile_image is not None:
             profile_image_serializer = ProfileImageSerializer(data={"is_default": False, "image": new_profile_image[0]})
             profile_image_serializer.is_valid(raise_exception=True)
@@ -219,6 +295,26 @@ class ProfileViewSet(
 
         time.sleep(0.1)
         return Response(UserResponseSerializer(request.user, read_only=True).data, status=status.HTTP_201_CREATED)
+
+
+class ProfileImageViewSet(
+    mixins.ListModelMixin,
+    GenericViewSet
+):
+    queryset = ProfileImage.objects.all()
+    serializer_class = ProfileImageSerializer
+    permission_classes = [AllowAny]
+
+    @swagger_auto_schema(
+        operation_id='프로필 이미지',
+        operation_description='존재하는 모든 default profile image를 반환',
+        request_body=no_body,
+        responses={200: ProfileImageResponseSerializer(many=True)},
+    )
+    def list(self, request, *args, **kwargs):
+        self.queryset.filter(is_default=True)
+        serializer = ProfileImageResponseSerializer(self.queryset.filter(is_default=True), many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class CustomTokenRefreshView(TokenRefreshView):
@@ -257,7 +353,7 @@ def kakao_login(request):
 @swagger_auto_schema(
     method='post',
     operation_id='카카오 로그인',
-    operation_description='카카오 로그인 정보로 가입 여부 결과 발송',
+    operation_description="카카오 로그인 정보로 가입 여부 결과 발송(debug에서는 'code' 보낼것)",
     request_body=SwaggerKakaoLoginRequestSerializer(),
     responses={200: SwaggerKakaoCallbackResponseSerializer()}
 )
@@ -267,7 +363,7 @@ def kakao_login_callback(request):
     code = request.data.get('code')
     access_token = request.data.get('access_token')
 
-    if not access_token:
+    if code is not None and access_token is None:
         token_response = requests.post(
             "https://kauth.kakao.com/oauth/token",
             data={
@@ -285,15 +381,15 @@ def kakao_login_callback(request):
         headers={"Authorization": f"Bearer {access_token}"}
     )
     profile_json = profile_request.json()
-    social_id = profile_json.get('id')
+    uid = str(profile_json.get('id'))
 
     try:
-        SocialAccount.objects.get(provider="Kakao", uid=social_id)
+        social_user = SocialAccount.objects.get(provider="kakao", uid=uid)
         # 유저 정보가 있는 경우(로그인)
-        return Response(data={"user_exists": True, "code": code, "access_token": access_token}, status=status.HTTP_200_OK)
+        return Response(data={"user_exists": True, "access_token": access_token, "is_inactive": not social_user.user.is_active}, status=status.HTTP_200_OK)
     except SocialAccount.DoesNotExist:
         # 유저 정보가 없는 경우(새로 가입)
-        return Response(data={"user_exists": False, "code": code, "access_token": access_token}, status=status.HTTP_200_OK)
+        return Response(data={"user_exists": False, "access_token": access_token, "is_inactive": False}, status=status.HTTP_200_OK)
 
 
 class KakaoLogin(SocialLoginView):
@@ -305,8 +401,65 @@ class KakaoLogin(SocialLoginView):
         operation_id='카카오 로그인 완료',
         operation_description='유저가 존재하면 해당 user 정보를 반환하고, 존재하지 않으면 만들어서 반환',
         request_body=SwaggerKakaoLoginRequestSerializer,
-        responses={200: SwaggerKakaoLoginFinishResponseSerializer()}
+        responses={200: SwaggerSocialLoginFinishResponseSerializer()}
     )
     def post(self, request, *args, **kwargs):
-        return super(KakaoLogin, self).post(request, *args, **kwargs)
+
+        response = super(KakaoLogin, self).post(request, *args, **kwargs)
+
+        if 'user' in response.data:
+            user_data = response.data.pop('user')
+            user_serializer = UserResponseSerializer(User.objects.get(id=user_data.get('id')), read_only=True)
+            response.data['user'] = user_serializer.data
+
+        return response
+
+
+@swagger_auto_schema(
+    method='post',
+    operation_id='애플 로그인',
+    operation_description="애플 로그인 정보로 가입 여부 결과 발송",
+    request_body=SwaggerAppleLoginRequestSerializer(),
+    responses={200: SwaggerAppleCallbackResponseSerializer()}
+)
+@api_view(['POST'])
+@permission_classes((AllowAny,))
+def apple_login_callback(request):
+    id_token = request.data.get("id_token")
+    code = request.data.get("code")
+
+    decoded_token = jwt.decode(id_token, algorithms=['RS256'], options={'verify_signature': False, 'verify_aud': False})
+    uid = str(decoded_token.get("sub"))
+
+    try:
+        social_user = SocialAccount.objects.get(provider="apple", uid=uid)
+        # 유저 정보가 있는 경우(로그인)
+        return Response(data={"user_exists": True, "code": code, "id_token": id_token, "is_inactive": not social_user.user.is_active}, status=status.HTTP_200_OK)
+    except SocialAccount.DoesNotExist:
+        # 유저 정보가 없는 경우(새로 가입)
+        return Response(data={"user_exists": False, "code": code, "id_token": id_token, "is_inactive": False}, status=status.HTTP_200_OK)
+
+
+class AppleLogin(SocialLoginView):
+    adapter_class = AppleOAuth2Adapter
+    callback_url = APPLE_REDIRECT_URL
+    client_class = AppleOAuth2Client
+
+    @swagger_auto_schema(
+        operation_id='애플 로그인 완료',
+        operation_description='유저가 존재하면 해당 user 정보를 반환하고, 존재하지 않으면 만들어서 반환',
+        request_body=SwaggerAppleLoginRequestSerializer,
+        responses={200: SwaggerSocialLoginFinishResponseSerializer()}
+    )
+    def post(self, request, *args, **kwargs):
+        response = super(AppleLogin, self).post(request, *args, **kwargs)
+
+        if 'user' in response.data:
+            user_data = response.data.pop('user')
+            user_serializer = UserResponseSerializer(User.objects.get(id=user_data.get('id')), read_only=True)
+            response.data['user'] = user_serializer.data
+
+        return response
+
+
 

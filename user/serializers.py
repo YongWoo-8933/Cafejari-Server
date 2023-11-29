@@ -1,10 +1,13 @@
 
 from rest_framework import serializers
 
-from user.models import User, Profile, Grade, ProfileImage
-
+from cafe.serializers import CafeResponseSerializer
+from user.models import User, Profile, Grade, ProfileImage, NicknameAdjective, NicknameNoun
 
 # 기본 serializer ----------------------------------------------------------------------------
+from utils import ImageModelSerializer
+
+
 class GradeSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -33,15 +36,45 @@ class UserSerializer(serializers.ModelSerializer):
         exclude = ['password']
 
 
+class NicknameAdjectiveSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = NicknameAdjective
+        fields = "__all__"
+
+
+class NicknameNounSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = NicknameNoun
+        fields = "__all__"
+
+
 
 # 응용 serializer ----------------------------------------------------------------------------
+# grade image 응답용 serializer
+class GradeResponseSerializer(ImageModelSerializer):
+
+    class Meta:
+        model = Grade
+        fields = "__all__"
+
+
+# profile_image image 응답용 serializer
+class ProfileImageResponseSerializer(ImageModelSerializer):
+
+    class Meta:
+        model = ProfileImage
+        fields = "__all__"
+
+
 class PartialProfileSerializer(serializers.ModelSerializer):
-    grade = GradeSerializer(read_only=True)
-    profile_image = ProfileImageSerializer(read_only=True)
+    grade = GradeResponseSerializer(read_only=True)
+    profile_image = ProfileImageResponseSerializer(read_only=True)
 
     def to_representation(self, instance):
-        self.fields['grade'] = GradeSerializer(read_only=True)
-        self.fields['profile_image'] = ProfileImageSerializer(read_only=True)
+        self.fields['grade'] = GradeResponseSerializer(read_only=True)
+        self.fields['profile_image'] = ProfileImageResponseSerializer(read_only=True)
         return super(PartialProfileSerializer, self).to_representation(instance)
 
     class Meta:
@@ -58,12 +91,14 @@ class PartialUserSerializer(serializers.ModelSerializer):
 
 
 class ProfileResponseSerializer(ProfileSerializer):
-    grade = GradeSerializer(read_only=True)
-    profile_image = ProfileImageSerializer(read_only=True)
+    grade = GradeResponseSerializer(read_only=True)
+    profile_image = ProfileImageResponseSerializer(read_only=True)
+    favorite_cafe = CafeResponseSerializer(read_only=True, many=True)
 
     def to_representation(self, instance):
-        self.fields['grade'] = GradeSerializer(read_only=True)
-        self.fields['profile_image'] = ProfileImageSerializer(read_only=True)
+        self.fields['grade'] = GradeResponseSerializer(read_only=True)
+        self.fields['profile_image'] = ProfileImageResponseSerializer(read_only=True)
+        self.fields['favorite_cafe'] = CafeResponseSerializer(read_only=True, many=True)
         return super(ProfileResponseSerializer, self).to_representation(instance)
 
 

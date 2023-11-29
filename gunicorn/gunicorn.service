@@ -1,0 +1,18 @@
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/srv/cafejari
+ExecStart=/home/ubuntu/.local/bin/gunicorn \
+        --access-logfile /srv/cafejari/log/gunicorn/access.log \
+        --error-logfile /srv/cafejari/log/gunicorn/error.log \
+        --workers 3 \
+        --bind unix:/run/gunicorn.sock \
+        cafejari.wsgi:application
+EnvironmentFile=/srv/cafejari/.env
+
+[Install]
+WantedBy=multi-user.target

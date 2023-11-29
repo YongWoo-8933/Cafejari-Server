@@ -22,7 +22,10 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('', views.index),
+    path('tos/', views.tos),
+    path('privacy_policy/', views.privacy_policy),
     path('admin/', admin.site.urls),
+    path('app_config/', include('app_config.urls')),
     path('user/', include('user.urls')),
     path('cafe/', include('cafe.urls')),
     path('cafe_log/', include('cafe_log.urls')),
@@ -30,6 +33,7 @@ urlpatterns = [
     path('push/', include('notification.urls')),
     path('shop/', include('shop.urls')),
     path('request/', include('request.urls')),
+    path('challenge/', include('challenge.urls')),
 ]
 
 if DEBUG:
