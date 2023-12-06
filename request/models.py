@@ -39,8 +39,9 @@ class CafeInformationSuggestion(models.Model):
     is_notified = models.BooleanField(default=False)
     requested_at = models.DateTimeField(auto_now_add=True)
     answered_at = models.DateTimeField(default=timezone.now)
+    etc = models.TextField(default=None, null=True, blank=True)
+    description = models.TextField(default=None, null=True, blank=True)
     rejection_reason = models.TextField(default=None, null=True, blank=True)
-    is_open = models.BooleanField(default=True)
     cafe = models.ForeignKey(
         'cafe.Cafe',
         on_delete=models.SET_NULL,
@@ -55,15 +56,6 @@ class CafeInformationSuggestion(models.Model):
         on_delete=models.SET_NULL,
         related_name="suggested_cafe_information_suggestion",
         db_column="suggested_cafe",
-        default=None,
-        blank=True,
-        null=True
-    )
-    suggested_new_image = models.ForeignKey(
-        'cafe.CafeImage',
-        on_delete=models.SET_NULL,
-        related_name="cafe_information_suggestion",
-        db_column="suggested_new_image",
         default=None,
         blank=True,
         null=True

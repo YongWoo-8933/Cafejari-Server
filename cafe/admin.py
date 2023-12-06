@@ -4,6 +4,7 @@ from django.utils.html import format_html
 
 from cafe.models import Cafe, Brand, District, OpeningHour, CafeFloor, CafeImage, OccupancyRatePrediction, \
     OccupancyRateUpdateLog, CongestionArea, CafeVIP, DailyActivityStack, Location, CATI
+from data.admin import OpeningHoursUpdateAdmin
 from utils import ImageModelAdmin, replace_image_domain
 
 
@@ -115,6 +116,7 @@ class CafeAdmin(admin.GeoModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.point = Point(obj.longitude, obj.latitude, srid=4326)
         obj.save()
+        OpeningHoursUpdateAdmin.save_opening_hour(opening_hour_object=obj.opening_hour)
 
     floor_count.short_description = "층수"
     district_city.short_description = "구역"
@@ -223,3 +225,6 @@ class OpeningHourAdmin(admin.ModelAdmin):
     def cafe_name(self, obj): return obj.cafe.name if obj.cafe else None
 
     cafe_name.short_description = "카페"
+
+    def save_model(self, request, obj, form, change):
+        OpeningHoursUpdateAdmin.save_opening_hour(opening_hour_object=obj)

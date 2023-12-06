@@ -15,7 +15,7 @@ class CafeAdditionRequestSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class CafeInformationSuggestionSerializer(ImageModelSerializer):
+class CafeInformationSuggestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CafeInformationSuggestion
@@ -46,5 +46,10 @@ class CafeAdditionRequestResponseSerializer(CafeAdditionRequestSerializer):
         return super(CafeAdditionRequestResponseSerializer, self).to_representation(instance)
 
 
-class CafeInformationSuggestionResponseSerializer(CafeInformationSuggestionSerializer):
-    pass
+class CafeInformationSuggestionRequestResponseSerializer(CafeInformationSuggestionSerializer):
+    cafe = CafeSerializer(read_only=True)
+    suggested_cafe = CafeSerializer(read_only=True)
+
+    def to_representation(self, instance):
+        self.fields['cafe'] = CafeSerializer(read_only=True)
+        return super(CafeInformationSuggestionSerializer, self).to_representation(instance)

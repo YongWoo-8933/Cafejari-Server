@@ -8,13 +8,15 @@ from rest_framework.viewsets import GenericViewSet
 from cafe.models import Cafe, District, CongestionArea, Brand
 from cafe.serializers import CafeSerializer, CafeFloorSerializer, OpeningHourSerializer
 from cafejari.settings import BASE_DOMAIN
+from data.admin import OpeningHoursUpdateAdmin
 from error import ServiceError
 from notification.naver_sms import send_sms_to_admin
-from request.models import CafeAdditionRequest, WithdrawalRequest, UserMigrationRequest
+from request.models import CafeAdditionRequest, WithdrawalRequest, UserMigrationRequest, CafeInformationSuggestion
 from request.serializers import CafeAdditionRequestResponseSerializer, CafeAdditionRequestSerializer, \
-    WithdrawalRequestSerializer, UserMigrationRequestSerializer
+    WithdrawalRequestSerializer, UserMigrationRequestSerializer, CafeInformationSuggestionSerializer, \
+    CafeInformationSuggestionRequestResponseSerializer
 from request.swagger_serializers import SwaggerCafeAdditionRequestSerializer, SwaggerWithdrawalRequestSerializer, \
-    SwaggerUserMigrationRequestSerializer
+    SwaggerUserMigrationRequestSerializer, SwaggerCafeInformationSuggestionRequestSerializer
 from user.serializers import UserSerializer
 from utils import UserListDestroyViewSet, AUTHORIZATION_MANUAL_PARAMETER
 
@@ -123,7 +125,8 @@ class CafeAdditionRequestViewSet(
                     "cafe": new_cafe_object.id
                 })
                 opening_hour_serializer.is_valid(raise_exception=True)
-                opening_hour_serializer.save()
+                opening_hour_object = opening_hour_serializer.save()
+                OpeningHoursUpdateAdmin.save_opening_hour(opening_hour_object=opening_hour_object)
 
             # request 작성
             cafe_addition_request_serializer = CafeAdditionRequestSerializer(data={
@@ -155,24 +158,153 @@ class CafeInformationSuggestionViewSet(
     mixins.CreateModelMixin,
     UserListDestroyViewSet
 ):
-    queryset = CafeAdditionRequest.objects.all()
-    serializer_class = CafeAdditionRequestResponseSerializer
+    queryset = CafeInformationSuggestion.objects.all()
+    serializer_class = CafeInformationSuggestionRequestResponseSerializer
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_id='내 카페 정보 수정 요청 리스트',
+        operation_description='내 카페 정보 수정 요청 리스트',
+        request_body=no_body,
+        responses={200: CafeInformationSuggestionRequestResponseSerializer(many=True)},
+        manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
+    )
+    def list(self, request, *args, **kwargs):
+        return super(CafeInformationSuggestionViewSet, self).list(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_id='카페 정보 수정 요청',
+        operation_description='카페 정보 수정 요청',
+        request_body=SwaggerCafeInformationSuggestionRequestSerializer,
+        responses={201: CafeInformationSuggestionRequestResponseSerializer()},
+        manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
+    )
     def create(self, request, *args, **kwargs):
-        cafe_id = request.data.get("cafe_id")
-        is_opened = request.data.get("is_opened")
-        opening_hour = request.data.get("opening_hour")
-        restroom = request.data.get("restroom")
-        wall_socket_rate = request.data.get("wall_socket_rate")
-        no_seat_floor_list = request.data.get("no_seat_floor_list")
-        tag_id_list = request.data.get("tag_id_list")
-        total_floor = request.data.get("total_floor")
-        first_floor = request.data.get("first_floor")
-        image = request.FILES.get('file_key')
+        cafe_id = int(request.data.get("cafe_id"))
+        is_closed = request.data.get("is_closed")
+        top_floor = int(request.data.get("top_floor"))
+        bottom_floor = int(request.data.get("bottom_floor"))
+        opening_hour_list = request.data.get("opening_hour_list")
+        wall_socket_rate_list = request.data.get("wall_socket_rate_list")
+        restroom_list = request.data.get("restroom_list")
+        no_seat_list = request.data.get("no_seat_list")
+        latitude = request.data.get("latitude")
+        longitude = request.data.get("longitude")
+        etc = request.data.get("etc")
+        description = ""
 
+        try:
+            # 정보 수정 요청한 원본 카페 찾기
+            origin_cafe_object = Cafe.objects.get(id=cafe_id)
 
-        # return Response(data=cafe_addition_request_serializer.data, status=status.HTTP_201_CREATED)
+            # 수정 요청된 데이터를 바탕으로 suggested_cafe 생성
+            cafe_data = {
+                "is_visible": False,
+                "name": f"정보수정요청_{request.user.profile.nickname}_{origin_cafe_object.name}",
+                "address": origin_cafe_object.address
+            }
+
+            # 카페 오픈 여부
+            if is_closed is not None:
+                cafe_data["is_closed"] = bool(is_closed)
+                description += "오픈여부 변경됨, "
+
+            # 좌표 변경 여부
+            if latitude is not None and longitude is not None:
+                cafe_data["latitude"] = float(latitude)
+                cafe_data["longitude"] = float(longitude)
+                cafe_data["point"] = Point(longitude, latitude, srid=4326)
+                description += "좌표 변경됨, "
+            else:
+                cafe_data["latitude"] = origin_cafe_object.latitude
+                cafe_data["longitude"] = origin_cafe_object.longitude
+                cafe_data["point"] = origin_cafe_object.point
+
+            cafe_serializer = CafeSerializer(data=cafe_data)
+            cafe_serializer.is_valid(raise_exception=True)
+            suggested_cafe_object = cafe_serializer.save()
+
+            # 층 정보 적용
+            index = 0
+            is_no_seat_changed = False
+            is_wall_socket_rate_changed = False
+            is_restroom_changed = False
+            for floor in range(bottom_floor, top_floor + 1):
+                if floor == 0: continue
+                cafe_floor_data = {
+                    "floor": floor,
+                    "cafe": suggested_cafe_object.id
+                }
+                # 자리없는 층 정보 여부
+                if no_seat_list is not None:
+                    cafe_floor_data["has_seat"] = str(floor) not in no_seat_list
+                    is_no_seat_changed = True
+                # 콘센트 정보 변경 여부
+                if wall_socket_rate_list is not None and wall_socket_rate_list[index]:
+                    cafe_floor_data["wall_socket_rate"] = float(wall_socket_rate_list[index])
+                    is_wall_socket_rate_changed = True
+                # 화장실 정보 변경 여부
+                if restroom_list is not None and restroom_list[index]:
+                    cafe_floor_data["restroom"] = restroom_list[index]
+                    is_restroom_changed = True
+                cafe_floor_serializer = CafeFloorSerializer(data=cafe_floor_data)
+                cafe_floor_serializer.is_valid(raise_exception=True)
+                cafe_floor_serializer.save()
+                index += 1
+            if origin_cafe_object.cafe_floor.all().count() != index:
+                description += "층 갯수 변경됨, "
+            if is_no_seat_changed:
+                description += "자리 없는 층 정보 변경됨, "
+            if is_wall_socket_rate_changed:
+                description += "콘센트 정보 변경됨, "
+            if is_restroom_changed:
+                description += "화장실 정보 변경됨, "
+
+            # 오픈시간 변경 여부
+            if opening_hour_list is not None:
+                opening_hour_serializer = OpeningHourSerializer(data={
+                    "cafe": suggested_cafe_object.id,
+                    "mon": opening_hour_list[0],
+                    "tue": opening_hour_list[1],
+                    "wed": opening_hour_list[2],
+                    "thu": opening_hour_list[3],
+                    "fri": opening_hour_list[4],
+                    "sat": opening_hour_list[5],
+                    "sun": opening_hour_list[6]
+                })
+                opening_hour_serializer.is_valid(raise_exception=True)
+                opening_hour_object = opening_hour_serializer.save()
+                OpeningHoursUpdateAdmin.save_opening_hour(opening_hour_object=opening_hour_object)
+                description += "오픈시간 변경됨, "
+
+            # request 작성
+            cafe_suggestion_request_serializer = CafeInformationSuggestionSerializer(data={
+                "user": request.user.id,
+                "cafe": origin_cafe_object.id,
+                "suggested_cafe": suggested_cafe_object.id,
+                "etc": etc,
+                "description": description
+            })
+            cafe_suggestion_request_serializer.is_valid(raise_exception=True)
+            obj = cafe_suggestion_request_serializer.save()
+
+            # 관리자에게 요청 알림
+            send_sms_to_admin(
+                content=f"카페 정보수정 요청 by {obj.user.profile.nickname}\n{obj.cafe.name}\nhttps://{BASE_DOMAIN}/admin/request/")
+
+            return Response(data=self.get_serializer(obj, read_only=True).data, status=status.HTTP_201_CREATED)
+        except Cafe.DoesNotExist:
+            return ServiceError.no_cafe_response()
+
+    @swagger_auto_schema(
+        operation_id='카페 정보 수정 요청 삭제',
+        operation_description='내가 했던 카페 정보 수정 요청 삭제',
+        request_body=no_body,
+        responses={204: ""},
+        manual_parameters=[AUTHORIZATION_MANUAL_PARAMETER]
+    )
+    def destroy(self, request, *args, **kwargs):
+        return super(CafeInformationSuggestionViewSet, self).destroy(request, *args, **kwargs)
 
 
 class WithdrawalRequestViewSet(
