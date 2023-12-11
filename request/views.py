@@ -138,8 +138,9 @@ class CafeAdditionRequestViewSet(
             obj = cafe_addition_request_serializer.save()
 
             # 관리자에게 요청 알림
-            send_sms_to_admin(
-                content=f"카페 등록 요청 by {obj.user.profile.nickname}\n{obj.cafe.name}\nhttps://{BASE_DOMAIN}/admin/request/")
+            if not request.user.is_superuser:
+                send_sms_to_admin(
+                    content=f"카페 등록 요청 by {obj.user.profile.nickname}\n{obj.cafe.name}\nhttps://{BASE_DOMAIN}/admin/request/")
 
             return Response(data=self.get_serializer(obj, read_only=True).data, status=status.HTTP_201_CREATED)
 
@@ -289,8 +290,9 @@ class CafeInformationSuggestionViewSet(
             obj = cafe_suggestion_request_serializer.save()
 
             # 관리자에게 요청 알림
-            send_sms_to_admin(
-                content=f"카페 정보수정 요청 by {obj.user.profile.nickname}\n{obj.cafe.name}\nhttps://{BASE_DOMAIN}/admin/request/")
+            if not request.user.is_superuser:
+                send_sms_to_admin(
+                    content=f"카페 정보수정 요청 by {obj.user.profile.nickname}\n{obj.cafe.name}\nhttps://{BASE_DOMAIN}/admin/request/")
 
             return Response(data=self.get_serializer(obj, read_only=True).data, status=status.HTTP_201_CREATED)
         except Cafe.DoesNotExist:
@@ -330,8 +332,9 @@ class WithdrawalRequestViewSet(
         user_serializer.is_valid(raise_exception=True)
         user_serializer.save()
         # 관리자에게 요청 알림
-        send_sms_to_admin(
-            content=f"회원 탈퇴 요청 by {request.user.profile.nickname}\nhttps://{BASE_DOMAIN}/admin/request/")
+        if not request.user.is_superuser:
+            send_sms_to_admin(
+                content=f"회원 탈퇴 요청 by {request.user.profile.nickname}\nhttps://{BASE_DOMAIN}/admin/request/")
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -364,6 +367,7 @@ class UserMigrationRequestViewSet(
             request_serializer.save()
 
             # 관리자에게 요청 알림
-            send_sms_to_admin(
-                content=f"사용자 정보 이전 요청 by {request.user.profile.nickname}\n번호: {phone_number}\nhttps://{BASE_DOMAIN}/admin/request/")
+            if not request.user.is_superuser:
+                send_sms_to_admin(
+                    content=f"사용자 정보 이전 요청 by {request.user.profile.nickname}\n번호: {phone_number}\nhttps://{BASE_DOMAIN}/admin/request/")
             return Response(data=request_serializer.data,status=status.HTTP_201_CREATED)
