@@ -7,7 +7,7 @@ from request.views import CafeAdditionRequestViewSet, WithdrawalRequestViewSet, 
 
 router = routers.DefaultRouter()
 router.register('cafe_addition', CafeAdditionRequestViewSet)
-router.register('cafe_information_suggest', CafeInformationSuggestionViewSet)
+router.register('cafe_information_suggestion', CafeInformationSuggestionViewSet)
 router.register('withdrawal', WithdrawalRequestViewSet)
 router.register('user_migration', UserMigrationRequestViewSet)
 
