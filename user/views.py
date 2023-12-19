@@ -1,8 +1,10 @@
+import datetime
 import random
 import re
 import time
 
 import jwt
+import pytz
 import requests
 from allauth.socialaccount.models import SocialAccount
 from allauth.socialaccount.providers.apple.client import AppleOAuth2Client
@@ -22,7 +24,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from cafejari import settings
-from cafejari.settings import KAKAO_REST_API_KEY, KAKAO_REDIRECT_URL, DEBUG, APPLE_REDIRECT_URL
+from cafejari.settings import KAKAO_REST_API_KEY, KAKAO_REDIRECT_URL, DEBUG, APPLE_REDIRECT_URL, TIME_ZONE
 from error import ServiceError
 from notification.naver_sms import send_sms_to_admin
 from user.models import User, Profile, Grade, NicknameAdjective, NicknameNoun, ProfileImage
@@ -32,7 +34,7 @@ from user.swagger_serializers import SwaggerMakeNewProfileRequestSerializer, \
     SwaggerValidateNicknameResponseSerializer, SwaggerKakaoLoginRequestSerializer, \
     SwaggerRefreshTokenResponseSerializer, SwaggerAppleLoginRequestSerializer, SwaggerAppleCallbackResponseSerializer
 from user.serializers import ProfileResponseSerializer, UserResponseSerializer, ProfileSerializer, \
-    ProfileImageSerializer, GradeResponseSerializer, ProfileImageResponseSerializer
+    ProfileImageSerializer, GradeResponseSerializer, ProfileImageResponseSerializer, UserSerializer
 from drf_yasg.utils import swagger_auto_schema, no_body
 
 from utils import AUTHORIZATION_MANUAL_PARAMETER
@@ -69,6 +71,9 @@ class UserViewSet(GenericViewSet):
     )
     @action(methods=['get'], detail=False)
     def user(self, queryset):
+        serializer = UserSerializer(self.request.user, data={"last_login": datetime.datetime.now(tz=pytz.timezone(TIME_ZONE))})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(data=self.get_serializer(self.request.user, read_only=True).data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
