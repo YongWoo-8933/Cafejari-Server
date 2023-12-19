@@ -71,7 +71,7 @@ class UserViewSet(GenericViewSet):
     )
     @action(methods=['get'], detail=False)
     def user(self, queryset):
-        serializer = UserSerializer(self.request.user, data={"last_login": datetime.datetime.now(tz=pytz.timezone(TIME_ZONE))})
+        serializer = UserSerializer(self.request.user, partial=True, data={"last_login": datetime.datetime.now(tz=pytz.timezone(TIME_ZONE))})
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(data=self.get_serializer(self.request.user, read_only=True).data, status=status.HTTP_200_OK)
