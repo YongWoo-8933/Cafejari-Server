@@ -116,7 +116,8 @@ class CafeAdmin(admin.GeoModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.point = Point(obj.longitude, obj.latitude, srid=4326)
         obj.save()
-        OpeningHoursUpdateAdmin.save_opening_hour(opening_hour_object=obj.opening_hour)
+        if obj.opening_hour:
+            OpeningHoursUpdateAdmin.save_opening_hour(opening_hour_object=obj.opening_hour)
 
     floor_count.short_description = "층수"
     district_city.short_description = "구역"
