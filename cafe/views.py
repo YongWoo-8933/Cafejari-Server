@@ -135,7 +135,7 @@ class CafeViewSet(
         if len(queryset) > 300:
             queryset = queryset[:300]
         if latitude and longitude:
-            user_location = Point(longitude, latitude, srid=4326)
+            user_location = Point(float(longitude), float(latitude), srid=4326)
             queryset.annotate(
                 distance=Distance("point", GEOSGeometry(user_location, srid=4326))
             ).order_by("distance")
