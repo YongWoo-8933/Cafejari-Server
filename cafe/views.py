@@ -111,6 +111,8 @@ class CafeViewSet(
     @action(detail=False, methods=['get'], permission_classes=[AllowAny])
     def search(self, queryset):
         query = self.request.query_params.get('query')
+        latitude = self.request.query_params.get('latitude')
+        longitude = self.request.query_params.get('longitude')
         queryset = self.queryset.filter(is_closed=False, is_visible=True)
         if query:
             query_list = query.split()
@@ -118,6 +120,11 @@ class CafeViewSet(
                 queryset = queryset.filter(Q(name__icontains=query_word) | Q(address__icontains=query_word))
         if len(queryset) > 300:
             queryset = queryset[:300]
+        if latitude and longitude:
+            user_location = Point(longitude, latitude, srid=4326)
+            queryset.annotate(
+                distance=Distance("point", GEOSGeometry(user_location, srid=4326))
+            ).order_by("distance")
         serializer = CafeSearchResponseSerializer(queryset, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
