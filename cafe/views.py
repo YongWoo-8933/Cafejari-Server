@@ -136,7 +136,7 @@ class CafeViewSet(
             queryset = queryset[:300]
         if latitude and longitude:
             user_location = Point(float(longitude), float(latitude), srid=4326)
-            queryset.annotate(
+            queryset = queryset.annotate(
                 distance=Distance("point", GEOSGeometry(user_location, srid=4326))
             ).order_by("distance")
         serializer = CafeSearchResponseSerializer(queryset, many=True)
