@@ -105,7 +105,21 @@ class CafeViewSet(
                 type=openapi.TYPE_STRING,
                 required=True,
                 description='검색어',
-            )
+            ),
+            openapi.Parameter(
+                name='latitude',
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_NUMBER,
+                required=False,
+                description='위도',
+            ),
+            openapi.Parameter(
+                name='longitude',
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_NUMBER,
+                required=False,
+                description='경도',
+            ),
         ]
     )
     @action(detail=False, methods=['get'], permission_classes=[AllowAny])
