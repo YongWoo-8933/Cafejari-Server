@@ -14,3 +14,6 @@ class AdLogAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         return self.readonly_fields + ('name', 'date', 'count', 'description')
+
+    def has_add_permission(self, request):
+        return False
