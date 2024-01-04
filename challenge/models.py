@@ -9,6 +9,7 @@ class Challenge(models.Model):
     name = models.CharField(max_length=63)
     description = models.TextField()
     image = models.ImageField(upload_to=challenge_image_upload_path)
+    url = models.URLField(max_length=255, null=True, default=None, blank=True)
     available = models.BooleanField(default=True)
     start = models.DateTimeField()
     finish = models.DateTimeField()
