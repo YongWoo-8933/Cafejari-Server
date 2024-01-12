@@ -127,7 +127,7 @@ class UserMigrationRequest(models.Model):
 
 class AppFeedback(models.Model):
     time = models.DateTimeField(auto_now_add=True)
-    feedback = models.TextField()
+    feedback = models.TextField(default="")
     user = models.ForeignKey(
         'user.User',
         on_delete=models.SET_NULL,
