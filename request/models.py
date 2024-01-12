@@ -131,7 +131,7 @@ class AppFeedback(models.Model):
     user = models.ForeignKey(
         'user.User',
         on_delete=models.SET_NULL,
-        related_name="user_migration_request",
+        related_name="app_feedback",
         db_column="user",
         default=None,
         blank=True,
