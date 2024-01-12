@@ -377,7 +377,6 @@ class UserMigrationRequestViewSet(
 
 
 class AppFeedbackViewSet(
-    mixins.CreateModelMixin,
     GenericViewSet
 ):
     queryset = AppFeedback.objects.all()
