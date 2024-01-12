@@ -39,6 +39,6 @@ class SwaggerUserMigrationRequestSerializer(SwaggerSerializer):
 
 
 class SwaggerAppFeedbackRequestSerializer(SwaggerSerializer):
-    reason = serializers.CharField()
+    feedback = serializers.CharField()
 
 

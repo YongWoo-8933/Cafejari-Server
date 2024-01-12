@@ -392,9 +392,9 @@ class AppFeedbackViewSet(
     )
     @action(detail=False, methods=['post'], permission_classes=[AllowAny])
     def guest_feedback(self, request):
-        reason = str(request.data.get("reason"))
+        feedback = str(request.data.get("feedback"))
 
-        serializer = self.get_serializer(data={"reason": reason})
+        serializer = self.get_serializer(data={"feedback": feedback})
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
@@ -408,9 +408,9 @@ class AppFeedbackViewSet(
     )
     @action(detail=False, methods=['post'], permission_classes=[AllowAny])
     def user_feedback(self, request):
-        reason = str(request.data.get("reason"))
+        feedback = str(request.data.get("feedback"))
 
-        serializer = self.get_serializer(data={"reason": reason, "user": request.user.id})
+        serializer = self.get_serializer(data={"feedback": feedback, "user": request.user.id})
         serializer.is_valid(raise_exception=True)
         serializer.save()
 

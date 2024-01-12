@@ -203,10 +203,10 @@ class UserMigrationRequestAdmin(admin.ModelAdmin):
 
 @admin.register(AppFeedback)
 class AppFeedbackAdmin(admin.ModelAdmin):
-    list_display = ("id", "time", "reason", "nickname")
-    list_filter = ("reason",)
+    list_display = ("id", "time", "feedback", "nickname")
+    list_filter = ("feedback",)
     date_hierarchy = "time"
-    search_fields = ("user__profile__nickname", "reason")
+    search_fields = ("user__profile__nickname", "feedback")
     ordering = ("-time",)
     list_select_related = ["user"]
     save_as = True
