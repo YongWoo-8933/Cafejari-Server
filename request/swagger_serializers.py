@@ -38,3 +38,7 @@ class SwaggerUserMigrationRequestSerializer(SwaggerSerializer):
     phone_number = serializers.CharField(max_length=8)
 
 
+class SwaggerAppFeedbackRequestSerializer(SwaggerSerializer):
+    reason = serializers.CharField()
+
+

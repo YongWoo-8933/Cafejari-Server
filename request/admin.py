@@ -12,7 +12,8 @@ from cafe.serializers import CafeSerializer, CafeImageSerializer
 from cafejari.settings import GOOGLE_PLACE_API_KEY
 from notification.firebase_message import FirebaseMessage
 from notification.models import PushNotificationType
-from request.models import CafeAdditionRequest, CafeInformationSuggestion, WithdrawalRequest, UserMigrationRequest
+from request.models import CafeAdditionRequest, CafeInformationSuggestion, WithdrawalRequest, UserMigrationRequest, \
+    AppFeedback
 from request.serializers import CafeAdditionRequestSerializer, CafeInformationSuggestionSerializer
 
 
@@ -198,3 +199,19 @@ class UserMigrationRequestAdmin(admin.ModelAdmin):
     def nickname(self, request): return request.user.profile.nickname if request.user else None
 
     nickname.short_description = "요청자"
+
+
+@admin.register(AppFeedback)
+class AppFeedbackAdmin(admin.ModelAdmin):
+    list_display = ("id", "time", "reason", "nickname")
+    list_filter = ("reason",)
+    date_hierarchy = "time"
+    search_fields = ("user__profile__nickname", "reason")
+    ordering = ("-time",)
+    list_select_related = ["user"]
+    save_as = True
+    preserve_filters = True
+
+    def nickname(self, feedback): return feedback.user.profile.nickname if feedback.user else None
+
+    nickname.short_description = "사용자"

@@ -1,7 +1,8 @@
 from django.contrib.gis.geos import Point
 from drf_yasg.utils import swagger_auto_schema, no_body
 from rest_framework import mixins, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
@@ -11,12 +12,14 @@ from cafejari.settings import BASE_DOMAIN
 from data.admin import OpeningHoursUpdateAdmin
 from error import ServiceError
 from notification.naver_sms import send_sms_to_admin
-from request.models import CafeAdditionRequest, WithdrawalRequest, UserMigrationRequest, CafeInformationSuggestion
+from request.models import CafeAdditionRequest, WithdrawalRequest, UserMigrationRequest, CafeInformationSuggestion, \
+    AppFeedback
 from request.serializers import CafeAdditionRequestResponseSerializer, CafeAdditionRequestSerializer, \
     WithdrawalRequestSerializer, UserMigrationRequestSerializer, CafeInformationSuggestionSerializer, \
-    CafeInformationSuggestionRequestResponseSerializer
+    CafeInformationSuggestionRequestResponseSerializer, AppFeedbackSerializer
 from request.swagger_serializers import SwaggerCafeAdditionRequestSerializer, SwaggerWithdrawalRequestSerializer, \
-    SwaggerUserMigrationRequestSerializer, SwaggerCafeInformationSuggestionRequestSerializer
+    SwaggerUserMigrationRequestSerializer, SwaggerCafeInformationSuggestionRequestSerializer, \
+    SwaggerAppFeedbackRequestSerializer
 from user.serializers import UserSerializer
 from utils import UserListDestroyViewSet, AUTHORIZATION_MANUAL_PARAMETER
 
@@ -371,3 +374,44 @@ class UserMigrationRequestViewSet(
                 send_sms_to_admin(
                     content=f"사용자 정보 이전 요청 by {request.user.profile.nickname}\n번호: {phone_number}\nhttps://{BASE_DOMAIN}/admin/request/")
             return Response(data=request_serializer.data,status=status.HTTP_201_CREATED)
+
+
+class AppFeedbackViewSet(
+    mixins.CreateModelMixin,
+    GenericViewSet
+):
+    queryset = AppFeedback.objects.all()
+    serializer_class = AppFeedbackSerializer
+    permission_classes = [AllowAny]
+
+    @swagger_auto_schema(
+        operation_id='게스트 유저 피드백 제출',
+        operation_description='인증 정보가 없는 게스트 유저의 앱 피드백 제출',
+        request_body=SwaggerAppFeedbackRequestSerializer,
+        responses={201: AppFeedbackSerializer()}
+    )
+    @action(detail=False, methods=['post'], permission_classes=[AllowAny])
+    def guest_feedback(self, request):
+        reason = str(request.data.get("reason"))
+
+        serializer = self.get_serializer(data={"reason": reason})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @swagger_auto_schema(
+        operation_id='유저 피드백 제출',
+        operation_description='로그인한 유저의 앱 피드백 제출',
+        request_body=SwaggerAppFeedbackRequestSerializer,
+        responses={201: AppFeedbackSerializer()}
+    )
+    @action(detail=False, methods=['post'], permission_classes=[AllowAny])
+    def user_feedback(self, request):
+        reason = str(request.data.get("reason"))
+
+        serializer = self.get_serializer(data={"reason": reason, "user": request.user.id})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

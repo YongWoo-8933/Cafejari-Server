@@ -123,3 +123,23 @@ class UserMigrationRequest(models.Model):
         db_table_comment = '사용자 정보이전 요청'
         app_label = 'request'
         ordering = ["-requested_at"]
+
+
+class AppFeedback(models.Model):
+    time = models.DateTimeField(auto_now_add=True)
+    reason = models.BooleanField(default=False)
+    user = models.ForeignKey(
+        'user.User',
+        on_delete=models.SET_NULL,
+        related_name="user_migration_request",
+        db_column="user",
+        default=None,
+        blank=True,
+        null=True
+    )
+
+    class Meta:
+        db_table = 'app_feedback'
+        db_table_comment = '앱 사용 피드백 제출'
+        app_label = 'request'
+        ordering = ["-time"]
