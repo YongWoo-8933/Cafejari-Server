@@ -29,6 +29,9 @@ class FirebaseMessage:
                         body=body,
                     ),
                     token=user_object.profile.fcm_token,
+                    data={
+                        "bottom_tab_index": 2
+                    }
                 )
                 try:
                     messaging.send(message)
