@@ -30,7 +30,7 @@ class FirebaseMessage:
                     ),
                     token=user_object.profile.fcm_token,
                     data={
-                        "bottom_tab_index": 2
+                        "bottom_tab_index": "2"
                     }
                 )
                 try:
