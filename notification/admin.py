@@ -1,10 +1,8 @@
 
 from django.contrib import admin
-from django.core.exceptions import ObjectDoesNotExist
 
 from notification.firebase_message import FirebaseMessage
 from notification.models import PushNotification
-from user.models import User
 
 
 @admin.register(PushNotification)

@@ -401,6 +401,8 @@ class CafeDataUpdateAdmin(CsvFileManageAdmin):
                             "cafe": new_cafe_object.id
                         })
                         opening_hour_serializer.is_valid(raise_exception=True)
+                        opening_hour_object = opening_hour_serializer.save()
+                        OpeningHoursUpdateAdmin.save_opening_hour(opening_hour_object=opening_hour_object)
                         opening_hour_serializer.save()
 
                 # cafe image 설정
@@ -525,25 +527,29 @@ class OpeningHoursUpdateAdmin(admin.ModelAdmin):
     def save_opening_hours(self):
         opening_hour_queryset = OpeningHour.objects.all()
         for opening_hour_object in opening_hour_queryset:
-            data = {}
-            if opening_hour_object.mon:
-                data["mon_opening_time"], data["mon_closing_time"] = self.parse_hours(opening_hour_object.mon)
-            if opening_hour_object.tue:
-                data["tue_opening_time"], data["tue_closing_time"] = self.parse_hours(opening_hour_object.tue)
-            if opening_hour_object.wed:
-                data["wed_opening_time"], data["wed_closing_time"] = self.parse_hours(opening_hour_object.wed)
-            if opening_hour_object.thu:
-                data["thu_opening_time"], data["thu_closing_time"] = self.parse_hours(opening_hour_object.thu)
-            if opening_hour_object.fri:
-                data["fri_opening_time"], data["fri_closing_time"] = self.parse_hours(opening_hour_object.fri)
-            if opening_hour_object.sat:
-                data["sat_opening_time"], data["sat_closing_time"] = self.parse_hours(opening_hour_object.sat)
-            if opening_hour_object.sun:
-                data["sun_opening_time"], data["sun_closing_time"] = self.parse_hours(opening_hour_object.sun)
+            self.save_opening_hour(opening_hour_object=opening_hour_object)
 
-            serializer = OpeningHourSerializer(opening_hour_object, data=data, partial=True)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+    @staticmethod
+    def save_opening_hour(opening_hour_object):
+        data = {}
+        if opening_hour_object.mon:
+            data["mon_opening_time"], data["mon_closing_time"] = OpeningHoursUpdateAdmin.parse_hours(opening_hour_object.mon)
+        if opening_hour_object.tue:
+            data["tue_opening_time"], data["tue_closing_time"] = OpeningHoursUpdateAdmin.parse_hours(opening_hour_object.tue)
+        if opening_hour_object.wed:
+            data["wed_opening_time"], data["wed_closing_time"] = OpeningHoursUpdateAdmin.parse_hours(opening_hour_object.wed)
+        if opening_hour_object.thu:
+            data["thu_opening_time"], data["thu_closing_time"] = OpeningHoursUpdateAdmin.parse_hours(opening_hour_object.thu)
+        if opening_hour_object.fri:
+            data["fri_opening_time"], data["fri_closing_time"] = OpeningHoursUpdateAdmin.parse_hours(opening_hour_object.fri)
+        if opening_hour_object.sat:
+            data["sat_opening_time"], data["sat_closing_time"] = OpeningHoursUpdateAdmin.parse_hours(opening_hour_object.sat)
+        if opening_hour_object.sun:
+            data["sun_opening_time"], data["sun_closing_time"] = OpeningHoursUpdateAdmin.parse_hours(opening_hour_object.sun)
+
+        serializer = OpeningHourSerializer(opening_hour_object, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
 
 

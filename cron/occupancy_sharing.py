@@ -12,14 +12,14 @@ def check_sharing_activity():
     try:
         now = datetime.datetime.now()
         before_10_minute = now - datetime.timedelta(minutes=10)
-        before_20_minute = now - datetime.timedelta(minutes=20)
-        between_10_20_logs = OccupancyRateUpdateLog.objects.filter(
+        before_30_minute = now - datetime.timedelta(minutes=30)
+        between_10_30_logs = OccupancyRateUpdateLog.objects.filter(
             user__isnull=False,
             is_notified=False,
             cafe_floor__isnull=False,
-            update__range=(before_20_minute, before_10_minute)
+            update__range=(before_30_minute, before_10_minute)
         )
-        for log in between_10_20_logs:
+        for log in between_10_30_logs:
             if log.cafe_floor.floor < 0:
                 floor_text = f"B{abs(log.cafe_floor.floor)}"
             else:
