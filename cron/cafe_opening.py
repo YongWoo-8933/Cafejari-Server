@@ -1,15 +1,12 @@
 import datetime
 import logging
 
-import pytz
-
 from cafe.models import Cafe, OpeningHour
 from cafe.serializers import CafeSerializer
-from cafejari.settings import TIME_ZONE
 
 
 def get_is_cafe_opened(open_at, close_at):
-    now = datetime.datetime.now(tz=pytz.timezone(TIME_ZONE))
+    now = datetime.datetime.now()
     if open_at is not None and close_at is not None:
         if open_at < close_at:
             return open_at <= now.time() <= close_at
@@ -23,7 +20,7 @@ def get_is_cafe_opened(open_at, close_at):
 
 def update_cafe_opening():
     try:
-        now = datetime.datetime.now(tz=pytz.timezone(TIME_ZONE))
+        now = datetime.datetime.now()
         for cafe_object in Cafe.objects.all():
             # 연결된 영업시간 정보가 있으면 진행
             try:

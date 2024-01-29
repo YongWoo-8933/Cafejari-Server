@@ -25,6 +25,7 @@ urlpatterns = [
     path('tos/', views.tos),
     path('privacy_policy/', views.privacy_policy),
     path('admin/', admin.site.urls),
+    path('ad/', include('ad.urls')),
     path('app_config/', include('app_config.urls')),
     path('user/', include('user.urls')),
     path('cafe/', include('cafe.urls')),

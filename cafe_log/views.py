@@ -286,7 +286,8 @@ class CafeLogViewSet(mixins.CreateModelMixin,
         serializer.save()
 
         # 관리자에게 신고 알림
-        send_sms_to_admin(
-            content=f"카페 로그 신고 by {request.user.profile.nickname}\nhttp://localhost/admin/cafelogreport/")
+        if not request.user.is_superuser:
+            send_sms_to_admin(
+                content=f"카페 로그 신고 by {request.user.profile.nickname}\nhttp://localhost/admin/cafelogreport/")
 
         return Response(self.get_serializer(self.get_object(), read_only=True).data, status=status.HTTP_201_CREATED)

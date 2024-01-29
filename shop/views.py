@@ -141,8 +141,9 @@ class GifticonViewSet(
         profile_serializer.save()
 
         # 관리자에게 상품구매 알림
-        send_sms_to_admin(
-            content=f"상품 구매 by {request.user.profile.nickname}\nhttps://{BASE_DOMAIN}/admin/shop/")
+        if not request.user.is_superuser:
+            send_sms_to_admin(
+                content=f"상품 구매 by {request.user.profile.nickname}\nhttps://{BASE_DOMAIN}/admin/shop/")
 
         # 발송 성공 후 비즈머니 체크 로직
         balance = GiftishowBiz.get_biz_money_balance()

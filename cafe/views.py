@@ -105,12 +105,28 @@ class CafeViewSet(
                 type=openapi.TYPE_STRING,
                 required=True,
                 description='검색어',
+            ),
+            openapi.Parameter(
+                name='latitude',
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_NUMBER,
+                required=False,
+                description='위도',
+            ),
+            openapi.Parameter(
+                name='longitude',
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_NUMBER,
+                required=False,
+                description='경도',
             )
         ]
     )
     @action(detail=False, methods=['get'], permission_classes=[AllowAny])
     def search(self, queryset):
         query = self.request.query_params.get('query')
+        latitude = self.request.query_params.get('latitude')
+        longitude = self.request.query_params.get('longitude')
         queryset = self.queryset.filter(is_closed=False, is_visible=True)
         if query:
             query_list = query.split()
@@ -118,6 +134,11 @@ class CafeViewSet(
                 queryset = queryset.filter(Q(name__icontains=query_word) | Q(address__icontains=query_word))
         if len(queryset) > 300:
             queryset = queryset[:300]
+        if latitude and longitude:
+            user_location = Point(float(longitude), float(latitude), srid=4326)
+            queryset = queryset.annotate(
+                distance=Distance("point", GEOSGeometry(user_location, srid=4326))
+            ).order_by("distance")
         serializer = CafeSearchResponseSerializer(queryset, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 

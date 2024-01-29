@@ -121,6 +121,10 @@ class ServiceError:
         return Response(cls._error_dict(
             error_code=902, error_message="사용자 정보 이전이 완료된 계정입니다"), status=status.HTTP_409_CONFLICT)
 
+    @classmethod
+    def no_cafe_response(cls):
+        return Response(cls._error_dict(
+            error_code=903, error_message="요청하신 카페가 존재하지 않습니다"), status=status.HTTP_409_CONFLICT)
 
     # 1000번대 shop
     @classmethod
