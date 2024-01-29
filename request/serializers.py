@@ -2,7 +2,8 @@
 from rest_framework import serializers
 
 from cafe.serializers import CafeSerializer
-from request.models import CafeAdditionRequest, CafeInformationSuggestion, WithdrawalRequest, UserMigrationRequest
+from request.models import CafeAdditionRequest, CafeInformationSuggestion, WithdrawalRequest, UserMigrationRequest, \
+    AppFeedback
 
 # 기본 serializer ------------------------------------------------------------------------------------
 from utils import ImageModelSerializer
@@ -36,6 +37,14 @@ class UserMigrationRequestSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class AppFeedbackSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AppFeedback
+        fields = "__all__"
+
+
+
 
 # 응용 serializer ------------------------------------------------------------------------------------
 class CafeAdditionRequestResponseSerializer(CafeAdditionRequestSerializer):
@@ -46,5 +55,10 @@ class CafeAdditionRequestResponseSerializer(CafeAdditionRequestSerializer):
         return super(CafeAdditionRequestResponseSerializer, self).to_representation(instance)
 
 
-class CafeInformationSuggestionResponseSerializer(CafeInformationSuggestionSerializer):
-    pass
+class CafeInformationSuggestionRequestResponseSerializer(CafeInformationSuggestionSerializer):
+    cafe = CafeSerializer(read_only=True)
+    suggested_cafe = CafeSerializer(read_only=True)
+
+    def to_representation(self, instance):
+        self.fields['cafe'] = CafeSerializer(read_only=True)
+        return super(CafeInformationSuggestionSerializer, self).to_representation(instance)

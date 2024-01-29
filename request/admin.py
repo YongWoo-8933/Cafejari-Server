@@ -1,3 +1,4 @@
+import datetime
 import os
 import time
 import uuid
@@ -6,11 +7,14 @@ import requests
 from django.contrib import admin
 from django.core.files.base import ContentFile
 
+from cafe.models import Cafe
 from cafe.serializers import CafeSerializer, CafeImageSerializer
 from cafejari.settings import GOOGLE_PLACE_API_KEY
 from notification.firebase_message import FirebaseMessage
 from notification.models import PushNotificationType
-from request.models import CafeAdditionRequest, CafeInformationSuggestion, WithdrawalRequest, UserMigrationRequest
+from request.models import CafeAdditionRequest, CafeInformationSuggestion, WithdrawalRequest, UserMigrationRequest, \
+    AppFeedback
+from request.serializers import CafeAdditionRequestSerializer, CafeInformationSuggestionSerializer
 
 
 @admin.register(CafeAdditionRequest)
@@ -33,6 +37,9 @@ class CafeAdditionRequestAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.save()
+        serializer = CafeAdditionRequestSerializer(obj, data={"answered_at": datetime.datetime.now()}, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         if obj.is_approved:
             # 카페 정보 저장
             cafe_serializer = CafeSerializer(obj.cafe, data={"is_visible": True}, partial=True)
@@ -105,12 +112,12 @@ class CafeAdditionRequestAdmin(admin.ModelAdmin):
 
 @admin.register(CafeInformationSuggestion)
 class CafeInformationSuggestionAdmin(admin.ModelAdmin):
-    list_display = ("id", "nickname", "cafe_name", "is_open", "suggested_cafe_name", "suggested_new_image", "requested_at", "answered_at", "is_approved", "is_notified",)
-    list_filter = ("user__profile__nickname", "is_approved",)
-    search_fields = ("user__profile__nickname",)
+    list_display = ("id", "nickname", "cafe_name", "suggested_cafe_name", "requested_at", "answered_at", "is_approved", "is_notified", "description")
+    list_filter = ("is_approved",)
+    search_fields = ("user__profile__nickname", "cafe__name",)
     date_hierarchy = "requested_at"
     ordering = ("-requested_at",)
-    list_select_related = ["cafe", "suggested_cafe", "suggested_new_image", "user"]
+    list_select_related = ["cafe", "suggested_cafe", "user"]
     save_as = True
     preserve_filters = True
 
@@ -121,18 +128,45 @@ class CafeInformationSuggestionAdmin(admin.ModelAdmin):
     def suggested_cafe_name(self, request):
         return request.suggested_cafe.name if request.suggested_cafe else None
 
-    nickname.short_description = "요청자"
-    cafe_name.short_description = "요청 카페"
-    suggested_cafe_name.short_description = "수정 요청한 카페 정보"
-
     def delete_model(self, request, obj):
-        self.s3_manager.delete_image(path=obj.suggested_new_image)
+        try:
+            Cafe.objects.get(id=obj.suggested_cafe.id).delete()
+        except Cafe.DoesNotExist:
+            pass
         obj.delete()
 
     def delete_queryset(self, request, queryset):
         for obj in queryset:
-            self.s3_manager.delete_image(path=obj.suggested_new_image)
+            try:
+                Cafe.objects.get(id=obj.suggested_cafe.id).delete()
+            except Cafe.DoesNotExist:
+                pass
             obj.delete()
+        queryset.delete()
+
+    nickname.short_description = "요청자"
+    cafe_name.short_description = "요청 카페"
+    suggested_cafe_name.short_description = "수정 요청한 카페 정보"
+
+    def save_model(self, request, obj, form, change):
+        obj.save()
+        serializer = CafeInformationSuggestionSerializer(obj, data={"answered_at": datetime.datetime.now()}, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        if obj.is_notified:
+            approve_title = "승인" if obj.is_approved else "거절"
+            if obj.is_approved:
+                approve_body = f"{obj.cafe.name} 정보 수정이 완료되었습니다."
+            else:
+                approve_body = f"{obj.cafe.name} 정보 수정 요청이 거절되었습니다. 사유: {obj.rejection_reason}"
+            FirebaseMessage.push_message(
+                title=f"카페 정보 수정 요청 {approve_title} 알림",
+                body=approve_body,
+                push_type=PushNotificationType.Etc.value,
+                user_object=obj.user,
+                save_model=True
+            )
 
 
 @admin.register(WithdrawalRequest)
@@ -165,3 +199,19 @@ class UserMigrationRequestAdmin(admin.ModelAdmin):
     def nickname(self, request): return request.user.profile.nickname if request.user else None
 
     nickname.short_description = "요청자"
+
+
+@admin.register(AppFeedback)
+class AppFeedbackAdmin(admin.ModelAdmin):
+    list_display = ("id", "time", "feedback", "nickname")
+    list_filter = ("feedback",)
+    date_hierarchy = "time"
+    search_fields = ("user__profile__nickname", "feedback")
+    ordering = ("-time",)
+    list_select_related = ["user"]
+    save_as = True
+    preserve_filters = True
+
+    def nickname(self, feedback): return feedback.user.profile.nickname if feedback.user else None
+
+    nickname.short_description = "사용자"

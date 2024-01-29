@@ -28,7 +28,7 @@ class FirebaseMessage:
                         title=title,
                         body=body,
                     ),
-                    token=user_object.profile.fcm_token,
+                    token=user_object.profile.fcm_token
                 )
                 try:
                     messaging.send(message)

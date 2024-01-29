@@ -4,6 +4,7 @@ from django.utils.html import format_html
 
 from cafe.models import Cafe, Brand, District, OpeningHour, CafeFloor, CafeImage, OccupancyRatePrediction, \
     OccupancyRateUpdateLog, CongestionArea, CafeVIP, DailyActivityStack, Location, CATI
+from data.admin import OpeningHoursUpdateAdmin
 from utils import ImageModelAdmin, replace_image_domain
 
 
@@ -115,6 +116,10 @@ class CafeAdmin(admin.GeoModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.point = Point(obj.longitude, obj.latitude, srid=4326)
         obj.save()
+        try:
+            OpeningHoursUpdateAdmin.save_opening_hour(opening_hour_object=obj.opening_hour)
+        except OpeningHour.DoesNotExist:
+            pass
 
     floor_count.short_description = "층수"
     district_city.short_description = "구역"
@@ -125,7 +130,7 @@ class CafeAdmin(admin.GeoModelAdmin):
 @admin.register(CafeImage)
 class CafeImageAdmin(ImageModelAdmin):
     list_display = ("id", "cafe_name", "image_tag", "is_visible",)
-    list_filter = ("cafe__name", "is_visible",)
+    list_filter = ("is_visible",)
     search_fields = ("cafe__name",)
     ordering = ("cafe__name",)
     list_select_related = ["cafe"]
@@ -144,7 +149,7 @@ class CafeImageAdmin(ImageModelAdmin):
 @admin.register(CafeVIP)
 class CafeVIPAdmin(admin.ModelAdmin):
     list_display = ("id", "cafe_name", "nickname", "update_count",)
-    list_filter = ("cafe__name", "user__profile__nickname",)
+    list_filter = ("cafe__district__gu", "cafe__brand__name", "user__profile__nickname",)
     search_fields = ("cafe__name", "user__profile__nickname",)
     ordering = ("cafe__name", "-update_count")
     list_select_related = ["cafe", "user"]
@@ -162,7 +167,7 @@ class CafeVIPAdmin(admin.ModelAdmin):
 @admin.register(OccupancyRatePrediction)
 class OccupancyRatePredictionAdmin(admin.ModelAdmin):
     list_display = ("id", "cafe_name", "occupancy_rate", "update")
-    list_filter = ("cafe_floor__cafe__name", "cafe_floor__cafe__brand__name", "cafe_floor__cafe__district__city",)
+    list_filter = ("cafe_floor__cafe__brand__name", "cafe_floor__cafe__district__city", "cafe_floor__cafe__district__gu", "cafe_floor__cafe__district__dong",)
     list_select_related = ["cafe_floor"]
     date_hierarchy = "update"
     search_fields = ("cafe_floor__cafe__name",)
@@ -178,7 +183,7 @@ class OccupancyRatePredictionAdmin(admin.ModelAdmin):
 @admin.register(OccupancyRateUpdateLog)
 class OccupancyRateUpdateLogAdmin(admin.ModelAdmin):
     list_display = ("id", "cafe_name_floor", "nickname", "occupancy_rate", "update", "is_google_map_prediction", "point", "congestion", "is_notified")
-    list_filter = ("user__profile__nickname", "is_google_map_prediction")
+    list_filter = ("cafe_floor__cafe__brand__name", "cafe_floor__cafe__district__city", "cafe_floor__cafe__district__gu", "cafe_floor__cafe__district__dong", "is_google_map_prediction")
     date_hierarchy = "update"
     search_fields = ("user__profile__nickname", "cafe_floor__cafe__name")
     ordering = ("-update",)
@@ -223,3 +228,6 @@ class OpeningHourAdmin(admin.ModelAdmin):
     def cafe_name(self, obj): return obj.cafe.name if obj.cafe else None
 
     cafe_name.short_description = "카페"
+
+    def save_model(self, request, obj, form, change):
+        OpeningHoursUpdateAdmin.save_opening_hour(opening_hour_object=obj)

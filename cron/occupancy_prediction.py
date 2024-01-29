@@ -20,7 +20,7 @@ def delete_occupancy_prediction(cafe_floor_id):
 
 
 def is_occupancy_update_possible():
-    now = datetime.datetime.now(tz=pytz.timezone(TIME_ZONE))
+    now = datetime.datetime.now()
     update_possible_time_from = datetime.time(UPDATE_POSSIBLE_TIME_FROM, 0, 0)
     update_possible_time_to = datetime.time(UPDATE_POSSIBLE_TIME_TO, 0, 0)
     return update_possible_time_from < now.time() < update_possible_time_to
@@ -45,7 +45,7 @@ def predict_occupancy():
                 delete_occupancy_prediction(cafe_floor_object.id)
                 continue
             # 현재 시각, 전후 80분 씩 설정, 평일 / 주말 구분
-            now = datetime.datetime.now(tz=pytz.timezone(TIME_ZONE))
+            now = datetime.datetime.now()
             start_datetime = now - datetime.timedelta(minutes=80)
             end_datetime = now + datetime.timedelta(minutes=80)
             start_time = datetime.time(start_datetime.hour, start_datetime.minute, 0)
