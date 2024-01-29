@@ -16,7 +16,7 @@ class CafeAdditionRequestSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class CafeInformationSuggestionSerializer(serializers.ModelSerializer):
+class CafeInformationSuggestionSerializer(ImageModelSerializer):
 
     class Meta:
         model = CafeInformationSuggestion

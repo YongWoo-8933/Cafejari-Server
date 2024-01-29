@@ -119,7 +119,7 @@ class CafeViewSet(
                 type=openapi.TYPE_NUMBER,
                 required=False,
                 description='경도',
-            ),
+            )
         ]
     )
     @action(detail=False, methods=['get'], permission_classes=[AllowAny])

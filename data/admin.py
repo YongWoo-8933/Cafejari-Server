@@ -403,6 +403,7 @@ class CafeDataUpdateAdmin(CsvFileManageAdmin):
                         opening_hour_serializer.is_valid(raise_exception=True)
                         opening_hour_object = opening_hour_serializer.save()
                         OpeningHoursUpdateAdmin.save_opening_hour(opening_hour_object=opening_hour_object)
+                        opening_hour_serializer.save()
 
                 # cafe image 설정
                 if google_place_id:

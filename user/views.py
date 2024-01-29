@@ -4,7 +4,6 @@ import re
 import time
 
 import jwt
-import pytz
 import requests
 from allauth.socialaccount.models import SocialAccount
 from allauth.socialaccount.providers.apple.client import AppleOAuth2Client

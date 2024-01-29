@@ -126,7 +126,6 @@ class ServiceError:
         return Response(cls._error_dict(
             error_code=903, error_message="요청하신 카페가 존재하지 않습니다"), status=status.HTTP_409_CONFLICT)
 
-
     # 1000번대 shop
     @classmethod
     def no_item_response(cls):

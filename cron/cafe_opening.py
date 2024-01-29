@@ -1,7 +1,6 @@
 import datetime
 import logging
 
-
 from cafe.models import Cafe, OpeningHour
 from cafe.serializers import CafeSerializer
 
