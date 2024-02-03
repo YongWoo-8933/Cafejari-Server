@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from notification.models import PushNotification, PopUpNotification
-from notification.serializers import PushNotificationSerializer, PopUpNotificationSerializer
+from notification.serializers import PushNotificationSerializer, PopUpNotificationResponseSerializer
 from utils import UserListDestroyViewSet, AUTHORIZATION_MANUAL_PARAMETER
 
 
@@ -57,13 +57,13 @@ class PopUpNotificationViewSet(
     GenericViewSet
 ):
     queryset = PopUpNotification.objects.all()
-    serializer_class = PopUpNotificationSerializer
+    serializer_class = PopUpNotificationResponseSerializer
     permission_classes = [AllowAny]
 
     @swagger_auto_schema(
         operation_id='팝업들 확인',
         operation_description='visible 상태의 팝업들 정보를 받음',
-        responses={200: PopUpNotificationSerializer(many=True)}
+        responses={200: PopUpNotificationResponseSerializer(many=True)}
     )
     def list(self, request, *args, **kwargs):
         queryset = self.queryset.filter(is_visible=True)
