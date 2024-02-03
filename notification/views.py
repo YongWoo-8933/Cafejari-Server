@@ -10,24 +10,6 @@ from notification.serializers import PushNotificationSerializer, PopUpNotificati
 from utils import UserListDestroyViewSet, AUTHORIZATION_MANUAL_PARAMETER
 
 
-class PopUpNotificationViewSet(
-    mixins.ListModelMixin,
-    GenericViewSet
-):
-    queryset = PopUpNotification.objects.all()
-    serializer_class = PopUpNotificationSerializer
-    permission_classes = [AllowAny]
-
-    @swagger_auto_schema(
-        operation_id='팝업들 확인',
-        operation_description='visible 상태의 팝업들 정보를 받음',
-        responses={200: PopUpNotificationSerializer(many=True)}
-    )
-    def list(self, request, *args, **kwargs):
-        queryset = self.queryset.filter(is_visible=True)
-        return Response(data=self.get_serializer(queryset, many=True).data, status=status.HTTP_200_OK)
-
-
 class PushNotificationViewSet(UserListDestroyViewSet):
     queryset = PushNotification.objects.all()
     serializer_class = PushNotificationSerializer
@@ -68,3 +50,21 @@ class PushNotificationViewSet(UserListDestroyViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+
+
+class PopUpNotificationViewSet(
+    mixins.ListModelMixin,
+    GenericViewSet
+):
+    queryset = PopUpNotification.objects.all()
+    serializer_class = PopUpNotificationSerializer
+    permission_classes = [AllowAny]
+
+    @swagger_auto_schema(
+        operation_id='팝업들 확인',
+        operation_description='visible 상태의 팝업들 정보를 받음',
+        responses={200: PopUpNotificationSerializer(many=True)}
+    )
+    def list(self, request, *args, **kwargs):
+        queryset = self.queryset.filter(is_visible=True)
+        return Response(data=self.get_serializer(queryset, many=True).data, status=status.HTTP_200_OK)
