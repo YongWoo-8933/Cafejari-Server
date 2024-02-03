@@ -58,7 +58,6 @@ class PopUpNotificationViewSet(
 ):
     queryset = PopUpNotification.objects.all()
     serializer_class = PopUpNotificationSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
 
     @swagger_auto_schema(
         operation_id='팝업들 확인',
