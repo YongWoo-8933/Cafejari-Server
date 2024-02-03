@@ -66,5 +66,5 @@ class PopUpNotificationViewSet(
         responses={200: PopUpNotificationResponseSerializer(many=True)}
     )
     def list(self, request, *args, **kwargs):
-        queryset = self.queryset.filter(visible=True)
+        queryset = self.queryset.filter(visible=True).order_by('-datetime')
         return Response(data=self.get_serializer(queryset, many=True).data, status=status.HTTP_200_OK)
