@@ -9,6 +9,7 @@ class PushNotificationSerializer(serializers.ModelSerializer):
         model = PushNotification
         fields = "__all__"
 
+
 class PopUpNotificationSerializer(serializers.ModelSerializer):
 
     class Meta:

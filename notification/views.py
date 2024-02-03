@@ -1,7 +1,7 @@
 from drf_yasg.utils import swagger_auto_schema, no_body
 from rest_framework import status, mixins
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
@@ -58,7 +58,7 @@ class PopUpNotificationViewSet(
 ):
     queryset = PopUpNotification.objects.all()
     serializer_class = PopUpNotificationSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     @swagger_auto_schema(
         operation_id='팝업들 확인',
