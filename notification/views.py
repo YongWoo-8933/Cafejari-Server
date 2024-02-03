@@ -1,11 +1,12 @@
 from drf_yasg.utils import swagger_auto_schema, no_body
-from rest_framework import status
+from rest_framework import status, mixins
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 
-from notification.models import PushNotification
-from notification.serializers import PushNotificationSerializer
+from notification.models import PushNotification, PopUpNotification
+from notification.serializers import PushNotificationSerializer, PopUpNotificationSerializer
 from utils import UserListDestroyViewSet, AUTHORIZATION_MANUAL_PARAMETER
 
 
@@ -49,3 +50,21 @@ class PushNotificationViewSet(UserListDestroyViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+
+
+class PopUpNotificationViewSet(
+    mixins.ListModelMixin,
+    GenericViewSet
+):
+    queryset = PopUpNotification.objects.all()
+    serializer_class = PopUpNotificationSerializer
+    permission_classes = [AllowAny]
+
+    @swagger_auto_schema(
+        operation_id='팝업들 확인',
+        operation_description='visible 상태의 팝업들 정보를 받음',
+        responses={200: PopUpNotificationSerializer(many=True)}
+    )
+    def list(self, request, *args, **kwargs):
+        queryset = self.queryset.filter(is_visible=True)
+        return Response(data=self.get_serializer(queryset, many=True).data, status=status.HTTP_200_OK)
