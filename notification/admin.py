@@ -34,10 +34,10 @@ class PushNotificationAdmin(admin.ModelAdmin):
 
 @admin.register(PopUpNotification)
 class PopUpNotificationAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "image_tag", "visible", "datetime",)
+    list_display = ("id", "title", "order", "image_tag", "visible", "datetime",)
     list_filter = ("visible",)
     search_fields = ("title",)
-    ordering = ("-datetime",)
+    ordering = ("order",)
     date_hierarchy = "datetime"
     save_as = True
     preserve_filters = True

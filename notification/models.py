@@ -47,6 +47,7 @@ def pop_up_image_upload_path(instance, filename):
 
 
 class PopUpNotification(models.Model):
+    order = models.IntegerField(null=True, default=None, blank=True)
     title = models.CharField(max_length=31, null=True, default=None, blank=True)
     visible = models.BooleanField(default=True)
     datetime = models.DateTimeField(auto_now_add=True)
