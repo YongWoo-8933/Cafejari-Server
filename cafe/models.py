@@ -148,7 +148,7 @@ class Cafe(models.Model):
     is_closed = models.BooleanField(default=False)
     is_opened = models.BooleanField(default=True)
     name = models.CharField(max_length=63)
-    address = models.CharField(max_length=63)
+    address = models.CharField(max_length=127)
     latitude = models.FloatField()
     longitude = models.FloatField()
     point = models.PointField(blank=True, null=True, default=Point(0, 0, srid=4326), srid=4326)
