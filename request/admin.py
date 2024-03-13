@@ -21,6 +21,7 @@ from request.serializers import CafeAdditionRequestSerializer, CafeInformationSu
 class CafeAdditionRequestAdmin(admin.ModelAdmin):
     list_display = ("id", "nickname", "cafe_name", "requested_at", "answered_at", "is_approved", "is_notified",)
     list_filter = ("user__profile__nickname", "is_approved",)
+    autocomplete_fields = ("user", "cafe")
     search_fields = ("user__profile__nickname",)
     date_hierarchy = "requested_at"
     ordering = ("-requested_at",)
@@ -114,6 +115,7 @@ class CafeAdditionRequestAdmin(admin.ModelAdmin):
 class CafeInformationSuggestionAdmin(admin.ModelAdmin):
     list_display = ("id", "nickname", "cafe_name", "suggested_cafe_name", "requested_at", "answered_at", "is_approved", "is_notified", "description")
     list_filter = ("is_approved",)
+    autocomplete_fields = ("user", "suggested_cafe", "cafe")
     search_fields = ("user__profile__nickname", "cafe__name",)
     date_hierarchy = "requested_at"
     ordering = ("-requested_at",)
@@ -173,6 +175,7 @@ class CafeInformationSuggestionAdmin(admin.ModelAdmin):
 class WithdrawalRequestAdmin(admin.ModelAdmin):
     list_display = ("id", "nickname", "requested_at", "reason",)
     list_filter = ("reason",)
+    autocomplete_fields = ("user",)
     date_hierarchy = "requested_at"
     search_fields = ("user__profile__nickname",)
     ordering = ("-requested_at",)
@@ -189,6 +192,7 @@ class WithdrawalRequestAdmin(admin.ModelAdmin):
 class UserMigrationRequestAdmin(admin.ModelAdmin):
     list_display = ("id", "nickname", "requested_at", "phone_number", "is_completed", "is_notified")
     list_filter = ("is_completed",)
+    autocomplete_fields = ("user",)
     date_hierarchy = "requested_at"
     search_fields = ("user__profile__nickname",)
     ordering = ("-requested_at",)
@@ -205,6 +209,7 @@ class UserMigrationRequestAdmin(admin.ModelAdmin):
 class AppFeedbackAdmin(admin.ModelAdmin):
     list_display = ("id", "time", "feedback", "nickname")
     list_filter = ("feedback",)
+    autocomplete_fields = ("user",)
     date_hierarchy = "time"
     search_fields = ("user__profile__nickname", "feedback")
     ordering = ("-time",)

@@ -40,6 +40,7 @@ class ChallengePointInline(admin.TabularInline):
 class ChallengerAdmin(admin.ModelAdmin):
     list_display = ("id", "user_nickname", "challenge_name", "image_tag", "progress_rate", "count")
     list_filter = ("challenge__available", "challenge__name")
+    autocomplete_fields = ("challenge", "user")
     inlines = (ChallengePointInline,)
     search_fields = ("user__profile__nickname", "challenge__name")
     date_hierarchy = "challenge__start"

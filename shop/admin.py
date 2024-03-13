@@ -14,6 +14,7 @@ class BrandInline(admin.TabularInline):
 class ItemAdmin(admin.ModelAdmin):
     list_display = ("id", "name", "code", "image_tag", "brand_name", "price",)
     list_filter = ("brand__name",)
+    autocomplete_fields = ("brand",)
     search_fields = ("brand__name", "name",)
     ordering = ("brand__name", "name",)
     list_select_related = ["brand",]
@@ -34,6 +35,7 @@ class ItemAdmin(admin.ModelAdmin):
 class GifticonAdmin(ImageModelAdmin):
     list_display = ("id", "item_name", "user_nickname", 'image_tag', "expiration_period", "is_used",)
     list_filter = ("user__profile__nickname", "item__name", "is_used")
+    autocomplete_fields = ("item", "user")
     search_fields = ("user__profile__nickname", "item__name",)
     ordering = ("-expiration_period", "is_used",)
     date_hierarchy = "expiration_period"
@@ -73,6 +75,7 @@ class CouponAdmin(ImageModelAdmin):
 class UserCouponAdmin(admin.ModelAdmin):
     list_display = ("id", "coupon_name", "user_nickname", "expiration_period", "is_used",)
     list_filter = ("user__profile__nickname", "coupon__name", "is_used")
+    autocomplete_fields = ("coupon", "user")
     search_fields = ("user__profile__nickname", "item__name",)
     ordering = ("expiration_period", "is_used",)
     date_hierarchy = "expiration_period"

@@ -10,6 +10,7 @@ class CafeLogAdmin(admin.ModelAdmin):
     list_display = ("id", "image_tag", "cafe_name", "user_nickname", "theme", "like_count", "created_at", "updated_at", "report_count", "is_private", "is_visible")
     list_filter = ("is_private", "is_visible", "theme")
     list_select_related = ["cafe", "user", "snapshot"]
+    autocomplete_fields = ("user", "cafe")
     search_fields = ("cafe__name", "user__profile__nickname", "content")
     date_hierarchy = "created_at"
     ordering = ("-created_at",)
@@ -40,6 +41,7 @@ class CafeLogAdmin(admin.ModelAdmin):
 class CafeLogReportAdmin(admin.ModelAdmin):
     list_display = ("id", "image_tag", "reporter", "reason")
     list_select_related = ["cafe_log", "user"]
+    autocomplete_fields = ("cafe_log", "user")
     search_fields = ("cafe_log__cafe__name", "user__profile__nickname", "reason")
     date_hierarchy = "cafe_log__created_at"
     ordering = ("-cafe_log__created_at",)
@@ -57,9 +59,10 @@ class CafeLogReportAdmin(admin.ModelAdmin):
 
 
 @admin.register(CafeLogLike)
-class CafeLogReportAdmin(admin.ModelAdmin):
+class CafeLogLikeAdmin(admin.ModelAdmin):
     list_display = ("id", "image_tag", "user_nickname", "cafe_name")
     list_select_related = ["cafe_log", "user"]
+    autocomplete_fields = ("cafe_log", "user")
     search_fields = ("cafe_log__cafe__name", "user__profile__nickname")
     date_hierarchy = "cafe_log__created_at"
     ordering = ("-cafe_log__created_at",)
