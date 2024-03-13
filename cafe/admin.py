@@ -93,6 +93,7 @@ class CafeImageInline(admin.TabularInline):
 class CafeAdmin(admin.GeoModelAdmin):
     list_display = ("id", "name", "floor_count", "is_opened", "district_city", "brand_name", "congestion_area_name", "address", "is_visible", "is_closed",)
     list_filter = ("is_visible", "is_opened", "is_closed", "brand__name", "district__city", "district__gu", "district__dong", "congestion_area__name")
+    autocomplete_fields = ("district__city", "district__gu", "district__dong", "brand__name",)
     search_fields = ("name", "address",)
     ordering = ("is_visible", "-is_closed", "name",)
     inlines = (OpeningHourInline, CafeFloorInline, CafeImageInline,)
@@ -132,6 +133,7 @@ class CafeAdmin(admin.GeoModelAdmin):
 class CafeImageAdmin(ImageModelAdmin):
     list_display = ("id", "cafe_name", "image_tag", "is_visible",)
     list_filter = ("is_visible",)
+    autocomplete_fields = ("cafe__name",)
     search_fields = ("cafe__name",)
     ordering = ("cafe__name",)
     list_select_related = ["cafe"]
@@ -151,6 +153,7 @@ class CafeImageAdmin(ImageModelAdmin):
 class CafeVIPAdmin(admin.ModelAdmin):
     list_display = ("id", "cafe_name", "nickname", "update_count",)
     list_filter = ("cafe__district__gu", "cafe__brand__name", "user__profile__nickname",)
+    autocomplete_fields = ("user", "user__profile__nickname", "cafe__name")
     search_fields = ("cafe__name", "user__profile__nickname",)
     ordering = ("cafe__name", "-update_count")
     list_select_related = ["cafe", "user"]
@@ -170,6 +173,7 @@ class OccupancyRatePredictionAdmin(admin.ModelAdmin):
     list_display = ("id", "cafe_name", "occupancy_rate", "update")
     list_filter = ("cafe_floor__cafe__brand__name", "cafe_floor__cafe__district__city", "cafe_floor__cafe__district__gu", "cafe_floor__cafe__district__dong",)
     list_select_related = ["cafe_floor"]
+    autocomplete_fields = ("cafe_floor__cafe__name",)
     date_hierarchy = "update"
     search_fields = ("cafe_floor__cafe__name",)
     ordering = ("-update",)
@@ -185,6 +189,7 @@ class OccupancyRatePredictionAdmin(admin.ModelAdmin):
 class OccupancyRateUpdateLogAdmin(admin.ModelAdmin):
     list_display = ("id", "cafe_name_floor", "nickname", "occupancy_rate", "update", "is_google_map_prediction", "point", "congestion", "is_notified")
     list_filter = ("cafe_floor__cafe__brand__name", "cafe_floor__cafe__district__city", "cafe_floor__cafe__district__gu", "cafe_floor__cafe__district__dong", "is_google_map_prediction")
+    autocomplete_fields = ("cafe_floor__cafe__name", "user", "user__profile__nickname",)
     date_hierarchy = "update"
     search_fields = ("user__profile__nickname", "cafe_floor__cafe__name")
     ordering = ("-update",)
@@ -203,6 +208,7 @@ class OccupancyRateUpdateLogAdmin(admin.ModelAdmin):
 @admin.register(DailyActivityStack)
 class DailyActivityStackAdmin(admin.ModelAdmin):
     list_display = ("id", "cafe_name_floor", "nickname", "update")
+    autocomplete_fields = ("cafe_floor__cafe__name", "user", "user__profile__nickname",)
     date_hierarchy = "update"
     search_fields = ("user__profile__nickname", "cafe_floor__cafe__name")
     ordering = ("-update",)
@@ -221,6 +227,7 @@ class DailyActivityStackAdmin(admin.ModelAdmin):
 class OpeningHourAdmin(admin.ModelAdmin):
     list_display = ("id", "cafe_name", "mon", "tue", "wed", "thu", "fri", "sat", "sun")
     list_editable = ('mon', 'tue', "wed", "thu", "fri", "sat", "sun")
+    autocomplete_fields = ("cafe__name",)
     search_fields = ("cafe__name",)
     ordering = ("mon",)
     save_as = True
