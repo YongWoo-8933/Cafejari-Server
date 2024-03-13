@@ -11,6 +11,7 @@ from utils import replace_image_domain
 class PushNotificationAdmin(admin.ModelAdmin):
     list_display = ("id", "title", "pushed_at", "type", "user_name", "is_read")
     list_filter = ("type",)
+    autocomplete_fields = ("user",)
     search_fields = ("title", "body")
     ordering = ("-pushed_at",)
     date_hierarchy = "pushed_at"
