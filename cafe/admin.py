@@ -62,6 +62,7 @@ class BrandAdmin(ImageModelAdmin):
 class CATIAdmin(admin.ModelAdmin):
     list_display = ("id", "cafe_name", "nickname", "openness", "coffee", "workspace", "acidity",)
     list_filter = ("cafe__brand__name", "openness", "coffee", "workspace", "acidity",)
+    autocomplete_fields = ("user","user__profile__nickname", "cafe", "cafe__name")
     search_fields = ("cafe__name", "user__profile__nickname",)
     ordering = ("cafe__name",)
     list_select_related = ["cafe", "user"]
