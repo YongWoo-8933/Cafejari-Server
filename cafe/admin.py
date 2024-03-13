@@ -62,7 +62,7 @@ class BrandAdmin(ImageModelAdmin):
 class CATIAdmin(admin.ModelAdmin):
     list_display = ("id", "cafe_name", "nickname", "openness", "coffee", "workspace", "acidity",)
     list_filter = ("cafe__brand__name", "openness", "coffee", "workspace", "acidity",)
-    autocomplete_fields = ("user", "user__profile__nickname", "cafe", "cafe__name")
+    autocomplete_fields = ("user", "cafe")
     search_fields = ("cafe__name", "user__profile__nickname",)
     ordering = ("cafe__name",)
     list_select_related = ["cafe", "user"]
@@ -93,7 +93,7 @@ class CafeImageInline(admin.TabularInline):
 class CafeAdmin(admin.GeoModelAdmin):
     list_display = ("id", "name", "floor_count", "is_opened", "district_city", "brand_name", "congestion_area_name", "address", "is_visible", "is_closed",)
     list_filter = ("is_visible", "is_opened", "is_closed", "brand__name", "district__city", "district__gu", "district__dong", "congestion_area__name")
-    autocomplete_fields = ("district", "brand", "brand__name",)
+    autocomplete_fields = ("district", "brand")
     search_fields = ("name", "address",)
     ordering = ("is_visible", "-is_closed", "name",)
     inlines = (OpeningHourInline, CafeFloorInline, CafeImageInline,)
