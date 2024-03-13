@@ -29,7 +29,6 @@ class ProfileInline(admin.TabularInline):
 class UserAdmin(admin.ModelAdmin):
     list_display = ("id", "nickname", "image_tag", "email", "grade", "last_login", "date_joined", "is_active", "social_type", "point")
     list_filter = ("is_active", "profile__grade__name")
-    autocomplete_fields = ("grade", "profile")
     search_fields = ("profile__nickname", "username", "email", "first_name", "last_name",)
     ordering = ("-date_joined",)
     inlines = (ProfileInline,)

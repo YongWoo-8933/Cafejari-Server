@@ -53,7 +53,6 @@ class WeekSharingRankerAdmin(admin.ModelAdmin):
 @admin.register(MonthlyHotCafeLog)
 class MonthlyHotCafeLogAdmin(admin.ModelAdmin):
     list_display = ("id", "date", "cafe_log_user_nickname", "cafe_log_snapshot_image_tag", "like_count",)
-    autocomplete_fields = ("user", "cafe")
     search_fields = ("user__profile__nickname",)
     ordering = ("-date",)
     list_select_related = ["cafe_log"]

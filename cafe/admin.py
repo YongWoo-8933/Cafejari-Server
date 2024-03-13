@@ -173,7 +173,6 @@ class OccupancyRatePredictionAdmin(admin.ModelAdmin):
     list_display = ("id", "cafe_name", "occupancy_rate", "update")
     list_filter = ("cafe_floor__cafe__brand__name", "cafe_floor__cafe__district__city", "cafe_floor__cafe__district__gu", "cafe_floor__cafe__district__dong",)
     list_select_related = ["cafe_floor"]
-    autocomplete_fields = ("cafe_floor",)
     date_hierarchy = "update"
     search_fields = ("cafe_floor__cafe__name",)
     ordering = ("-update",)
@@ -189,7 +188,6 @@ class OccupancyRatePredictionAdmin(admin.ModelAdmin):
 class OccupancyRateUpdateLogAdmin(admin.ModelAdmin):
     list_display = ("id", "cafe_name_floor", "nickname", "occupancy_rate", "update", "is_google_map_prediction", "point", "congestion", "is_notified")
     list_filter = ("cafe_floor__cafe__brand__name", "cafe_floor__cafe__district__city", "cafe_floor__cafe__district__gu", "cafe_floor__cafe__district__dong", "is_google_map_prediction")
-    autocomplete_fields = ("cafe_floor", "user",)
     date_hierarchy = "update"
     search_fields = ("user__profile__nickname", "cafe_floor__cafe__name")
     ordering = ("-update",)
@@ -208,7 +206,6 @@ class OccupancyRateUpdateLogAdmin(admin.ModelAdmin):
 @admin.register(DailyActivityStack)
 class DailyActivityStackAdmin(admin.ModelAdmin):
     list_display = ("id", "cafe_name_floor", "nickname", "update")
-    autocomplete_fields = ("cafe_floor", "user",)
     date_hierarchy = "update"
     search_fields = ("user__profile__nickname", "cafe_floor__cafe__name")
     ordering = ("-update",)
