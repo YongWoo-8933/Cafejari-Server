@@ -10,7 +10,7 @@ class CafeLogAdmin(admin.ModelAdmin):
     list_display = ("id", "image_tag", "cafe_name", "user_nickname", "theme", "like_count", "created_at", "updated_at", "report_count", "is_private", "is_visible")
     list_filter = ("is_private", "is_visible", "theme")
     list_select_related = ["cafe", "user", "snapshot"]
-    autocomplete_fields = ("user", "cafe")
+    autocomplete_fields = ("user",)
     search_fields = ("cafe__name", "user__profile__nickname", "content")
     date_hierarchy = "created_at"
     ordering = ("-created_at",)
