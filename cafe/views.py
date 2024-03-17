@@ -372,6 +372,7 @@ class OccupancyRateUpdateLogViewSet(
                                      user_id=request.user.id, point=point, congestion=congestion)
 
         # 얻은 포인트 부여
+
         serializer = ProfileSerializer(request.user.profile, data={"point": request.user.profile.point + point}, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
