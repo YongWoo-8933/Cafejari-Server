@@ -1,5 +1,4 @@
 import datetime
-import logging
 import os
 import time
 import uuid
@@ -51,16 +50,13 @@ class CafeAdditionRequestAdmin(admin.ModelAdmin):
 
             # 포인트 추가
             if obj.point:
-                logger = logging.getLogger('my')
-                logger.error("여기까지 진입 성공")
                 serializer = ProfileSerializer(
-                    request.user.profile,
-                    data={"point": request.user.profile.point + obj.point},
+                    obj.user.profile,
+                    data={"point": obj.user.profile.point + obj.point},
                     partial=True
                 )
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
-                logger.error(f"세이브, point: {obj.point}, user point: {request.user.profile.point}")
 
             # cafe image 설정
             if obj.cafe.google_place_id:
