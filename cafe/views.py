@@ -12,16 +12,20 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from cafe.models import Cafe, CafeFloor, OccupancyRateUpdateLog, DailyActivityStack, Location, CATI, Congestion
+from cafe.models import Cafe, CafeFloor, OccupancyRateUpdateLog, DailyActivityStack, Location, CATI, Congestion, \
+    OccupancyRatePrediction
 from cafe.serializers import CafeResponseSerializer, \
     OccupancyRateUpdateLogResponseSerializer, OccupancyRateUpdateLogSerializer, DailyActivityStackSerializer, \
     CafeSearchResponseSerializer, LocationResponseSerializer, CATISerializer
 from cafe.swagger_serializers import SwaggerOccupancyRegistrationRequestSerializer, SwaggerCafeResponseSerializer, \
     SwaggerCATIRequestSerializer
 from cafe.utils import PointCalculator
-from cafejari.settings import UPDATE_COOLTIME
+from cafejari.settings import UPDATE_COOLTIME, RECENT_HOUR
+from challenge.models import Challenge
 from cron.occupancy_prediction import is_occupancy_update_possible
 from error import ServiceError
+from notification.firebase_message import FirebaseMessage
+from notification.models import PushNotificationType
 from user.serializers import ProfileSerializer
 from utils import AUTHORIZATION_MANUAL_PARAMETER
 
@@ -181,41 +185,6 @@ class CafeViewSet(
 
         return Response(data=self.get_serializer(cafes, many=True).data, status=status.HTTP_200_OK)
 
-    # @swagger_auto_schema(
-    #     operation_id='카페 검색 정보',
-    #     operation_description='검색 했을 때 카페 리스트 정보를 받음',
-    #     responses={200: SwaggerCafeSearchResponseSerializer(many=True)},
-    #     manual_parameters=[
-    #         openapi.Parameter(
-    #             name='query',
-    #             in_=openapi.IN_QUERY,
-    #             type=openapi.TYPE_STRING,
-    #             required=True,
-    #             description='검색어',
-    #         ),
-    #         openapi.Parameter(
-    #             name='page',
-    #             in_=openapi.IN_QUERY,
-    #             type=openapi.TYPE_INTEGER,
-    #             required=False,
-    #             description='몇 번째 페이지를 조회할지, default=1',
-    #         ),
-    #     ]
-    # )
-    # @action(detail=False, methods=['get'], permission_classes=[AllowAny])
-    # def search(self, queryset):
-    #     query = self.request.query_params.get('query')
-    #     queryset = self.queryset.filter(is_closed=False, is_visible=True)
-    #     if query:
-    #         query_list = query.split()
-    #         for query_word in query_list:
-    #             queryset = queryset.filter(Q(name__icontains=query_word) | Q(address__icontains=query_word))
-    #
-    #     paginator = CafePagination()
-    #     page = paginator.paginate_queryset(queryset, self.request)
-    #     serializer = self.get_serializer(page, many=True)
-    #     return paginator.get_paginated_response(data=serializer.data)
-
 
 class OccupancyRateUpdateLogViewSet(
     mixins.ListModelMixin,
@@ -325,6 +294,32 @@ class OccupancyRateUpdateLogViewSet(
         today_this_cafe_update_logs = OccupancyRateUpdateLog.objects.filter(
             update__gte=midnight, cafe_floor__id=cafe_floor_id, user__id=request.user.id)
 
+        # 회색 마커 이벤트 중인지 확인
+        challenge_queryset = Challenge.objects.filter(name="회색마커추가포인트", available=False)
+        if challenge_queryset.exists():
+            challenge = challenge_queryset.first()
+            now = datetime.datetime.now()
+            if challenge.start <= now <= challenge.finish:
+                log_queryset = OccupancyRateUpdateLog.objects.filter(
+                    cafe_floor__id=cafe_floor_id, update__gte=now-datetime.timedelta(hours=RECENT_HOUR)
+                )
+                prediction_queryset = OccupancyRatePrediction.objects.filter(cafe_floor__id=cafe_floor_id)
+                if not log_queryset.exists() and not prediction_queryset.exists():
+                    serializer = ProfileSerializer(
+                        request.user.profile,
+                        data={"point": request.user.profile.point + challenge.goal},
+                        partial=True
+                    )
+                    serializer.is_valid(raise_exception=True)
+                    serializer.save()
+                    FirebaseMessage.push_message(
+                        title="📍 '회색마커를 찾아라!' 이벤트 보상 지급",
+                        body=f"이벤트 기간({challenge.start.hour}시 ~ {challenge.finish.hour}시)중 혼잡도 업데이트로 {challenge.goal}P가 추가 지급되었습니다",
+                        push_type=PushNotificationType.Activity.value,
+                        user_object=request.user,
+                        save_model=True
+                    )
+
         # 지역 혼잡도 가져오기
         congestion = self.get_congestion(cafe_floor_object)
 
@@ -372,7 +367,6 @@ class OccupancyRateUpdateLogViewSet(
                                      user_id=request.user.id, point=point, congestion=congestion)
 
         # 얻은 포인트 부여
-
         serializer = ProfileSerializer(request.user.profile, data={"point": request.user.profile.point + point}, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
