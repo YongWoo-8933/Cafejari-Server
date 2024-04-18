@@ -11,7 +11,7 @@ class ChallengeMilestoneInline(admin.TabularInline):
 
 @admin.register(Challenge)
 class ChallengeAdmin(ImageModelAdmin):
-    list_display = ("id", "name", "image_tag", "url", "available", "start", "finish", "participant_limit", "goal")
+    list_display = ("id", "name", "image_tag", "url", "available", "is_occupancy_registration_challenge", "start", "finish", "participant_limit", "goal")
     list_filter = ("available",)
     inlines = (ChallengeMilestoneInline,)
     search_fields = ("name",)

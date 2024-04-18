@@ -11,6 +11,7 @@ class Challenge(models.Model):
     image = models.ImageField(upload_to=challenge_image_upload_path)
     url = models.URLField(max_length=255, null=True, default=None, blank=True)
     available = models.BooleanField(default=True)
+    is_occupancy_registration_challenge = models.BooleanField(default=False)
     start = models.DateTimeField()
     finish = models.DateTimeField()
     participant_limit = models.IntegerField(null=True, blank=True, default=None)
