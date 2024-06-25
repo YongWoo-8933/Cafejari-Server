@@ -27,13 +27,11 @@ def update_leaders():
             day=first_datetime_of_this_week.day, hour=0, minute=0, second=1, tzinfo=timezone('Asia/Seoul')
         )
         # total, month, week queryset 세팅
-        occupancy_rate_update_log_queryset = OccupancyRateUpdateLog.objects.filter(
-            user__isnull=False, cafe_floor__isnull=False
-        )
+        occupancy_rate_update_log_queryset = OccupancyRateUpdateLog.objects.filter(user__isnull=False)
         this_month_occupancy_rate_update_log_queryset = occupancy_rate_update_log_queryset.filter(
             update__gt=first_datetime_midnight_of_this_month
         )
-        this_week_occupancy_rate_update_log_queryset = this_month_occupancy_rate_update_log_queryset.filter(
+        this_week_occupancy_rate_update_log_queryset = occupancy_rate_update_log_queryset.filter(
             update__gt=first_datetime_midnight_of_this_week
         )
         # 랭커 dict 정리

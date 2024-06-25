@@ -7,6 +7,7 @@ from django.utils import timezone
 class CafeAdditionRequest(models.Model):
     is_approved = models.BooleanField(default=False)
     is_notified = models.BooleanField(default=False)
+    point = models.IntegerField(default=0)
     requested_at = models.DateTimeField(auto_now_add=True)
     answered_at = models.DateTimeField(default=timezone.now)
     etc = models.TextField(default=None, null=True, blank=True)
