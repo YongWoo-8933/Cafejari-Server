@@ -24,6 +24,7 @@ urlpatterns = [
     path('', views.index),
     path('tos/', views.tos),
     path('privacy_policy/', views.privacy_policy),
+    path('app-ads.txt', views.app_ads),
     path('admin/', admin.site.urls),
     path('ad/', include('ad.urls')),
     path('app_config/', include('app_config.urls')),

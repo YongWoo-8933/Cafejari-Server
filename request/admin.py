@@ -15,12 +15,14 @@ from notification.models import PushNotificationType
 from request.models import CafeAdditionRequest, CafeInformationSuggestion, WithdrawalRequest, UserMigrationRequest, \
     AppFeedback
 from request.serializers import CafeAdditionRequestSerializer, CafeInformationSuggestionSerializer
+from user.serializers import ProfileSerializer
 
 
 @admin.register(CafeAdditionRequest)
 class CafeAdditionRequestAdmin(admin.ModelAdmin):
-    list_display = ("id", "nickname", "cafe_name", "requested_at", "answered_at", "is_approved", "is_notified",)
+    list_display = ("id", "nickname", "cafe_name", "requested_at", "answered_at", "point", "is_approved", "is_notified",)
     list_filter = ("user__profile__nickname", "is_approved",)
+    autocomplete_fields = ("user", "cafe")
     search_fields = ("user__profile__nickname",)
     date_hierarchy = "requested_at"
     ordering = ("-requested_at",)
@@ -45,6 +47,16 @@ class CafeAdditionRequestAdmin(admin.ModelAdmin):
             cafe_serializer = CafeSerializer(obj.cafe, data={"is_visible": True}, partial=True)
             cafe_serializer.is_valid(raise_exception=True)
             cafe_serializer.save()
+
+            # 포인트 추가
+            if obj.point:
+                serializer = ProfileSerializer(
+                    obj.user.profile,
+                    data={"point": obj.user.profile.point + obj.point},
+                    partial=True
+                )
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
 
             # cafe image 설정
             if obj.cafe.google_place_id:
@@ -96,14 +108,15 @@ class CafeAdditionRequestAdmin(admin.ModelAdmin):
                         continue
 
         if obj.is_notified:
-            approve_title = "승인" if obj.is_approved else "거절"
-            if obj.is_approved:
-                approve_body = f"{obj.cafe.name} 등록요청이 승인되었습니다. 혼잡도를 등록하고 포인트 받아가세요!"
+            if obj.is_approved and obj.point:
+                message = f"{obj.cafe.name} 등록요청이 승인되어 {obj.point}P 지급되었습니다. 혼잡도를 등록하고 포인트 받아가세요!"
+            elif obj.is_approved:
+                message = f"{obj.cafe.name} 등록요청이 승인되었습니다. 혼잡도를 등록하고 포인트 받아가세요!"
             else:
-                approve_body = f"{obj.cafe.name} 등록요청이 거절되었습니다. 사유: {obj.rejection_reason}"
+                message = f"{obj.cafe.name} 등록요청이 거절되었습니다. 사유: {obj.rejection_reason}"
             FirebaseMessage.push_message(
-                title=f"카페 등록요청 {approve_title} 알림",
-                body=approve_body,
+                title=f"카페 등록요청 {'승인' if obj.is_approved else '거절'} 알림",
+                body=message,
                 push_type=PushNotificationType.Etc.value,
                 user_object=obj.user,
                 save_model=True
@@ -114,6 +127,7 @@ class CafeAdditionRequestAdmin(admin.ModelAdmin):
 class CafeInformationSuggestionAdmin(admin.ModelAdmin):
     list_display = ("id", "nickname", "cafe_name", "suggested_cafe_name", "requested_at", "answered_at", "is_approved", "is_notified", "description")
     list_filter = ("is_approved",)
+    autocomplete_fields = ("user", "suggested_cafe", "cafe")
     search_fields = ("user__profile__nickname", "cafe__name",)
     date_hierarchy = "requested_at"
     ordering = ("-requested_at",)
@@ -173,6 +187,7 @@ class CafeInformationSuggestionAdmin(admin.ModelAdmin):
 class WithdrawalRequestAdmin(admin.ModelAdmin):
     list_display = ("id", "nickname", "requested_at", "reason",)
     list_filter = ("reason",)
+    autocomplete_fields = ("user",)
     date_hierarchy = "requested_at"
     search_fields = ("user__profile__nickname",)
     ordering = ("-requested_at",)
@@ -189,6 +204,7 @@ class WithdrawalRequestAdmin(admin.ModelAdmin):
 class UserMigrationRequestAdmin(admin.ModelAdmin):
     list_display = ("id", "nickname", "requested_at", "phone_number", "is_completed", "is_notified")
     list_filter = ("is_completed",)
+    autocomplete_fields = ("user",)
     date_hierarchy = "requested_at"
     search_fields = ("user__profile__nickname",)
     ordering = ("-requested_at",)
@@ -200,10 +216,12 @@ class UserMigrationRequestAdmin(admin.ModelAdmin):
 
     nickname.short_description = "요청자"
 
+
 @admin.register(AppFeedback)
 class AppFeedbackAdmin(admin.ModelAdmin):
     list_display = ("id", "time", "feedback", "nickname")
     list_filter = ("feedback",)
+    autocomplete_fields = ("user",)
     date_hierarchy = "time"
     search_fields = ("user__profile__nickname", "feedback")
     ordering = ("-time",)

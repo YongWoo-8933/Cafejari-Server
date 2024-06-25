@@ -62,6 +62,7 @@ class BrandAdmin(ImageModelAdmin):
 class CATIAdmin(admin.ModelAdmin):
     list_display = ("id", "cafe_name", "nickname", "openness", "coffee", "workspace", "acidity",)
     list_filter = ("cafe__brand__name", "openness", "coffee", "workspace", "acidity",)
+    autocomplete_fields = ("user", "cafe")
     search_fields = ("cafe__name", "user__profile__nickname",)
     ordering = ("cafe__name",)
     list_select_related = ["cafe", "user"]
@@ -92,6 +93,7 @@ class CafeImageInline(admin.TabularInline):
 class CafeAdmin(admin.GeoModelAdmin):
     list_display = ("id", "name", "floor_count", "is_opened", "district_city", "brand_name", "congestion_area_name", "address", "is_visible", "is_closed",)
     list_filter = ("is_visible", "is_opened", "is_closed", "brand__name", "district__city", "district__gu", "district__dong", "congestion_area__name")
+    autocomplete_fields = ("district", "brand", "congestion_area")
     search_fields = ("name", "address",)
     ordering = ("is_visible", "-is_closed", "name",)
     inlines = (OpeningHourInline, CafeFloorInline, CafeImageInline,)
@@ -131,6 +133,7 @@ class CafeAdmin(admin.GeoModelAdmin):
 class CafeImageAdmin(ImageModelAdmin):
     list_display = ("id", "cafe_name", "image_tag", "is_visible",)
     list_filter = ("is_visible",)
+    autocomplete_fields = ("cafe",)
     search_fields = ("cafe__name",)
     ordering = ("cafe__name",)
     list_select_related = ["cafe"]
@@ -150,6 +153,7 @@ class CafeImageAdmin(ImageModelAdmin):
 class CafeVIPAdmin(admin.ModelAdmin):
     list_display = ("id", "cafe_name", "nickname", "update_count",)
     list_filter = ("cafe__district__gu", "cafe__brand__name", "user__profile__nickname",)
+    autocomplete_fields = ("user", "cafe")
     search_fields = ("cafe__name", "user__profile__nickname",)
     ordering = ("cafe__name", "-update_count")
     list_select_related = ["cafe", "user"]
@@ -220,6 +224,7 @@ class DailyActivityStackAdmin(admin.ModelAdmin):
 class OpeningHourAdmin(admin.ModelAdmin):
     list_display = ("id", "cafe_name", "mon", "tue", "wed", "thu", "fri", "sat", "sun")
     list_editable = ('mon', 'tue', "wed", "thu", "fri", "sat", "sun")
+    autocomplete_fields = ("cafe",)
     search_fields = ("cafe__name",)
     ordering = ("mon",)
     save_as = True

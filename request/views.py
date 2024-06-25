@@ -130,7 +130,6 @@ class CafeAdditionRequestViewSet(
                 opening_hour_serializer.is_valid(raise_exception=True)
                 opening_hour_object = opening_hour_serializer.save()
                 OpeningHoursUpdateAdmin.save_opening_hour(opening_hour_object=opening_hour_object)
-                opening_hour_serializer.save()
 
             # request 작성
             cafe_addition_request_serializer = CafeAdditionRequestSerializer(data={
@@ -311,9 +310,6 @@ class CafeInformationSuggestionViewSet(
     )
     def destroy(self, request, *args, **kwargs):
         return super(CafeInformationSuggestionViewSet, self).destroy(request, *args, **kwargs)
-
-
-        # return Response(data=cafe_addition_request_serializer.data, status=status.HTTP_201_CREATED)
 
 
 class WithdrawalRequestViewSet(

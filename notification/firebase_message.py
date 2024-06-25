@@ -1,5 +1,3 @@
-import logging
-
 from django.core.exceptions import ObjectDoesNotExist
 from firebase_admin import messaging
 from firebase_admin.messaging import UnregisteredError

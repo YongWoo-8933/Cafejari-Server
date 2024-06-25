@@ -61,7 +61,8 @@ class Gender(Enum):
 
 class AgeRange(Enum):
     ZeroToNine = "0~9"
-    TemToNineteen = "10~19"
+    TeNToFourteen = "10~14"
+    FifteenToNineteen = "15~19"
     TwentyToTwentyNine = "20~29"
     ThirtyToThirtyNine = "30~39"
     FortyToFortyNine = "40~49"

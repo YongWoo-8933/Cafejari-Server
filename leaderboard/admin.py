@@ -8,6 +8,7 @@ from leaderboard.models import TotalSharingRanker, MonthSharingRanker, WeekShari
 @admin.register(TotalSharingRanker)
 class TotalSharingRankerAdmin(admin.ModelAdmin):
     list_display = ("id", "sharing_count", "user_nickname",)
+    autocomplete_fields = ("user",)
     search_fields = ("user__profile__nickname",)
     ordering = ("-sharing_count",)
     list_select_related = ["user"]
@@ -22,6 +23,7 @@ class TotalSharingRankerAdmin(admin.ModelAdmin):
 @admin.register(MonthSharingRanker)
 class MonthSharingRankerAdmin(admin.ModelAdmin):
     list_display = ("id", "sharing_count", "user_nickname",)
+    autocomplete_fields = ("user",)
     search_fields = ("user__profile__nickname",)
     ordering = ("-sharing_count",)
     list_select_related = ["user"]
@@ -36,6 +38,7 @@ class MonthSharingRankerAdmin(admin.ModelAdmin):
 @admin.register(WeekSharingRanker)
 class WeekSharingRankerAdmin(admin.ModelAdmin):
     list_display = ("id", "sharing_count", "user_nickname",)
+    autocomplete_fields = ("user",)
     search_fields = ("user__profile__nickname",)
     ordering = ("-sharing_count",)
     list_select_related = ["user"]

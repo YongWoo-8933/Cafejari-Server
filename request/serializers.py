@@ -6,7 +6,6 @@ from request.models import CafeAdditionRequest, CafeInformationSuggestion, Withd
     AppFeedback
 
 # 기본 serializer ------------------------------------------------------------------------------------
-from utils import ImageModelSerializer
 
 
 class CafeAdditionRequestSerializer(serializers.ModelSerializer):
@@ -16,7 +15,7 @@ class CafeAdditionRequestSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class CafeInformationSuggestionSerializer(ImageModelSerializer):
+class CafeInformationSuggestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CafeInformationSuggestion

@@ -102,6 +102,7 @@ NAVER_API_SECRET = env('NAVER_API_SECRET')
 NAVER_GEO_KEY_ID = env('NAVER_GEO_KEY_ID')
 NAVER_GEO_KEY = env('NAVER_GEO_KEY')
 NAVER_SMS_CALLING_NUMBER = env('NAVER_SMS_CALLING_NUMBER')
+A_PICK_API_KEY = env('A_PICK_API_KEY')
 ADMIN_PHONE_NUMBER_LIST = [env('ADMIN_PHONE_NUMBER_1'), env('ADMIN_PHONE_NUMBER_2')]
 DB_NAME = env('DB_NAME')
 DB_USER = env('DB_USER')
@@ -202,7 +203,7 @@ CRONJOBS = [
     ('1 15 * * *', 'cron.occupancy_registration_challenge.check_occupancy_registration_challengers'), # 매일 자정 1분에 업데이트
     ('30 15 * * *', 'cron.cafe_vip.update_cafe_vip'), # 매일 자정 30분에 업데이트
     ('50 15 * * *', 'cron.leaderboard.update_leaders'), # 매일 자정 50분에 업데이트
-    ('*/10 0-12 * * *', 'cron.occupancy_sharing.check_sharing_activity'), # 매일 9-21시동안 10분마다 업데이트
+    ('*/20 0-12 * * *', 'cron.occupancy_sharing.check_sharing_activity'), # 매일 9-21시동안 20분마다 업데이트
     ('*/10 * * * *', 'cron.cafe_opening.update_cafe_opening'), # 매일 10분마다 업데이트
     ('*/10 * * * *', 'cron.occupancy_prediction.predict_occupancy'), # 매일 10분마다 업데이트
 ]
@@ -342,3 +343,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # auto field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
