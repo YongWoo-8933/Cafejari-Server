@@ -1,21 +1,18 @@
-import json
+import boto3
 
-import requests
-
-from cafejari.settings import ADMIN_PHONE_NUMBER_LIST, NAVER_SMS_CALLING_NUMBER, A_PICK_API_KEY
+from cafejari.settings import ADMIN_PHONE_NUMBER_LIST, AWS_SMS_ACCESS_KEY, \
+    AWS_SMS_SECRET_KEY, AWS_SMS_REGION_NAME
 
 
 def send_sms_to_admin(content):
+    client = boto3.client(
+        "sns",
+        aws_access_key_id=AWS_SMS_ACCESS_KEY,
+        aws_secret_access_key=AWS_SMS_SECRET_KEY,
+        region_name=AWS_SMS_REGION_NAME,
+    )
     for number in ADMIN_PHONE_NUMBER_LIST:
-        requests.post(
-            "https://apick.app/rest/send_sms",
-            headers={
-                'Content-Type': 'application/json',
-                "CL_AUTH_KEY": A_PICK_API_KEY,
-            },
-            data=json.dumps({
-                "from": NAVER_SMS_CALLING_NUMBER,
-                "to": number,
-                "text": content
-            }),
+        client.publish(
+            PhoneNumber="+82"+number[1:],
+            Message=content
         )
