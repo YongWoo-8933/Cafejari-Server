@@ -1,24 +1,26 @@
-import logging
+import json
 
-import boto3
+import requests
 
-from cafejari.settings import ADMIN_PHONE_NUMBER_LIST, AWS_SMS_ACCESS_KEY, \
-    AWS_SMS_SECRET_KEY, AWS_SMS_REGION_NAME
+from cafejari.settings import ADMIN_PHONE_NUMBER_LIST, NHN_SMS_APP_KEY, NHN_SMS_SECRET_KEY, NHN_SMS_CALLING_NUMBER
 
 
 def send_sms_to_admin(content):
-    try:
-        client = boto3.client(
-            "sns",
-            aws_access_key_id=AWS_SMS_ACCESS_KEY,
-            aws_secret_access_key=AWS_SMS_SECRET_KEY,
-            region_name=AWS_SMS_REGION_NAME,
+    for number in ADMIN_PHONE_NUMBER_LIST:
+        requests.post(
+            f"https://api-sms.cloud.toast.com/sms/v3.0/appKeys/{NHN_SMS_APP_KEY}/sender/sms",
+            headers={
+                'Content-Type': 'application/json',
+                "X-Secret-Key": NHN_SMS_SECRET_KEY
+            },
+            data=json.dumps({
+                "sendNo": NHN_SMS_CALLING_NUMBER,
+                "body": content,
+                "recipientList": [
+                    {
+                        "recipientNo": number,
+                        "countryCode": "82"
+                    }
+                ],
+            }),
         )
-        for number in ADMIN_PHONE_NUMBER_LIST:
-            client.publish(
-                PhoneNumber="+82" + number[1:],
-                Message=content
-            )
-    except Exception as e:
-        logger = logging.getLogger('my')
-        logger.error(e)
